@@ -13,7 +13,7 @@ public class AccountManagement {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public String id;
+    protected Integer id;
 
     @Column(name = "username", nullable = false, length = 20)
     private String username;
@@ -29,7 +29,7 @@ public class AccountManagement {
         this.password = password;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
