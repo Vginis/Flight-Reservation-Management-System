@@ -1,0 +1,12 @@
+2023-11-13 20:33:40.205869+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(20)": "'Eleftherios Venizelos' (21)"; SQL statement:
+insert into airports (city,country,name,"3digitCode",id) values (?,?,?,?,?) [22001-224]
+2023-11-13 20:33:40.239434+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(20)": "'Eleftherios Venizelos' (21)"; SQL statement:
+insert into airports (city,country,name,"3digitCode",id) values (?,?,?,?,?) [22001-224]
+2023-11-13 20:33:40.270997+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(20)": "'Eleftherios Venizelos' (21)"; SQL statement:
+insert into airports (city,country,name,"3digitCode",id) values (?,?,?,?,?) [22001-224]
+2023-11-13 20:34:09.873275+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(20)": "'Eleftherios Venizelos' (21)"; SQL statement:
+insert into airports (city,country,name,"3digitCode",id) values (?,?,?,?,?) [22001-224]
