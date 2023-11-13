@@ -6,13 +6,13 @@ import jakarta.persistence.*;
 @DiscriminatorValue("Passenger")
 public class Passenger extends AccountManagement {
 
-    @Column(name = "email", nullable = false, length = 20)
+    @Column(name = "email", nullable = true, length = 20)
     public String email;
 
-    @Column(name = "phoneNum", nullable = false, length = 20)
+    @Column(name = "phoneNum", nullable = true, length = 20)
     public String phoneNum;
 
-    @Column(name = "passport_id", nullable = false, length = 20)
+    @Column(name = "passport_id", nullable = true, length = 20)
     public String passport_id;
 
     public Passenger() {
