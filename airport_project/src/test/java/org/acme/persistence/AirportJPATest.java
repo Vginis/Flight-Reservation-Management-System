@@ -11,6 +11,6 @@ public class AirportJPATest extends JPATest{
     @Test
     public void listAirports(){
         List<Airport> result = em.createQuery("select a from Airport a").getResultList();
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
     }
 }

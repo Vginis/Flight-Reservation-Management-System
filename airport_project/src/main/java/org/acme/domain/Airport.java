@@ -1,11 +1,14 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import jakarta.xml.ws.WebFault;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "Airport")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
 public class Airport {
     @Id
     @Column(name="id")
