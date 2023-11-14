@@ -1,6 +1,5 @@
 package org.acme.persistence;
 
-import org.acme.domain.AccountManagement;
 import org.acme.domain.Airline;
 import org.acme.domain.Passenger;
 import org.junit.jupiter.api.Test;

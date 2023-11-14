@@ -1,37 +1,38 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import jakarta.xml.ws.WebFault;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "Airport")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
+@Table(name = "Airports")
 public class Airport {
+
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
-    @Column(name="name",nullable = false,length = 30)
-    private String Name;
-    @Column(name="city",nullable = false,length = 20)
-    private String City;
-    @Column(name="country",nullable = false,length = 20)
-    private String Country;
-    @Column(name="3digitCode",nullable = false,length = 3)
-    private String U3Digit_code;
+
+    @Column(name="name", nullable = false, length = 30)
+    private String name;
+
+    @Column(name="city", nullable = false, length = 20)
+    private String city;
+
+    @Column(name="country", nullable = false, length = 20)
+    private String country;
+
+    @Column(name="u3digitCode", nullable = false, length = 3)
+    private String u3digitCode;
 
     public Airport(){
-
     }
 
-    public Airport(String name,String city,String country,String threeDigitCode){
-        this.Name = name;
-        this.City = city;
-        this.Country = country;
-        this.U3Digit_code = threeDigitCode;
+    public Airport(String name, String city, String country, String u3digitCode){
+        this.name = name;
+        this.city = city;
+        this.country = country;
+        this.u3digitCode = u3digitCode;
     }
 
     public Integer getId() {
@@ -39,35 +40,35 @@ public class Airport {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
-    public String getU3Digit_code() {
-        return U3Digit_code;
+    public String getU3digitCode() {
+        return u3digitCode;
     }
 
-    public void setU3Digit_code(String u3Digit_code) {
-        U3Digit_code = u3Digit_code;
+    public void setU3digitCode(String u3digitCode) {
+        this.u3digitCode = u3digitCode;
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public String getCity() {
-        return City;
+        return city;
     }
 
     public void setCity(String city) {
-        City = city;
+        this.city = city;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class Airport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Airport airport = (Airport) o;
-        return Objects.equals(id, airport.id) && Objects.equals(Name, airport.Name) && Objects.equals(City, airport.City)
-                && Objects.equals(Country, airport.Country);
+        return Objects.equals(id, airport.id) && Objects.equals(name, airport.name) && Objects.equals(city, airport.city)
+                && Objects.equals(country, airport.country);
     }
 }

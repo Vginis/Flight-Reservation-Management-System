@@ -19,9 +19,10 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        em.createNativeQuery("delete from Airport").executeUpdate();
-        em.createQuery("delete from Flight");
+        em.createNativeQuery("delete from Flights").executeUpdate();
+        em.createNativeQuery("delete from Airports").executeUpdate();
         em.createNativeQuery("delete from AccountManagement").executeUpdate();
+
         tx.commit();
     }
 
@@ -33,10 +34,9 @@ public class Initializer {
         Airline a1 = new Airline("Aegean Airlines", "A3", "aegean", "idk");
 
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
-        Airport ai2 = new Airport("Fumicino","Milan","Italy","FUM");
+        Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
 
-        Flight f1 = new Flight("FR87438",  200,"Boeing-365",100,200);
-        f1.setAirline(a1);
+        Flight f1 = new Flight("FR8438", a1, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", (long) 100,200);
 
         EntityTransaction tx = em.getTransaction();
         tx.begin();

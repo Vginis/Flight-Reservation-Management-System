@@ -3,22 +3,22 @@ package org.acme.domain;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("Airline")
+@DiscriminatorValue("AIRLINE")
 public class Airline extends AccountManagement {
 
     @Column(name = "name", nullable = true, length = 30)
-    public String name;
+    private String name;
 
-    @Column(name = "2digit_id", nullable = true, length = 2)
-    public String u2digit_id;
+    @Column(name = "u2digitCode", nullable = true, length = 2)
+    private String u2digitCode;
 
     public Airline() {
     }
 
-    public Airline(String name, String u2digit_id, String username, String password) {
+    public Airline(String name, String u2digitCode, String username, String password) {
         super(username, password);
         this.name = name;
-        this.u2digit_id = u2digit_id;
+        this.u2digitCode = u2digitCode;
     }
 
     public String getName() {
@@ -29,12 +29,12 @@ public class Airline extends AccountManagement {
         this.name = name;
     }
 
-    public String getU2digit_id() {
-        return u2digit_id;
+    public String getU2digitCode() {
+        return u2digitCode;
     }
 
-    public void setU2digit_id(String u2digit_id) {
-        this.u2digit_id = u2digit_id;
+    public void setU2digitCode(String u2digitCode) {
+        this.u2digitCode = u2digitCode;
     }
 
 }
