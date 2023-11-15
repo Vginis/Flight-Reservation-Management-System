@@ -39,7 +39,7 @@ public class Flight {
     private String aircraftType;
 
     @Column(name="TicketPrice", nullable = false)
-    private Long ticketPrice;
+    private long ticketPrice;
 
     @Column(name="availableSeats", nullable = false)
     private Integer availableSeats;
@@ -48,7 +48,7 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(String flightNo, Airline airline, Airport departureAirport, String departureTime, Airport arrivalAirport, String arrivalTime, Integer capacity, String aircraftType, Long ticketPrice, Integer availableSeats) {
+    public Flight(String flightNo, Airline airline, Airport departureAirport, String departureTime, Airport arrivalAirport, String arrivalTime, Integer capacity, String aircraftType, long ticketPrice, Integer availableSeats) {
         this.flightNo = flightNo;
         this.airline = airline;
         this.departureAirport = departureAirport;
@@ -129,7 +129,7 @@ public class Flight {
         this.aircraftType = aircraftType;
     }
 
-    public Long getTicketPrice() {
+    public long getTicketPrice() {
         return ticketPrice;
     }
 

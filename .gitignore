@@ -45,3 +45,7 @@ nb-configuration.xml
 
 # Plugin directory
 /.quarkus/cli/plugins/
+
+# Database
+/airport_project/test.mv.db
+/airport_project/test.trace.db
