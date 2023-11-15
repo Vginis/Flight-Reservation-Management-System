@@ -1,0 +1,6 @@
+org\acme\domain\Passenger.class
+org\acme\persistence\JPAUtil.class
+org\acme\domain\AccountManagement.class
+org\acme\domain\Administrator.class
+org\acme\domain\Airline.class
+org\acme\domain\Airport.class

@@ -1,0 +1,4 @@
+org\acme\domain\AccountManagementTest.class
+org\acme\persistence\JPAUtilTest.class
+org\acme\persistence\AdministratorJPATest.class
+org\acme\persistence\AirlineJPATest.class
