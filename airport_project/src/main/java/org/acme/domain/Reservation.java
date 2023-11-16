@@ -30,15 +30,17 @@ public class Reservation {
             inverseJoinColumns = {@JoinColumn(name = "reservationId")})
     private List<Flight> ingoingFlights;
 
-    private Boolean returnFlight = false;
+    private Boolean returnFlight;
 
-    @Column(name = "totalPrice", nullable = false)
+    @Column(name = "reservation", nullable = false)
     private long totalPrice;
 
-    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ticketId", fetch = FetchType.LAZY)
     private List<Ticket> ticketsList = new ArrayList<>();
 
     public Reservation() {
+        returnFlight = false;
+        totalPrice = 0;
     }
 
     public Passenger getPassenger() {
@@ -101,12 +103,23 @@ public class Reservation {
         this.totalPrice = totalPrice;
     }
 
+    public void calculateTotalPrice(List<Ticket> ticketList) {
+        if (ticketList.size() == 0) return;
+        for (int i=1; i<= ticketList.size(); i++) {
+            this.totalPrice += ticketList.get(i).getTicketPrice();
+        }
+    }
+
     public List<Ticket> getTicketsList() {
         return ticketsList;
     }
 
-    public void setTicketsList(List<Ticket> ticketsList) {
-        this.ticketsList = ticketsList;
+    public void addTicket(Ticket ticket) {
+        if (ticket == null) return;
+        if (ticketsList.contains(ticket)) {
+            throw new RuntimeException("Ticket already exists.");
+        }
+        ticketsList.add(ticket);
     }
 
 }

@@ -1,6 +1,5 @@
 package org.acme.persistence;
 
-import org.acme.domain.Passenger;
 import org.acme.domain.Reservation;
 import org.junit.jupiter.api.Test;
 

@@ -3,7 +3,7 @@ package org.acme.domain;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("PASSENGERS")
+@DiscriminatorValue("PASSENGER")
 public class Passenger extends AccountManagement {
 
     @Column(name = "email", nullable = true, length = 20)

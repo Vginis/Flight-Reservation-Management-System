@@ -11,10 +11,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer ticketId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservationId", nullable = false)
     private Reservation reservation;
-
+*/
     @Embedded
     private Luggage luggage;
 
@@ -28,16 +28,23 @@ public class Ticket {
     private PassengerInfo passengerInfo;
 
     public Ticket() {
+        passengerInfo = new PassengerInfo();
     }
 
-    public Reservation getReservation() {
+    public Ticket(String seatNo, String firstName, String lastName, String passportId) {
+        this.seatNo = seatNo;
+        this.passengerInfo = new PassengerInfo(firstName, lastName, passportId);
+        luggage = new Luggage();
+    }
+
+    /*public Reservation getReservation() {
         return reservation;
     }
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
     }
-
+*/
     public boolean isLuggageIncluded() {
         return luggage.isLuggageIncluded();
     }
@@ -68,6 +75,11 @@ public class Ticket {
 
     public void setTicketPrice(long ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+    //TODO the calculateTicketPrice()
+    public void calculateTicketPrice() {
+        ticketPrice = 0;
+        if (isLuggageIncluded()) ticketPrice += 30;
     }
 
     public String getSeatNo() {

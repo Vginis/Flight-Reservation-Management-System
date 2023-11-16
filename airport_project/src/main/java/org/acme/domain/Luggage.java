@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Embeddable
 public class Luggage {
 
-    private boolean luggageIncluded = false;
+    private boolean luggageIncluded;
     @Column(name = "weight", nullable = false, length = 2)
     private int weight;
 
@@ -13,6 +13,7 @@ public class Luggage {
     private int amount;
 
     public Luggage() {
+        this.luggageIncluded = false;
         this.weight = 0;
         this.amount = 0;
     }
@@ -22,7 +23,7 @@ public class Luggage {
     }
 
     public void setLuggageIncluded(boolean luggageIncluded) {
-        this.luggageIncluded = luggageIncluded;
+        if (luggageIncluded) this.luggageIncluded = true;
     }
 
     public int getWeight() {
