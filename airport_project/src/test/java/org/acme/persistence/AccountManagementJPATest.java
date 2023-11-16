@@ -1,5 +1,6 @@
 package org.acme.persistence;
 
+import org.acme.domain.Administrator;
 import org.acme.domain.Airline;
 import org.acme.domain.Passenger;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,13 @@ public class AccountManagementJPATest extends JPATest {
     @Test
     public void listAirlines(){
         List<Airline> result = em.createQuery("select a from Airline a").getResultList();
+        assertEquals(1, result.size());
+    }
+
+
+    @Test
+    public void listAdministrator(){
+        List<Administrator> result = em.createQuery("select ad from Administrator ad").getResultList();
         assertEquals(1, result.size());
     }
 
