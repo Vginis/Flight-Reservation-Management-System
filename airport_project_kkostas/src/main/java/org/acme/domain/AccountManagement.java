@@ -1,0 +1,60 @@
+package org.acme.domain;
+
+import jakarta.persistence.*;
+
+import java.util.Objects;
+
+@Entity
+@Table(name = "AccountManagement")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
+public class AccountManagement {
+
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Integer id;
+
+    @Column(name = "username", nullable = false, length = 20)
+    private String username;
+
+    @Column(name = "password", nullable = false, length = 20)
+    private String password;
+
+    public AccountManagement() {
+    }
+
+    public AccountManagement(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccountManagement that = (AccountManagement) o;
+        return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(password, that.password);
+    }
+
+}
