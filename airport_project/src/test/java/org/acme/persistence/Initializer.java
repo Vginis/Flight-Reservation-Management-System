@@ -43,7 +43,7 @@ public class Initializer {
 
         Flight f1 = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L,200);
         Flight f2 = new Flight("A3651", a1, ai2, "19:00", ai1, "21:00", 178, "Airbus-A320", 80L, 178);
-
+        a1.addFlight(f2);
         Ticket t1 = new Ticket("1A", "Bob", "Wonder", "CP152D45");
 
         Reservation r1 = new Reservation();
