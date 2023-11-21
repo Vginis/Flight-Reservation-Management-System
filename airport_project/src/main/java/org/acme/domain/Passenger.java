@@ -49,4 +49,5 @@ public class Passenger extends AccountManagement {
         this.passport_id = passport_id;
     }
 
+    //TODO email_validation() maybe? ReservationList and add/remove/get()
 }

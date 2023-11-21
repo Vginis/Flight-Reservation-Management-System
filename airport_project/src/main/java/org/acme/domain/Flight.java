@@ -44,6 +44,7 @@ public class Flight {
     @Column(name="availableSeats", nullable = false)
     private Integer availableSeats;
 
+    //private List<Reservation> reservations;
 
     public Flight() {
     }
@@ -144,4 +145,6 @@ public class Flight {
     public void setAvailableSeats(Integer availableSeats) {
         this.availableSeats = availableSeats;
     }
+
+    //TODO validateFlightNumber(), calculate available seats, get/add Tickets()
 }
