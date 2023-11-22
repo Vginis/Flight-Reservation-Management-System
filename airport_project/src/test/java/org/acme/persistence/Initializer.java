@@ -31,7 +31,7 @@ public class Initializer {
 
         eraseData();
 
-        Passenger p1 = new Passenger("ndiam@aueb.gr", "1234567891", "AK102545", "ndima", "yes!");
+        Passenger p1 = new Passenger("ndiam@gmail.com", "1234567891", "AK102545", "ndima", "yes!");
 
         Airline a1 = new Airline("Aegean Airlines", "A3", "aegean", "idk");
         Airline a2 = new Airline("RayanAir", "FR", "rayan", "pleba");
@@ -50,6 +50,7 @@ public class Initializer {
         r1.setPassenger(p1);
         r1.addOutgoingFlight(f1);
         r1.addTicket(t1);
+        p1.addReservation(r1);
 
         Reservation r2 = new Reservation();
         r2.setPassenger(p1);

@@ -2,6 +2,11 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Entity
 @DiscriminatorValue("PASSENGER")
 public class Passenger extends AccountManagement {
@@ -15,22 +20,35 @@ public class Passenger extends AccountManagement {
     @Column(name = "passport_id", nullable = true, length = 20)
     private String passport_id;
 
-    public Passenger() {
+    @OneToMany(mappedBy ="passenger")
+    private List<Reservation> reservations = new ArrayList<>();
+
+    public Passenger() throws IllegalAccessException {
+        this.setEmail("default@gmail.com");
+        this.phoneNum = "";
+        this.passport_id ="";
+        this.setUsername("");
+        this.setPassword("");
+        this.reservations = new ArrayList<>();
     }
 
-    public Passenger(String email, String phoneNum, String passport_id, String username, String password) {
+    public Passenger(String email, String phoneNum, String passport_id, String username, String password){
         super(username, password);
-        this.email = email;
+        this.setEmail(email);
         this.phoneNum = phoneNum;
         this.passport_id = passport_id;
+        this.reservations = new ArrayList<>();
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String email){
+        if (isValidEmail(email))
+            this.email = email;
+        else
+            throw new RuntimeException("Invalid email address");
     }
 
     public String getPhoneNum() {
@@ -49,5 +67,40 @@ public class Passenger extends AccountManagement {
         this.passport_id = passport_id;
     }
 
-    //TODO email_validation() maybe? ReservationList and add/remove/get()
-}
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+//TODO email_validation() maybe? ReservationList and add/remove/get()
+
+    public void addReservation(Reservation reservation){
+            if (reservation == null)
+                return;
+            if (reservation.getPassenger()!=this)
+                throw new RuntimeException("This reservation is not for this passenger");
+            if (reservations.contains(reservation))
+                throw new RuntimeException("Reservation already exists.");
+            reservations.add(reservation);
+        }
+
+
+    public void removeReservation(Reservation reservation){
+        if (reservation == null)
+            return;
+        if (!reservations.contains(reservation))
+            throw new RuntimeException("Reservation does not exist.");
+        reservations.remove(reservation);
+    }
+
+    public boolean isValidEmail(String Email){
+        String emailRegex = "^.{3,10}@gmail\\.com$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(Email);
+        return matcher.matches();
+    }
+
+    }
+
