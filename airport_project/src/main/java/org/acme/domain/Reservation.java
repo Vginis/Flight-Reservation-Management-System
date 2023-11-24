@@ -32,10 +32,10 @@ public class Reservation {
 
     private Boolean returnFlight;
 
-    @Column(name = "reservation", nullable = false)
+    @Column(name = "totalPrice", nullable = false)
     private long totalPrice;
 
-    @OneToMany(mappedBy = "ticketId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "ticketId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketsList;
 
     public Reservation() {

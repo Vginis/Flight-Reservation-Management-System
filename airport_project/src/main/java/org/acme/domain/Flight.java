@@ -19,18 +19,18 @@ public class Flight {
     @Column(name="FlightNo", length = 20)
     private String flightNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn (name = "airlineId")
     private Airline airline;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "depAirportId")
     private Airport departureAirport;
 
     @Column(name = "depTime")
     private LocalDateTime departureTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "arrAirportId")
     private Airport arrivalAirport;
 
@@ -49,7 +49,7 @@ public class Flight {
     @Column(name="availableSeats")
     private Integer availableSeats;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList;
 
     public Flight() {

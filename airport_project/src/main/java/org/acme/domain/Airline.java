@@ -35,7 +35,6 @@ public class Airline extends AccountManagement {
         this.flights = new ArrayList<>();
     }
 
-
     public List<Flight> getFlights() {
         return flights;
     }
@@ -56,7 +55,6 @@ public class Airline extends AccountManagement {
         this.u2digitCode = u2digitCode;
     }
 
-    // TODO add-removeFlight(done), popular_airport(done),completeness()
     public void addFlight(Flight flight) {
         if (flight == null)
             return;
@@ -101,7 +99,6 @@ public class Airline extends AccountManagement {
         return (mostVisitedAirport != null) ? mostVisitedAirport.getName() : null;
     }
 
-
     public double completeness(){
         double sum=0;
         int count=0;
@@ -113,5 +110,5 @@ public class Airline extends AccountManagement {
         average =100-(sum/count)*100;
         return average;
     }
-    }
 
+}

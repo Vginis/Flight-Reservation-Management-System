@@ -56,8 +56,6 @@ public class AccountManagement {
             throw new RuntimeException("Invalid Password");
     }
 
-    //TODO ΕΔΩ ΝΑ ΜΠΕΙ PASSWORD RESTRICTIONS, update set_password
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,5 +72,3 @@ public class AccountManagement {
     }
 
 }
-
-

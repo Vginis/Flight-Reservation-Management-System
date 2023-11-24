@@ -11,7 +11,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer ticketId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "reservationId", nullable = false)
     private Reservation reservation;
 
@@ -27,7 +27,7 @@ public class Ticket {
     @Embedded
     private PassengerInfo passengerInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flightId", nullable = false)
     private Flight flight;
 

@@ -70,11 +70,6 @@ public class Passenger extends AccountManagement {
         return reservations;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-//TODO email_validation() maybe? ReservationList and add/remove/get()
-
     public void addReservation(Reservation reservation){
             if (reservation == null)
                 return;
@@ -84,7 +79,6 @@ public class Passenger extends AccountManagement {
                 throw new RuntimeException("Reservation already exists.");
             reservations.add(reservation);
         }
-
 
     public void removeReservation(Reservation reservation){
         if (reservation == null)
@@ -101,5 +95,4 @@ public class Passenger extends AccountManagement {
         return matcher.matches();
     }
 
-    }
-
+}

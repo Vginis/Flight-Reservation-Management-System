@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("Administrator")
 public class Administrator extends AccountManagement {
-    //TODO NA SKEFTOYME AN THA TO VGALOYME
+
     @Column(name = "admin_id", nullable = true, length = 20)
     public String admin_id;
 
@@ -90,7 +90,5 @@ public class Administrator extends AccountManagement {
         }
         passengersList.remove(passenger);
     }
-
-
 
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Luggage {
 
     private boolean luggageIncluded;
+
     @Column(name = "weight", nullable = false, length = 2)
     private int weight;
 
