@@ -11,7 +11,8 @@ public class Administrator extends AccountManagement {
 
     public Administrator() {
         this.setUsername("admin");
-        this.setPassword("1234567890");
+        this.setPassword("JeandDig1@");
+        this.admin_id="";
     }
 
     public Administrator(String admin_id, String username, String password) {

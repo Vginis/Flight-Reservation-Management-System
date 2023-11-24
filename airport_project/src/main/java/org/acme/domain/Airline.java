@@ -24,7 +24,7 @@ public class Airline extends AccountManagement {
         this.name = "";
         this.u2digitCode = "";
         this.setUsername("airl");
-        this.setPassword("01234576909");
+        this.setPassword("JeandDig1@");
         this.flights = new ArrayList<>();
     }
 

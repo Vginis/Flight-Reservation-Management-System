@@ -31,12 +31,12 @@ public class Initializer {
 
         eraseData();
 
-        Passenger p1 = new Passenger("ndiam@gmail.com", "1234567891", "AK102545", "ndima", "1234567890");
+        Passenger p1 = new Passenger("ndiam@gmail.com", "1234567891", "AK102545", "ndima", "JeandDig1@");
 
-        Airline a1 = new Airline("Aegean Airlines", "A3", "aegean", "1234567890");
-        Airline a2 = new Airline("RayanAir", "FR", "rayan", "1234567890");
+        Airline a1 = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
+        Airline a2 = new Airline("RayanAir", "FR", "rayan", "JeandDig1@");
 
-        Administrator ad1 = new Administrator("Mpampas","admin", "1234567890");
+        Administrator ad1 = new Administrator("Mpampas","admin", "JeandDig1@");
 
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");

@@ -23,12 +23,12 @@ public class Passenger extends AccountManagement {
     @OneToMany(mappedBy ="passenger")
     private List<Reservation> reservations = new ArrayList<>();
 
-    public Passenger() throws IllegalAccessException {
+    public Passenger(){
         this.setEmail("default@gmail.com");
         this.phoneNum = "";
         this.passport_id ="";
         this.setUsername("");
-        this.setPassword("01234567890");
+        this.setPassword("JeandDig1@");
         this.reservations = new ArrayList<>();
     }
 

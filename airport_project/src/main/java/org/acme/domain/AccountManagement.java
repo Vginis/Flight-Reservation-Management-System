@@ -3,8 +3,8 @@ package org.acme.domain;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
+
 
 @Entity
 @Table(name = "AccountManagement")
@@ -24,8 +24,8 @@ public class AccountManagement {
     private String password;
 
     public AccountManagement() {
-        this.username="absd";
-        this.setPassword("kostavaganna");
+        this.username = "addd";
+        this.setPassword("JeandDig1@");
     }
 
     public AccountManagement(String username, String password) {
@@ -67,7 +67,7 @@ public class AccountManagement {
     }
 
     public boolean passwordValidation(String password){
-        String passwordRegex = "^.{8,20}$";
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
