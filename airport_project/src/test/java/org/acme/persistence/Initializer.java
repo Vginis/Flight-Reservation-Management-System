@@ -41,21 +41,35 @@ public class Initializer {
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
 
-        Flight f1 = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L,200);
-        Flight f2 = new Flight("A3651", a1, ai2, "19:00", ai1, "21:00", 178, "Airbus-A320", 80L, 178);
+        Flight f1 = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00", 200, "Boeing-365", 100L);
+        Flight f2 = new Flight("A3651", a1, ai2, "19:00", ai1, "21:00", 178, "Airbus-A320", 80L);
+
         a1.addFlight(f2);
-        Ticket t1 = new Ticket("1A", "Bob", "Wonder", "CP152D45");
+
+        a2.addFlight(f1);
 
         Reservation r1 = new Reservation();
+        Reservation r2 = new Reservation();
+
+        Ticket t1 = new Ticket(r1, f1, "1A", "Bob", "Wonder", "CP152D45");
+        Ticket t2 = new Ticket(r2, f2, "2F", "Art", "Buster", "AB42J34D");
+
+        f1.addTicket(t1);
+        f2.addTicket(t2);
+
         r1.setPassenger(p1);
         r1.addOutgoingFlight(f1);
         r1.addTicket(t1);
+
         p1.addReservation(r1);
 
-        Reservation r2 = new Reservation();
         r2.setPassenger(p1);
         r2.addOutgoingFlight(f1);
         r2.addIngoingFlight(f2);
+        r2.addTicket(t1);
+        r2.addTicket(t2);
+
+        p1.addReservation(r2);
 
         EntityTransaction tx = em.getTransaction();
         tx.begin();
@@ -74,6 +88,7 @@ public class Initializer {
         em.persist(f2);
 
         em.persist(t1);
+        em.persist(t2);
 
         em.persist(r1);
         em.persist(r2);

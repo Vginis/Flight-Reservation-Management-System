@@ -14,10 +14,10 @@ public class PassengerTest {
         Airline a2 = new Airline("RayanAir", "FR", "rayan", "pleba");
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
-        Ticket t1 = new Ticket("1A", "Bob", "Wonder", "CP152D45");
         passenger = new Passenger("email@gmail.com", "100", "AK111111","pppp", "00001111");
-        flight = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L,200);
+        flight = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L);
         reservation= new Reservation();
+        Ticket t1 = new Ticket(reservation, flight, "1A", "Bob", "Wonder", "CP152D45");
         reservation.setPassenger(passenger);
         reservation.addOutgoingFlight(flight);
         reservation.addTicket(t1);

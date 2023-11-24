@@ -12,7 +12,7 @@ public class TicketJPATest extends JPATest {
     @Test
     public void listTickets(){
         List<Ticket> result = em.createQuery("select t from Ticket t").getResultList();
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
     }
 
 }

@@ -2,6 +2,9 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="Flights")
 public class Flight {
@@ -11,55 +14,57 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name="FlightNo", nullable = false, length = 20)
+    @Column(name="FlightNo", length = 20)
     private String flightNo;
 
-    @ManyToOne
-    @JoinColumn (name = "airlineId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn (name = "airlineId")
     private Airline airline;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "depAirportId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "depAirportId")
     private Airport departureAirport;
 
-    @Column(name = "depTime", nullable = false)
+    @Column(name = "depTime")
     private String departureTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "arrAirportId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "arrAirportId")
     private Airport arrivalAirport;
 
-    @Column(name = "arrTime", nullable = false)
+    @Column(name = "arrTime")
     private String arrivalTime;
 
-    @Column(name="aircraftCapacity", nullable = false)
-    private Integer capacity;
+    @Column(name="aircraftCapacity")
+    private Integer aircraftCapacity;
 
-    @Column(name="aircraftType", nullable = false, length = 20)
+    @Column(name="aircraftType", length = 20)
     private String aircraftType;
 
-    @Column(name="TicketPrice", nullable = false)
+    @Column(name="TicketPrice")
     private Long ticketPrice;
 
-    @Column(name="availableSeats", nullable = false)
+    @Column(name="availableSeats")
     private Integer availableSeats;
 
-    //private List<Reservation> reservations;
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Ticket> ticketList;
 
     public Flight() {
     }
 
-    public Flight(String flightNo, Airline airline, Airport departureAirport, String departureTime, Airport arrivalAirport, String arrivalTime, Integer capacity, String aircraftType, Long ticketPrice, Integer availableSeats) {
+    public Flight(String flightNo, Airline airline, Airport departureAirport, String departureTime, Airport arrivalAirport, String arrivalTime, Integer aircraftCapacity, String aircraftType, Long ticketPrice) {
         this.flightNo = flightNo;
         this.airline = airline;
         this.departureAirport = departureAirport;
         this.departureTime = departureTime;
         this.arrivalAirport = arrivalAirport;
         this.arrivalTime = arrivalTime;
-        this.capacity = capacity;
+        this.aircraftCapacity = aircraftCapacity;
         this.aircraftType = aircraftType;
         this.ticketPrice = ticketPrice;
-        this.availableSeats = availableSeats;
+        this.availableSeats = aircraftCapacity;
+        this.ticketList = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -71,7 +76,17 @@ public class Flight {
     }
 
     public void setFlightNo(String flightNo) {
-        this.flightNo = flightNo;
+        if (flightNo.length()<2)
+            throw new RuntimeException("The Flight Number is less than 2 characters.");
+        else
+            if (validateFlightNo(flightNo))
+                this.flightNo = flightNo;
+            else
+                throw new RuntimeException("The Flight Number does not match the Airline Code.");
+    }
+
+    private boolean validateFlightNo(String flightNo) {
+        return this.airline.getU2digitCode().matches(flightNo.substring(0, 2));
     }
 
     public Airline getAirline() {
@@ -79,7 +94,15 @@ public class Flight {
     }
 
     public void setAirline(Airline airline) {
-        this.airline = airline;
+        if (airline == null) return;
+        if (validateAirline(airline))
+            this.airline = airline;
+        else
+            throw new RuntimeException("The Airline does not match the Flight Number.");
+    }
+
+    private boolean validateAirline(Airline airline) {
+        return airline.getU2digitCode().matches(this.flightNo.substring(0, 2));
     }
 
     public Airport getDepartureAirport() {
@@ -87,7 +110,11 @@ public class Flight {
     }
 
     public void setDepartureAirport(Airport departureAirport) {
-        this.departureAirport = departureAirport;
+        if (this.departureAirport.equals(departureAirport)) return;
+        if (validateAirport(departureAirport))
+            this.departureAirport = departureAirport;
+        else
+            throw new RuntimeException("The Airport is similar to the Arrival Airport.");
     }
 
     public String getDepartureTime() {
@@ -103,7 +130,18 @@ public class Flight {
     }
 
     public void setArrivalAirport(Airport arrivalAirport) {
-        this.arrivalAirport = arrivalAirport;
+        if (this.arrivalAirport.equals(arrivalAirport)) return;
+        if (validateAirport(arrivalAirport))
+            this.arrivalAirport = arrivalAirport;
+        else
+            throw new RuntimeException("The Airport is similar to the Departure Airport.");
+    }
+
+    private boolean validateAirport(Airport airport) {
+        if (this.departureAirport.equals(airport) || this.arrivalAirport.equals(airport))
+            return false;
+        else
+            return true;
     }
 
     public String getArrivalTime() {
@@ -114,12 +152,15 @@ public class Flight {
         this.arrivalTime = arrivalTime;
     }
 
-    public Integer getCapacity() {
-        return capacity;
+    public Integer getAircraftCapacity() {
+        return aircraftCapacity;
     }
 
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
+    public void setAircraftCapacity(Integer aircraftCapacity) {
+        if (aircraftCapacity < this.ticketList.size())
+            throw new RuntimeException("The Capacity of the Aircraft is less than the Tickets sold.");
+        this.aircraftCapacity = aircraftCapacity;
+        calculateAvailableSeats();
     }
 
     public String getAircraftType() {
@@ -142,9 +183,33 @@ public class Flight {
         return availableSeats;
     }
 
-    public void setAvailableSeats(Integer availableSeats) {
-        this.availableSeats = availableSeats;
+    private void calculateAvailableSeats() {
+        Integer soldTickets = this.ticketList.size();
+        if (this.availableSeats > 0)
+            this.availableSeats = this.aircraftCapacity - soldTickets;
     }
 
-    //TODO validateFlightNumber(), calculate available seats, get/add Tickets()
+    public List<Ticket> getTicketList() {
+        return new ArrayList<>(ticketList);
+    }
+
+    public void addTicket(Ticket ticket) {
+        if (ticket == null) return;
+        if (this.availableSeats == 0)
+            throw new RuntimeException("There are no more seats available.");
+        if (ticketList.contains(ticket))
+            throw new RuntimeException("This Ticket is already on the list.");
+        ticketList.add(ticket);
+        calculateAvailableSeats();
+    }
+
+    public void removeTicket(Ticket ticket) {
+        if (ticket == null) return;
+        if (ticketList.contains(ticket)) {
+            ticketList.remove(ticket);
+            calculateAvailableSeats();
+        } else
+            throw new RuntimeException("This Ticket is not on the list.");
+    }
+
 }

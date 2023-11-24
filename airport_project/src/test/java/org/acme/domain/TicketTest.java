@@ -1,0 +1,30 @@
+package org.acme.domain;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class TicketTest {
+
+    Ticket ticket;
+
+    @BeforeEach
+    public void setup() {
+        Reservation reservation = new Reservation();
+        Airline airline = new Airline("Aegean Airlines", "A3", "aegean", "idk");
+        Airport airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
+        Airport airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
+        Flight flight = new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 178, "Airbus-A320", 80L);
+        ticket = new Ticket(reservation, flight, "11A", "Bob", "Dumb", "G478LJH");
+    }
+
+    @Test
+    public void CalculateTicketPrice() {
+        assertEquals(80, ticket.getTicketPrice());
+
+        ticket.setLuggageIncluded(true);
+        assertEquals(110, ticket.getTicketPrice());
+    }
+
+}

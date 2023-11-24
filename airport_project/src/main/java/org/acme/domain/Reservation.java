@@ -22,7 +22,7 @@ public class Reservation {
     @JoinTable(name = "OutFlightsReservations",
             joinColumns = {@JoinColumn(name = "flightId")},
             inverseJoinColumns = {@JoinColumn(name = "reservationId")})
-    private List<Flight> outgoingFlights = new ArrayList<>();
+    private List<Flight> outgoingFlights;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "InFlightsReservations",
@@ -35,12 +35,14 @@ public class Reservation {
     @Column(name = "reservation", nullable = false)
     private long totalPrice;
 
-    @OneToMany(mappedBy = "ticketId", fetch = FetchType.LAZY)
-    private List<Ticket> ticketsList = new ArrayList<>();
+    @OneToMany(mappedBy = "ticketId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Ticket> ticketsList;
 
     public Reservation() {
+        outgoingFlights = new ArrayList<>();
         returnFlight = false;
         totalPrice = 0;
+        ticketsList = new ArrayList<>();
     }
 
     public Passenger getPassenger() {
@@ -48,6 +50,7 @@ public class Reservation {
     }
 
     public void setPassenger(Passenger passenger) {
+        if (passenger == null) return;
         this.passenger = passenger;
     }
 
@@ -57,14 +60,18 @@ public class Reservation {
 
     public void addOutgoingFlight(Flight outFlight) {
         if (outFlight == null) return;
-        if (outgoingFlights.contains(outFlight)) {
-            throw new RuntimeException("Outgoing Flight already exists.");
+        if (this.outgoingFlights.contains(outFlight)) {
+            throw new RuntimeException("Outgoing Flight is already on the list.");
         }
-        outgoingFlights.add(outFlight);
+        this.outgoingFlights.add(outFlight);
     }
 
     public void removeOutgoingFlight(Flight outFlight) {
-        outgoingFlights.remove(outFlight);
+        if (outFlight == null) return;
+        if (this.outgoingFlights.contains(outFlight))
+            this.outgoingFlights.remove(outFlight);
+        else
+            throw new RuntimeException("Outgoing Flight is not on the list.");
     }
 
     public List<Flight> getIngoingFlights() {
@@ -73,53 +80,61 @@ public class Reservation {
 
     public void addIngoingFlight(Flight inFlight) {
         if (inFlight == null) return;
-        if (!returnFlight) setReturnFlight(true);
-        if (ingoingFlights.contains(inFlight)) {
-            throw new RuntimeException("Ingoing Flight already exists.");
+        if (!this.returnFlight) setReturnFlight();
+        if (this.ingoingFlights.contains(inFlight)) {
+            throw new RuntimeException("Ingoing Flight is already on the list..");
         }
-        ingoingFlights.add(inFlight);
+        this.ingoingFlights.add(inFlight);
     }
 
     public void removeIngoingFlight(Flight inFlight) {
-        ingoingFlights.remove(inFlight);
+        if (inFlight == null) return;
+        if (this.ingoingFlights.contains(inFlight))
+            this.ingoingFlights.remove(inFlight);
+        else
+            throw new RuntimeException("Ingoing Flight is not on the list.");
     }
 
     public Boolean getReturnFlight() {
         return returnFlight;
     }
 
-    public void setReturnFlight(Boolean returnFlight) {
-        if (returnFlight) {
+    private void setReturnFlight() {
             this.returnFlight = true;
             this.ingoingFlights = new ArrayList<>();
-        }
     }
 
     public long getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(long totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public void calculateTotalPrice(List<Ticket> ticketList) {
-        if (ticketList.size() == 0) return;
-        for (int i=1; i<= ticketList.size(); i++) {
-            this.totalPrice += ticketList.get(i).getTicketPrice();
+    private void calculateTotalPrice() {
+        if (this.ticketsList.size() == 0) return;
+        for (int i=0; i< this.ticketsList.size(); i++) {
+            this.totalPrice += this.ticketsList.get(i).getTicketPrice();
         }
     }
 
     public List<Ticket> getTicketsList() {
-        return ticketsList;
+        return new ArrayList<>(ticketsList);
     }
 
     public void addTicket(Ticket ticket) {
         if (ticket == null) return;
-        if (ticketsList.contains(ticket)) {
-            throw new RuntimeException("Ticket already exists.");
+        if (this.ticketsList.contains(ticket)) {
+            throw new RuntimeException("Ticket is already on the list.");
         }
-        ticketsList.add(ticket);
+        this.ticketsList.add(ticket);
+        calculateTotalPrice();
+    }
+
+    public void removeTicket(Ticket ticket) {
+        if (ticket == null) return;
+        if (this.ticketsList.contains(ticket)) {
+            this.ticketsList.remove(ticket);
+            calculateTotalPrice();
+        } else
+            throw new RuntimeException("Ticket is not on the list.");
     }
 
 }

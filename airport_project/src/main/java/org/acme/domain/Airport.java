@@ -77,6 +77,6 @@ public class Airport {
         if (o == null || getClass() != o.getClass()) return false;
         Airport airport = (Airport) o;
         return Objects.equals(id, airport.id) && Objects.equals(name, airport.name) && Objects.equals(city, airport.city)
-                && Objects.equals(country, airport.country);
+                && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
     }
 }

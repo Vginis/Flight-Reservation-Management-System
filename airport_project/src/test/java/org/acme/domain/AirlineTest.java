@@ -21,7 +21,7 @@ public class AirlineTest {
 
     @Test
     public void denyExistingFlights(){
-        Flight flight1 = new Flight("A3651", airline, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L, 178);
+        Flight flight1 = new Flight("A3651", airline, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
         airline.addFlight(flight1);
         Assertions.assertThrows(RuntimeException.class, () -> {
             airline.addFlight(flight1);
@@ -31,7 +31,7 @@ public class AirlineTest {
     @Test
     public void denyFlightFromAnotherAirline(){
         Airline airline2 = new Airline("Transavia", "TV", "trans", "Worst");
-        Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L, 178);
+        Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
         Assertions.assertThrows(RuntimeException.class, () -> {
             airline.addFlight(flight2);
         });
@@ -40,7 +40,7 @@ public class AirlineTest {
     @Test
     public void denyNonExistingDelete (){
         Airline airline2 = new Airline("Transavia", "TV", "trans", "Worst");
-        Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L, 178);
+        Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
         Assertions.assertThrows(RuntimeException.class, () -> {
             airline.removeFlight(flight2);
         });
@@ -48,8 +48,8 @@ public class AirlineTest {
 
     @Test
     public void computeMostPopularAirport(){
-        Flight flight1 = new Flight("A3651", airline, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L, 178);
-        Flight flight2 = new Flight("A3651", airline, airport1, "19:00", airport3, "21:00", 178, "Airbus-A320", 80L, 178);
+        Flight flight1 = new Flight("A3651", airline, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
+        Flight flight2 = new Flight("A3651", airline, airport1, "19:00", airport3, "21:00", 178, "Airbus-A320", 80L);
         airline.addFlight(flight1);
         airline.addFlight(flight2);
         Assertions.assertEquals("Eleftherios Venizelos",airline.mostPopularAirport());

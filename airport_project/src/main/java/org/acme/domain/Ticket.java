@@ -11,10 +11,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer ticketId;
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "reservationId", nullable = false)
     private Reservation reservation;
-*/
+
     @Embedded
     private Luggage luggage;
 
@@ -27,30 +27,34 @@ public class Ticket {
     @Embedded
     private PassengerInfo passengerInfo;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "flightId", nullable = false)
+    private Flight flight;
+
     public Ticket() {
         passengerInfo = new PassengerInfo();
     }
 
-    public Ticket(String seatNo, String firstName, String lastName, String passportId) {
+    public Ticket(Reservation reservation, Flight flight, String seatNo, String firstName, String lastName, String passportId) {
+        this.reservation = reservation;
+        this.flight = flight;
         this.seatNo = seatNo;
         this.passengerInfo = new PassengerInfo(firstName, lastName, passportId);
+        this.ticketPrice = flight.getTicketPrice();
         luggage = new Luggage();
     }
 
-    /*public Reservation getReservation() {
+    public Reservation getReservation() {
         return reservation;
     }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
-*/
     public boolean isLuggageIncluded() {
         return luggage.isLuggageIncluded();
     }
 
     public void setLuggageIncluded(boolean luggageIncluded) {
         this.luggage.setLuggageIncluded(luggageIncluded);
+        calculateTicketPrice();
     }
 
     public int getWeight() {
@@ -73,13 +77,12 @@ public class Ticket {
         return ticketPrice;
     }
 
-    public void setTicketPrice(long ticketPrice) {
-        this.ticketPrice = ticketPrice;
-    }
-    //TODO the calculateTicketPrice()
-    public void calculateTicketPrice() {
-        ticketPrice = 0;
-        if (isLuggageIncluded()) ticketPrice += 30;
+    private void calculateTicketPrice() {
+        if (this.flight == null)
+            throw new RuntimeException("Flight is null.");
+        this.ticketPrice = flight.getTicketPrice();
+        if (isLuggageIncluded()) this.ticketPrice += 30;
+
     }
 
     public String getSeatNo() {
@@ -112,6 +115,10 @@ public class Ticket {
 
     public void setPassportId(String passportId) {
         this.passengerInfo.setPassportId(passportId);
+    }
+
+    public Flight getFlight() {
+        return flight;
     }
 
 }
