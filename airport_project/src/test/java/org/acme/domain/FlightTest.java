@@ -19,7 +19,7 @@ public class FlightTest {
         airline = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
-        flight = new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 178, "Airbus-A320", 80L);
+        flight = new Flight("A3651", airline, airport1, "202307192100", airport2, "202307192100", 178, "Airbus-A320", 80L);
         Reservation reservation = new Reservation();
         ticket1 = new Ticket(reservation, flight, "1A", "Ben", "Wales", "CD542K76");
         ticket2 = new Ticket(reservation, flight, "2F", "Art", "Vandelay", "A754G5L");
@@ -78,7 +78,7 @@ public class FlightTest {
 
     @Test
     public void flightCompletnessTest(){
-        Flight flight1= new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 12, "Airbus-A320", 80L);
+        Flight flight1= new Flight("A3651", airline, airport1, "202307192100", airport2, "202307192100", 12, "Airbus-A320", 80L);
         Reservation reservation = new Reservation();
         ticket1 = new Ticket(reservation, flight1, "1A", "Ben", "Wales", "CD542K76");
         ticket2 = new Ticket(reservation, flight1, "2F", "Art", "Vandelay", "A754G5L");

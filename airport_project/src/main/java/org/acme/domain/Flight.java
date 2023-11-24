@@ -2,6 +2,8 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +28,14 @@ public class Flight {
     private Airport departureAirport;
 
     @Column(name = "depTime")
-    private String departureTime;
+    private LocalDateTime departureTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "arrAirportId")
     private Airport arrivalAirport;
 
     @Column(name = "arrTime")
-    private String arrivalTime;
+    private LocalDateTime arrivalTime;
 
     @Column(name="aircraftCapacity")
     private Integer aircraftCapacity;
@@ -57,9 +59,9 @@ public class Flight {
         this.flightNo = flightNo;
         this.airline = airline;
         this.departureAirport = departureAirport;
-        this.departureTime = departureTime;
+        this.departureTime = LocalDateTime.parse(departureTime, DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
         this.arrivalAirport = arrivalAirport;
-        this.arrivalTime = arrivalTime;
+        this.arrivalTime =  LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
         this.aircraftCapacity = aircraftCapacity;
         this.aircraftType = aircraftType;
         this.ticketPrice = ticketPrice;
@@ -117,12 +119,12 @@ public class Flight {
             throw new RuntimeException("The Airport is similar to the Arrival Airport.");
     }
 
-    public String getDepartureTime() {
+    public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
     public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+        this.departureTime = LocalDateTime.parse(departureTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 
     public Airport getArrivalAirport() {
@@ -144,12 +146,12 @@ public class Flight {
             return true;
     }
 
-    public String getArrivalTime() {
+    public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
     public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
+        this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));;
     }
 
     public Integer getAircraftCapacity() {

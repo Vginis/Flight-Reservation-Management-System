@@ -15,7 +15,7 @@ public class PassengerTest {
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
         passenger = new Passenger("email@gmail.com", "100", "AK111111","pppp", "JeandDig1@");
-        flight = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L);
+        flight = new Flight("FR8438", a2, ai1, "202307192100", ai2, "202307192100",  200,"Boeing-365", 100L);
         reservation= new Reservation();
         Ticket t1 = new Ticket(reservation, flight, "1A", "Bob", "Wonder", "CP152D45");
         reservation.setPassenger(passenger);

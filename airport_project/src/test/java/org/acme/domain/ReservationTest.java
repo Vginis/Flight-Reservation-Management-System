@@ -23,8 +23,8 @@ public class ReservationTest {
         airline = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
-        flightO = new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 178, "Airbus-A320", 80L);
-        flightI = new Flight("A3650", airline, airport2, "22:00", airport1, "00:00", 178, "Airbus-A320", 50L);
+        flightO = new Flight("A3651", airline, airport1, "202307192100", airport2, "202307192100", 178, "Airbus-A320", 80L);
+        flightI = new Flight("A3650", airline, airport2, "202307192100", airport1, "202307192100", 178, "Airbus-A320", 50L);
         reservation = new Reservation();
         ticket = new Ticket(reservation, flightO, "11A", "Art", "Bunny", "34K89JL7");
     }

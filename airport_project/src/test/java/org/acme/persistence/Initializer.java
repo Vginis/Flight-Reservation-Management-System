@@ -41,8 +41,8 @@ public class Initializer {
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
 
-        Flight f1 = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00", 200, "Boeing-365", 100L);
-        Flight f2 = new Flight("A3651", a1, ai2, "19:00", ai1, "21:00", 178, "Airbus-A320", 80L);
+        Flight f1 = new Flight("FR8438", a2, ai1, "202307192100", ai2, "202307192100", 200, "Boeing-365", 100L);
+        Flight f2 = new Flight("A3651", a1, ai2, "202307192100", ai1, "202307192100", 178, "Airbus-A320", 80L);
 
         a1.addFlight(f2);
 
