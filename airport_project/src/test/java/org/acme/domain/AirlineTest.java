@@ -13,7 +13,7 @@ public class AirlineTest {
 
     @BeforeEach
     public void setup(){
-        airline = new Airline("Aegean Airlines", "A3", "aegean", "idk");
+        airline = new Airline("Aegean Airlines", "A3", "aegean", "01234567890");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fumicino","Milan","Italy","FCO");
         airport3 = new Airport("Thessalonikis","Thessaloniki","Greece","SKG");
@@ -30,7 +30,7 @@ public class AirlineTest {
 
     @Test
     public void denyFlightFromAnotherAirline(){
-        Airline airline2 = new Airline("Transavia", "TV", "trans", "Worst");
+        Airline airline2 = new Airline("Transavia", "TV", "trans", "01234567890");
         Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
         Assertions.assertThrows(RuntimeException.class, () -> {
             airline.addFlight(flight2);
@@ -39,7 +39,7 @@ public class AirlineTest {
 
     @Test
     public void denyNonExistingDelete (){
-        Airline airline2 = new Airline("Transavia", "TV", "trans", "Worst");
+        Airline airline2 = new Airline("Transavia", "TV", "trans", "01234567890");
         Flight flight2 = new Flight("A3651", airline2, airport2, "19:00", airport1, "21:00", 178, "Airbus-A320", 80L);
         Assertions.assertThrows(RuntimeException.class, () -> {
             airline.removeFlight(flight2);

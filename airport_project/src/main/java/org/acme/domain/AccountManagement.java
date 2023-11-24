@@ -3,6 +3,8 @@ package org.acme.domain;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "AccountManagement")
@@ -22,11 +24,13 @@ public class AccountManagement {
     private String password;
 
     public AccountManagement() {
+        this.username="absd";
+        this.setPassword("kostavaganna");
     }
 
     public AccountManagement(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.setPassword(password);
     }
 
     public Integer getId() {
@@ -46,7 +50,10 @@ public class AccountManagement {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (passwordValidation(password))
+            this.password = password;
+        else
+            throw new RuntimeException("Invalid Password");
     }
 
     //TODO ΕΔΩ ΝΑ ΜΠΕΙ PASSWORD RESTRICTIONS, update set_password
@@ -57,6 +64,13 @@ public class AccountManagement {
         if (o == null || getClass() != o.getClass()) return false;
         AccountManagement that = (AccountManagement) o;
         return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(password, that.password);
+    }
+
+    public boolean passwordValidation(String password){
+        String passwordRegex = "^.{8,20}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 
 }

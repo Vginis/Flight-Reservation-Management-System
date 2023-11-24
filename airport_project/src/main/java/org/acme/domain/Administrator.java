@@ -10,6 +10,8 @@ public class Administrator extends AccountManagement {
     public String admin_id;
 
     public Administrator() {
+        this.setUsername("admin");
+        this.setPassword("1234567890");
     }
 
     public Administrator(String admin_id, String username, String password) {

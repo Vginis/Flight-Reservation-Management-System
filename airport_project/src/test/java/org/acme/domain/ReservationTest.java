@@ -19,8 +19,8 @@ public class ReservationTest {
 
     @BeforeEach
     public void setup() {
-        passenger = new Passenger("artb@gmail.com", "00306947165246", "34K89JL7", "artb", "random");
-        airline = new Airline("Aegean Airlines", "A3", "aegean", "idk");
+        passenger = new Passenger("artb@gmail.com", "00306947165246", "34K89JL7", "artb", "01234567890");
+        airline = new Airline("Aegean Airlines", "A3", "aegean", "01234567890");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
         flightO = new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 178, "Airbus-A320", 80L);

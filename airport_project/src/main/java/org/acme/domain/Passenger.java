@@ -28,7 +28,7 @@ public class Passenger extends AccountManagement {
         this.phoneNum = "";
         this.passport_id ="";
         this.setUsername("");
-        this.setPassword("");
+        this.setPassword("01234567890");
         this.reservations = new ArrayList<>();
     }
 

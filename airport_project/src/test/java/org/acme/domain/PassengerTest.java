@@ -11,10 +11,10 @@ public class PassengerTest {
 
     @BeforeEach
     public void setup() {
-        Airline a2 = new Airline("RayanAir", "FR", "rayan", "pleba");
+        Airline a2 = new Airline("RayanAir", "FR", "rayan", "01234567890");
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport ai2 = new Airport("Fumicino","Milan","Italy","FCO");
-        passenger = new Passenger("email@gmail.com", "100", "AK111111","pppp", "00001111");
+        passenger = new Passenger("email@gmail.com", "100", "AK111111","pppp", "01234567890");
         flight = new Flight("FR8438", a2, ai1, "09:00", ai2, "12:00",  200,"Boeing-365", 100L);
         reservation= new Reservation();
         Ticket t1 = new Ticket(reservation, flight, "1A", "Bob", "Wonder", "CP152D45");
@@ -26,7 +26,7 @@ public class PassengerTest {
 
     @Test
     public void DenyReservationForAnOtherPassenger(){
-        Passenger passenger2 = new Passenger("emp@gmail.com", "100254435", "AK155644","oooo", "9999111");
+        Passenger passenger2 = new Passenger("emp@gmail.com", "100254435", "AK155644","oooo", "01234567890");
         Assertions.assertThrows(RuntimeException.class, () -> {
             passenger2.addReservation(reservation);
         });
