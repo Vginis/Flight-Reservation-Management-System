@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 @Entity
 @DiscriminatorValue("PASSENGER")
@@ -96,7 +95,7 @@ public class Passenger extends AccountManagement {
     }
 
     public boolean isValidEmail(String Email){
-        String emailRegex = "^.{3,10}@gmail\\.com$";
+        String emailRegex = "^.{3,20}@(unipi\\.gr|outlook\\.com|aueb\\.gr|gmail\\.com)$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(Email);
         return matcher.matches();

@@ -31,7 +31,7 @@ public class Initializer {
 
         eraseData();
 
-        Passenger p1 = new Passenger("ndiam@gmail.com", "1234567891", "AK102545", "ndima", "JeandDig1@");
+        Passenger p1 = new Passenger("ndiam@aueb.gr", "1234567891", "AK102545", "ndima", "JeandDig1@");
 
         Airline a1 = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
         Airline a2 = new Airline("RayanAir", "FR", "rayan", "JeandDig1@");
