@@ -76,4 +76,16 @@ public class FlightTest {
         Assertions.assertThrows(RuntimeException.class, () -> flight.setArrivalAirport(airport1));
     }
 
+    @Test
+    public void flightCompletnessTest(){
+        Flight flight1= new Flight("A3651", airline, airport1, "19:00", airport2, "21:00", 12, "Airbus-A320", 80L);
+        Reservation reservation = new Reservation();
+        ticket1 = new Ticket(reservation, flight1, "1A", "Ben", "Wales", "CD542K76");
+        ticket2 = new Ticket(reservation, flight1, "2F", "Art", "Vandelay", "A754G5L");
+        ticket3 = new Ticket(reservation, flight1, "2A", "Turd", "Ferguson", "R34DH88");
+        flight1.addTicket(ticket1);
+        flight1.addTicket(ticket2);
+        flight1.addTicket(ticket3);
+        Assertions.assertEquals(25,flight1.flightCompletness());
+    }
 }
