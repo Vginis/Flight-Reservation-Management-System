@@ -13,7 +13,7 @@ public class Airport {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer airportId;
 
-    @Column(name="name", nullable = false, length = 30)
+    @Column(name="name", nullable = false, length = 30,unique = true)
     private String name;
 
     @Column(name="city", nullable = false, length = 20)

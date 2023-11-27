@@ -1,5 +1,6 @@
 package org.acme.persistence;
 
+import jakarta.persistence.Query;
 import org.acme.domain.Flight;
 import org.junit.jupiter.api.Test;
 
@@ -14,5 +15,13 @@ public class FlightJPATest extends JPATest{
     public void listFlights(){
         List<Flight> result = em.createQuery("select p from Flight p").getResultList();
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void listFlightsByAirline(){
+        Query query = em.createQuery("select f from Flight f where f.airline.id=:airline");
+        query.setParameter("airline", 55);
+        List<Flight> result = query.getResultList();
+        assertEquals(1, result.size());
     }
 }
