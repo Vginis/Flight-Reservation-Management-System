@@ -1,6 +1,10 @@
 package org.acme.persistence;
 
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.RollbackException;
+import org.acme.domain.Airline;
 import org.acme.domain.Airport;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,4 +17,5 @@ public class AirportJPATest extends JPATest{
         List<Airport> result = em.createQuery("select a from Airport a").getResultList();
         assertEquals(2, result.size());
     }
+
 }

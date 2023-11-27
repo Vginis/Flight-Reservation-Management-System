@@ -22,7 +22,7 @@ public class Airport {
     @Column(name="country", nullable = false, length = 20)
     private String country;
 
-    @Column(name="u3digitCode", nullable = false, length = 3)
+    @Column(name="u3digitCode", nullable = false, length = 3,unique = true)
     private String u3digitCode;
 
     public Airport(){

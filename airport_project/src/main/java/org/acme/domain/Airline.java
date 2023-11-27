@@ -11,13 +11,13 @@ import java.util.Map;
 @DiscriminatorValue("AIRLINE")
 public class Airline extends AccountManagement {
 
-    @Column(name = "name", nullable = true, length = 30)
+    @Column(name = "name", nullable = true, length = 30,unique = true)
     private String name;
 
-    @Column(name = "u2digitCode", nullable = true, length = 2)
+    @Column(name = "u2digitCode", nullable = true, length = 2,unique = true)
     private String u2digitCode;
 
-    @OneToMany(mappedBy = "airline")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
     private List<Flight> flights = new ArrayList<>();
 
     public Airline() {

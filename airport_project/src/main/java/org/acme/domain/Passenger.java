@@ -16,7 +16,7 @@ public class Passenger extends AccountManagement {
     @Column(name = "phoneNum", nullable = true, length = 20)
     private String phoneNum;
 
-    @Column(name = "passport_id", nullable = true, length = 20)
+    @Column(name = "passport_id", nullable = true, length = 20,unique = true)
     private String passport_id;
 
     @OneToMany(mappedBy ="passenger")
