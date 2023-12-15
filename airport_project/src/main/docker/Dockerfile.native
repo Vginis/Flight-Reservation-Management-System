@@ -7,11 +7,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native -t quarkus/airport .
+# docker build -f src/main/docker/Dockerfile.native -t quarkus/airport_project .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/airport
+# docker run -i --rm -p 8080:8080 quarkus/airport_project
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.9

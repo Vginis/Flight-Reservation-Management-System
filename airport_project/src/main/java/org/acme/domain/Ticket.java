@@ -27,7 +27,7 @@ public class Ticket {
     @Embedded
     private PassengerInfo passengerInfo;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flightId", nullable = false)
     private Flight flight;
 

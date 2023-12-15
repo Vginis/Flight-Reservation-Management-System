@@ -17,7 +17,7 @@ public class Airline extends AccountManagement {
     @Column(name = "u2digitCode", nullable = true, length = 2,unique = true)
     private String u2digitCode;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
+    @OneToMany(mappedBy = "airline")
     private List<Flight> flights = new ArrayList<>();
 
     public Airline() {
