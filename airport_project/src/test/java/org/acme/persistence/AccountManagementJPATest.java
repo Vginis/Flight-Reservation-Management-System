@@ -76,4 +76,14 @@ public class AccountManagementJPATest extends JPATest {
         });
     }
 
+    @Test
+    public void deleteFlightsViaDeletingAirline(){
+        Administrator ad1 = new Administrator("Mpampas","admin", "JeandDig1@");
+        Query query = em.createQuery("delete from Airline where id=3");
+        Assertions.assertNull(em.createQuery("select f from Flight f where f.airline=:Id"));
+        query.setParameter("Id", 3);
+    }
+
+
+
 }

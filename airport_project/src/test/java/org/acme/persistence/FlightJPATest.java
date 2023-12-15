@@ -24,4 +24,5 @@ public class FlightJPATest extends JPATest{
         List<Flight> result = query.getResultList();
         assertEquals(1, result.size());
     }
+
 }
