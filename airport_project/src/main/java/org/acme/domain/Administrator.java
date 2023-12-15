@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("Administrator")
+@DiscriminatorValue("ADMINISTRATOR")
 public class Administrator extends AccountManagement {
 
     @Column(name = "admin_id", nullable = true, length = 20)

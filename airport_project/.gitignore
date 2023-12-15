@@ -41,7 +41,3 @@ nb-configuration.xml
 
 # Plugin directory
 /.quarkus/cli/plugins/
-
-# Database
-/test.mv.db
-/test.trace.db

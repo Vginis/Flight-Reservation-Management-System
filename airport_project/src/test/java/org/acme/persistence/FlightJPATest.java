@@ -18,9 +18,9 @@ public class FlightJPATest extends JPATest{
     }
 
     @Test
-    public void listFlightsByAirline(){
-        Query query = em.createQuery("select f from Flight f where f.airline.id=:airline");
-        query.setParameter("airline", 55);
+    public void listFlightsByAirlineCode(){
+        Query query = em.createQuery("select f from Flight f where f.airline.u2digitCode=:airline");
+        query.setParameter("airline", "A3");
         List<Flight> result = query.getResultList();
         assertEquals(1, result.size());
     }
