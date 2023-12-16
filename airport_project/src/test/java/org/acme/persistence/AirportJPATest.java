@@ -1,42 +1,45 @@
 package org.acme.persistence;
 
-import jakarta.persistence.EntityTransaction;
+import io.quarkus.test.TestTransaction;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.RollbackException;
-import org.acme.domain.Airline;
 import org.acme.domain.Airport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+@QuarkusTest
+public class AirportJPATest {
 
-public class AirportJPATest extends JPATest {
+    @Inject
+    EntityManager em;
+
     @Test
+    @TestTransaction
     public void listAirports() {
         List<Airport> result = em.createQuery("select a from Airport a").getResultList();
-        assertEquals(2, result.size());
+        Assertions.assertEquals(2, result.size());
     }
 
     @Test
+    @TestTransaction
     public void denySavingAiportwithSameU3digitCode() {
         Airport ai1 = new Airport("Fotis Ioannidis","Athens","Greece","ATH");
         Assertions.assertThrows(RollbackException.class, () -> {
-            EntityTransaction tx = em.getTransaction();
-            tx.begin();
             em.persist(ai1);
-            tx.commit();
         });
     }
 
     @Test
+    @TestTransaction
     public void denySavingAirportWithSameName() {
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATK");
         Assertions.assertThrows(RollbackException.class, () -> {
-            EntityTransaction tx = em.getTransaction();
-            tx.begin();
             em.persist(ai1);
-            tx.commit();
         });
     }
+
 }

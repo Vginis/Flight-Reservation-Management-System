@@ -1,4 +1,4 @@
-package org.acme.Quarkus_Testing;
+package org.acme.quarkus;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
