@@ -26,6 +26,7 @@ public class IntegrationBase {
         }
 
         em.createNativeQuery(sql).executeUpdate();
+
     }
 
     private String convertStreamToString(InputStream in) {
@@ -33,5 +34,6 @@ public class IntegrationBase {
         Scanner s = new Scanner(in,"UTF-8").useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+
 
 }

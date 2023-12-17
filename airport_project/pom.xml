@@ -83,6 +83,18 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
 
     <!-- Hibernate
     <dependency>
@@ -223,8 +235,19 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
         <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
+            <arg>-Amapstruct.suppressGeneratorVersionInfoComment=true</arg>
+            <arg>-Amapstruct.verbose=true</arg>
+            <arg>-Amapstruct.defaultComponentModel=cdi</arg>
           </compilerArgs>
         </configuration>
       </plugin>
