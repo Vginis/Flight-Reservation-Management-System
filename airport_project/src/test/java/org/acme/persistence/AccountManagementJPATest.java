@@ -4,7 +4,6 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.RollbackException;
 import org.acme.domain.Administrator;
 import org.acme.domain.Airline;
 import org.acme.domain.Passenger;
@@ -44,7 +43,7 @@ public class AccountManagementJPATest {
     @TestTransaction
     public void denySavingAirlineWithSamey2DigitCode() {
         Airline a3 = new Airline("Aegean Airlinessss", "A3", "aegn", "JeandDig1@");
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(a3);
         });
     }
@@ -53,7 +52,7 @@ public class AccountManagementJPATest {
     @TestTransaction
     public void denySavingAirlineWithSameName() {
         Airline a3 = new Airline("Aegean Airlines", "B3", "aegen", "JeandDig1@");
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(a3);
         });
     }
@@ -64,11 +63,11 @@ public class AccountManagementJPATest {
         Airline a3 = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
         Passenger p2 = new Passenger("e.gkinis@aueb.gr", "1234567891", "AK102545", "ndima", "JeandDig1@");
 
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(a3);
         });
 
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(p2);
         });
     }

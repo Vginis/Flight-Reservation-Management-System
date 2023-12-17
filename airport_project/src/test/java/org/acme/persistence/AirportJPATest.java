@@ -4,7 +4,6 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.RollbackException;
 import org.acme.domain.Airport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ public class AirportJPATest {
     @TestTransaction
     public void denySavingAiportwithSameU3digitCode() {
         Airport ai1 = new Airport("Fotis Ioannidis","Athens","Greece","ATH");
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(ai1);
         });
     }
@@ -37,7 +36,7 @@ public class AirportJPATest {
     @TestTransaction
     public void denySavingAirportWithSameName() {
         Airport ai1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATK");
-        Assertions.assertThrows(RollbackException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             em.persist(ai1);
         });
     }

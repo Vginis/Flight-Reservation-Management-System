@@ -10,11 +10,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/airport_project .
+# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/airport .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/airport_project
+# docker run -i --rm -p 8080:8080 quarkus/airport
 #
 ###
 FROM quay.io/quarkus/quarkus-micro-image:2.0
