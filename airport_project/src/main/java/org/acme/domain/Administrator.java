@@ -5,28 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("Administrator")
+@DiscriminatorValue("ADMINISTRATOR")
 public class Administrator extends AccountManagement {
 
     @Column(name = "admin_id", nullable = true, length = 20)
     public String admin_id;
 
-    @OneToMany(mappedBy = "airportId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    /*@OneToMany(mappedBy = "airportId", cascade = CascadeType.REMOVE, orphanRemoval = true)
     public List<Airport> airportsList;
 
     @OneToMany(mappedBy = "u2digitCode", cascade = CascadeType.REMOVE, orphanRemoval = true)
     public List<Airline> airlinesList;
 
     @OneToMany(mappedBy = "passport_id", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    public List<Passenger> passengersList;
+    public List<Passenger> passengersList;*/
 
     public Administrator() {
         this.setUsername("");
         this.setPassword("Adfkmfi2@");
         this.admin_id = "";
-        this.airportsList = new ArrayList<>();
-        this.airlinesList = new ArrayList<>();
-        this.passengersList = new ArrayList<>();
+        //this.airportsList = new ArrayList<>();
+        //this.airlinesList = new ArrayList<>();
+        //this.passengersList = new ArrayList<>();
     }
 
     public Administrator(String admin_id, String username, String password) {
@@ -42,7 +42,7 @@ public class Administrator extends AccountManagement {
         this.admin_id = admin_id;
     }
 
-    public void addAirport(Airport airport) {
+    /*public void addAirport(Airport airport) {
         if (airport == null) return;
         if (this.airportsList.contains(airport)) {
             throw new RuntimeException("Airport already exists.");
@@ -89,6 +89,6 @@ public class Administrator extends AccountManagement {
             throw new RuntimeException("Passenger does not exist");
         }
         passengersList.remove(passenger);
-    }
+    }*/
 
 }

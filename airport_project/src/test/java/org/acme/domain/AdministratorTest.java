@@ -1,3 +1,4 @@
+/*
 package org.acme.domain;
 
 import org.junit.jupiter.api.Assertions;
@@ -50,4 +51,4 @@ public class AdministratorTest {
         ad1.addPassenger(p1);
         Assertions.assertThrows(RuntimeException.class, () -> ad1.removePassenger(p2));
     }
-}
+}*/

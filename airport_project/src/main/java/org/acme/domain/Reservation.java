@@ -10,7 +10,7 @@ import java.util.List;
 public class Reservation {
 
     @Id
-    @Column(name="bookingId")
+    @Column(name="reservationId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer bookingId;
 
@@ -20,14 +20,14 @@ public class Reservation {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "OutFlightsReservations",
-            joinColumns = {@JoinColumn(name = "flightId")},
-            inverseJoinColumns = {@JoinColumn(name = "reservationId")})
+            joinColumns = {@JoinColumn(name = "reservationId")},
+            inverseJoinColumns = {@JoinColumn(name = "flightId")})
     private List<Flight> outgoingFlights;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "InFlightsReservations",
-            joinColumns = {@JoinColumn(name = "flightId")},
-            inverseJoinColumns = {@JoinColumn(name = "reservationId")})
+            joinColumns = {@JoinColumn(name = "reservationId")},
+            inverseJoinColumns = {@JoinColumn(name = "flightId")})
     private List<Flight> ingoingFlights;
 
     private Boolean returnFlight;
@@ -35,7 +35,7 @@ public class Reservation {
     @Column(name = "totalPrice", nullable = false)
     private long totalPrice;
 
-    @OneToMany(mappedBy = "ticketId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketsList;
 
     public Reservation() {
