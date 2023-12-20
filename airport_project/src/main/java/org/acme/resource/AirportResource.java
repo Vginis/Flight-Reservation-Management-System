@@ -1,7 +1,7 @@
 package org.acme.resource;
 
 import java.util.List;
-import static org.acme.resource.ConvergenceUri.AIRPORTS;
+import static org.acme.resource.AirportProjectURIs.AIRPORTS;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;

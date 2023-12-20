@@ -88,4 +88,5 @@ public class FlightTest {
         flight1.addTicket(ticket3);
         Assertions.assertEquals(25,flight1.flightCompletness());
     }
+
 }

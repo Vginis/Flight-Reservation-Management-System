@@ -1,15 +1,12 @@
 package org.acme.persistence;
 
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.persistence.RollbackException;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class AirportJPATest extends JPATest {

@@ -1,9 +1,6 @@
 package org.acme.persistence;
 
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.RollbackException;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Administrator;
 import org.acme.domain.Airline;
@@ -12,8 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class AccountManagementJPATest extends JPATest {

@@ -1,13 +1,11 @@
 package org.acme.domain;
 
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AirlineTest {
     Airline airline;
-    //Flight flight1;
     Airport airport1;
     Airport airport2;
     Airport airport3;
@@ -89,5 +87,5 @@ public class AirlineTest {
         airline.addFlight(flight2);
         Assertions.assertEquals(25,airline.completeness());
     }
-    }
 
+}
