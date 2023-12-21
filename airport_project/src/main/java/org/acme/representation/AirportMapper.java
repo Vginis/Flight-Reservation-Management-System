@@ -13,4 +13,6 @@ public abstract class AirportMapper {
     public abstract AirportRepresentation toRepresentation(Airport airport);
 
     public abstract List<AirportRepresentation> toRepresentationList(List<Airport> airport);
+
+    public abstract Airport toModel(AirportRepresentation representation);
 }

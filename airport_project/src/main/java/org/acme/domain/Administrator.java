@@ -10,8 +10,9 @@ public class Administrator extends AccountManagement {
 
     @Column(name = "admin_id", nullable = true, length = 20)
     public String admin_id;
-
-    /*@OneToMany(mappedBy = "airportId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+/* Μια (πιθανή) λύση: Να δημιουργήσουμε συσχετίσεις πολλά-προς-ενα στις παρακάτω κλάσεις με την Administrator και ταυτόχρονα να σβήσουμε την κληρονομικότητα της Administrator.
+Μετά θα δουλέψουν λογικά και τα Annotations OneToMany.
+    @OneToMany(mappedBy = "airportId", cascade = CascadeType.REMOVE, orphanRemoval = true)
     public List<Airport> airportsList;
 
     @OneToMany(mappedBy = "u2digitCode", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -42,7 +43,7 @@ public class Administrator extends AccountManagement {
         this.admin_id = admin_id;
     }
 
-    /*public void addAirport(Airport airport) {
+   /* public void addAirport(Airport airport) {
         if (airport == null) return;
         if (this.airportsList.contains(airport)) {
             throw new RuntimeException("Airport already exists.");
