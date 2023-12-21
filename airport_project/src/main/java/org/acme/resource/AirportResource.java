@@ -31,7 +31,7 @@ public class AirportResource {
     @Inject
     AirportMapper airportMapper;
 
-
+    //check
     @GET
     @Path("{airportId:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,21 +46,18 @@ public class AirportResource {
         return Response.ok().entity(airportMapper.toRepresentation(airport)).build();
     }
 
+    //check
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<AirportRepresentation> searchAirportByName(@QueryParam("name") String name) {
         return airportMapper.toRepresentationList(airportRepository.search(name));
     }
-
-    @PUT
+/*
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response create (AirportRepresentation representation) {
-        if (representation.airportId == null) {
-            throw new RuntimeException();
-        }
-
         Airport airport= airportMapper.toModel(representation);
         airportRepository.persist(airport);
         URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(airport.getId())).build();
@@ -68,7 +65,7 @@ public class AirportResource {
     }
 
     @PUT
-    @Path("/{airportId[0-9]*}")
+    @Path("{airportId[0-9]*}")
     @Transactional
     public Response update(@PathParam("airportId") Integer id,
                            AirportRepresentation representation) {
@@ -76,9 +73,9 @@ public class AirportResource {
             throw new RuntimeException();
         }
 
-        Airport borrower = airportMapper.toModel(representation);
-        airportRepository.getEntityManager().merge(borrower);
+        Airport airport = airportMapper.toModel(representation);
+        airportRepository.getEntityManager().merge(airport);
 
         return Response.noContent().build();
-    }
+    }*/
 }

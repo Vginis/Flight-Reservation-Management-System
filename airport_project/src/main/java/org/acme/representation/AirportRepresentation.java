@@ -9,4 +9,5 @@ public class AirportRepresentation {
     public String city;
     public String country;
     public String u3digitCode;
+
 }
