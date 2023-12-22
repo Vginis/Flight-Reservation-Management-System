@@ -6,8 +6,8 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 public class TicketRepresentation {
 
     public Integer ticketId;
-    public Integer bookingId;
-    //public String flightNo;
+    public ReservationRepresentation reservation;
+    //public FlightRepresentation flight;
     public String firstName;
     public String lastName;
     public String passportId;

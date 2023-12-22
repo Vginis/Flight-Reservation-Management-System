@@ -10,12 +10,12 @@ import java.util.List;
 @RequestScoped
 public class ReservationRepository implements PanacheRepositoryBase<Reservation, Integer> {
 
-    public List<Reservation> search(Integer reservationId) {
-        if (reservationId == null) {
+    public List<Reservation> search(Integer passengerId) {
+        if (passengerId == null) {
             return listAll();
         }
-        return find("select r from Reservation r where r.reservationId = :reservationId" ,
-                Parameters.with("reservationId", reservationId).map())
+        return find("select r from Reservation r where r.passenger = :id" ,
+                Parameters.with("id", passengerId).map())
                 .list();
     }
 

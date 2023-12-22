@@ -16,23 +16,22 @@ public class Ticket {
     private Reservation reservation;
 
     @Embedded
-    private Luggage luggage;
+    private Luggage luggage = new Luggage();
 
     @Column(name = "ticketPrice", nullable = false)
-    private Long ticketPrice;
+    private Long ticketPrice = 0L;
 
     @Column(name = "seatNo", nullable = false)
     private String seatNo;
 
     @Embedded
-    private PassengerInfo passengerInfo;
+    private PassengerInfo passengerInfo = new PassengerInfo();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flightId", nullable = false)
     private Flight flight;
 
     public Ticket() {
-        passengerInfo = new PassengerInfo();
     }
 
     public Ticket(Reservation reservation, Flight flight, String seatNo, String firstName, String lastName, String passportId) {
@@ -44,12 +43,20 @@ public class Ticket {
         luggage = new Luggage();
     }
 
-    public Integer getId() {
+    public Integer getTicketId() {
         return ticketId;
+    }
+
+    public void setTicketId(Integer ticketId) {
+        this.ticketId = ticketId;
     }
 
     public Reservation getReservation() {
         return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public Boolean isLuggageIncluded() {
@@ -79,6 +86,10 @@ public class Ticket {
 
     public Long getTicketPrice() {
         return ticketPrice;
+    }
+
+    public void setTicketPrice(Long ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     private void calculateTicketPrice() {
@@ -125,4 +136,7 @@ public class Ticket {
         return flight;
     }
 
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
 }

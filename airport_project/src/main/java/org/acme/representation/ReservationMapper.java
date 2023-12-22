@@ -15,4 +15,6 @@ public abstract class ReservationMapper {
 
     public abstract List<ReservationRepresentation> toRepresentationList(List<Reservation> reservations);
 
+    public abstract Reservation toModel(ReservationRepresentation representation);
+
 }

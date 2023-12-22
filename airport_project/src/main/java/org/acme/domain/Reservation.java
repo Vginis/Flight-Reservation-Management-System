@@ -15,7 +15,7 @@ public class Reservation {
     protected Integer reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "passengerId", nullable = false)
+    @JoinColumn(name = "passengerId", nullable = true)
     private Passenger passenger;
 
     @ManyToMany(fetch = FetchType.LAZY)
