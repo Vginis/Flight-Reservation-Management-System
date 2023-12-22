@@ -12,7 +12,7 @@ public class Reservation {
     @Id
     @Column(name="reservationId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Integer bookingId;
+    protected Integer reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passengerId", nullable = false)
@@ -33,7 +33,7 @@ public class Reservation {
     private Boolean returnFlight;
 
     @Column(name = "totalPrice", nullable = false)
-    private long totalPrice;
+    private Long totalPrice;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketsList;
@@ -41,8 +41,12 @@ public class Reservation {
     public Reservation() {
         outgoingFlights = new ArrayList<>();
         returnFlight = false;
-        totalPrice = 0;
+        totalPrice = 0L;
         ticketsList = new ArrayList<>();
+    }
+
+    public Integer getReservationId() {
+        return reservationId;
     }
 
     public Passenger getPassenger() {
@@ -104,14 +108,14 @@ public class Reservation {
             this.ingoingFlights = new ArrayList<>();
     }
 
-    public long getTotalPrice() {
+    public Long getTotalPrice() {
         return totalPrice;
     }
 
     private void calculateTotalPrice() {
-        if (this.ticketsList.size() == 0) return;
-        for (int i=0; i< this.ticketsList.size(); i++) {
-            this.totalPrice += this.ticketsList.get(i).getTicketPrice();
+        if (this.ticketsList.isEmpty()) return;
+        for (Ticket ticket : this.ticketsList) {
+            this.totalPrice += ticket.getTicketPrice();
         }
     }
 

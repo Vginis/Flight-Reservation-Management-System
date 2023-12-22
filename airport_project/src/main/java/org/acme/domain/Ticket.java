@@ -19,7 +19,7 @@ public class Ticket {
     private Luggage luggage;
 
     @Column(name = "ticketPrice", nullable = false)
-    private long ticketPrice;
+    private Long ticketPrice;
 
     @Column(name = "seatNo", nullable = false)
     private String seatNo;
@@ -44,11 +44,15 @@ public class Ticket {
         luggage = new Luggage();
     }
 
+    public Integer getId() {
+        return ticketId;
+    }
+
     public Reservation getReservation() {
         return reservation;
     }
 
-    public boolean isLuggageIncluded() {
+    public Boolean isLuggageIncluded() {
         return luggage.isLuggageIncluded();
     }
 
@@ -57,7 +61,7 @@ public class Ticket {
         calculateTicketPrice();
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return luggage.getWeight();
     }
 
@@ -65,7 +69,7 @@ public class Ticket {
         this.luggage.setWeight(weight);
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return luggage.getAmount();
     }
 
@@ -73,7 +77,7 @@ public class Ticket {
         this.luggage.setAmount(amount);
     }
 
-    public long getTicketPrice() {
+    public Long getTicketPrice() {
         return ticketPrice;
     }
 

@@ -1,22 +1,18 @@
-package org.acme.resourceTest;
+package org.acme.resource;
 
 import static io.restassured.RestAssured.when;
 import static io.restassured.RestAssured.given;
-import static io.smallrye.common.constraint.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import org.acme.domain.Airport;
 import org.acme.persistence.JPATest;
-import org.acme.resource.*;
 
 import org.acme.representation.AirportRepresentation;
 
 import org.acme.util.Fixture;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;

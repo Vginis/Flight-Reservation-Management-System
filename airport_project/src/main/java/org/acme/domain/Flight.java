@@ -140,10 +140,7 @@ public class Flight {
     }
 
     private boolean validateAirport(Airport airport) {
-        if (this.departureAirport.equals(airport) || this.arrivalAirport.equals(airport))
-            return false;
-        else
-            return true;
+        return !this.departureAirport.equals(airport) && !this.arrivalAirport.equals(airport);
     }
 
     public LocalDateTime getArrivalTime() {
@@ -151,7 +148,7 @@ public class Flight {
     }
 
     public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));;
+        this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 
     public Integer getAircraftCapacity() {

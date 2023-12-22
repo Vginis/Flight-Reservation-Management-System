@@ -1,4 +1,4 @@
-package org.acme.resourceTest;
+package org.acme.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -6,7 +6,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.acme.representation.AirlineRepresentation;
-import org.acme.resource.AirportProjectURIs;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 

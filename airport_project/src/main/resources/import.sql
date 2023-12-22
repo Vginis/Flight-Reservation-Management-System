@@ -20,7 +20,7 @@ insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId
 
 
 insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (9, 6, false, 100);
-insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (10, 6, true, 280);
+insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (10, 6, true, 380);
 
 insert into OutFlightsReservations(flightId, reservationId) values (7, 9);
 insert into OutFlightsReservations(flightId, reservationId) values (7, 10);

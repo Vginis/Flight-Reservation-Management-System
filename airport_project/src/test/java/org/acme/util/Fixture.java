@@ -6,6 +6,9 @@ import org.acme.representation.AirportRepresentation;
 public class Fixture {
 
     public static String API_ROOT  = "http://localhost:8081";
+    public static class Reservations {
+        public static int RESERVATION_ONE_WAY_ID = 9;
+    }
 
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
