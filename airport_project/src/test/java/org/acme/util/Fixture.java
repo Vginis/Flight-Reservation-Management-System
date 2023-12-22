@@ -2,6 +2,7 @@ package org.acme.util;
 
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirportRepresentation;
+import org.acme.representation.PassengerRepresentation;
 
 public class Fixture {
 
@@ -32,5 +33,16 @@ public class Fixture {
         dto.username="british";
         dto.password="JeandDig1@";
         return dto;
+    }
+
+    public static PassengerRepresentation getPassengerRepresentation(){
+        PassengerRepresentation representation = new PassengerRepresentation();
+        representation.id = 44;
+        representation.email = "email@gmail.com";
+        representation.password = "VGinis12@djsj";
+        representation.username = "passenger123";
+        representation.passportId = "AK810399";
+        representation.phoneNumber = "8388383838";
+        return representation;
     }
 }

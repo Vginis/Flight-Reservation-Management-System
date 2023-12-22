@@ -23,12 +23,6 @@ public class Passenger extends AccountManagement {
     private List<Reservation> reservations = new ArrayList<>();
 
     public Passenger(){
-        this.setEmail("default@gmail.com");
-        this.phoneNum = "";
-        this.passport_id ="";
-        this.setUsername("");
-        this.setPassword("JeandDig1@");
-        this.reservations = new ArrayList<>();
     }
 
     public Passenger(String email, String phoneNum, String passport_id, String username, String password){
@@ -50,6 +44,14 @@ public class Passenger extends AccountManagement {
             throw new RuntimeException("Invalid email address");
     }
 
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
     public String getPhoneNum() {
         return phoneNum;
     }
@@ -64,10 +66,6 @@ public class Passenger extends AccountManagement {
 
     public void setPassport_id(String passport_id) {
         this.passport_id = passport_id;
-    }
-
-    public List<Reservation> getReservations() {
-        return reservations;
     }
 
     public void addReservation(Reservation reservation){

@@ -8,4 +8,6 @@ public class AirportProjectURIs {
 
 	public static final String RESERVATIONS = "/Reservations";
 
+	public static final String PASSENGERS = "/Passengers";
+
 }
