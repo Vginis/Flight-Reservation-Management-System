@@ -1,4 +1,4 @@
-package org.acme.resourceTest;
+package org.acme.resource;
 
 import org.acme.persistence.JPATest;
 import com.fasterxml.jackson.core.JsonProcessingException;

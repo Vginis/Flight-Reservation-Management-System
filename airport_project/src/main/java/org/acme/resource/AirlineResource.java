@@ -9,13 +9,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.acme.domain.Airline;
-import org.acme.domain.Airport;
 import org.acme.persistence.AirlineRepository;
-import org.acme.persistence.AirportRepository;
 import org.acme.representation.AirlineMapper;
 import org.acme.representation.AirlineRepresentation;
-import org.acme.representation.AirportMapper;
-import org.acme.representation.AirportRepresentation;
+
 
 import java.net.URI;
 import java.util.List;
@@ -23,6 +20,8 @@ import java.util.List;
 import static org.acme.resource.AirportProjectURIs.AIRLINES;
 
 @Path(AIRLINES)
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class AirlineResource {
 
@@ -68,5 +67,36 @@ public class AirlineResource {
                 .created(location)
                 .entity(airlineMapper.toRepresentation(airline))
                 .build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response updateAirline(@PathParam("id") Integer id,
+                                      AirlineRepresentation representation) {
+        if (!(id.equals(representation.id))) {
+            throw new RuntimeException();
+        }
+
+        Airline airline = airlineMapper.toModel(representation);
+        airlineRepository.getEntityManager().merge(airline);
+
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response deleteAirline(@PathParam("id") Integer id){
+        Airline airline = airlineRepository.find("id",id).firstResult();
+        if (airline==null){
+            return Response.status(404).build();
+        }
+        airlineRepository.deleteAirline(id);
+        return Response.noContent().build();
     }
 }

@@ -15,5 +15,18 @@ public abstract class AirlineMapper {
 
     public abstract List<AirlineRepresentation> toRepresentationList(List<Airline> airline);
 
-    public abstract Airline toModel(AirlineRepresentation representation);
+    public Airline toModel(AirlineRepresentation representation){
+        if ( representation == null ) {
+            return null;
+        }
+
+        Airline airline = new Airline();
+        airline.setUsername(representation.username);
+        airline.setPassword(representation.password);
+        airline.setName( representation.name );
+        airline.setU2digitCode( representation.u2digitCode );
+        airline.setId(representation.id);
+        return airline;
+    }
+
 }

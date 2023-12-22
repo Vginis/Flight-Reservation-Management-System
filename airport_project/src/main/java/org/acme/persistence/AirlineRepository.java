@@ -3,6 +3,7 @@ package org.acme.persistence;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import org.acme.domain.Airline;
 import org.acme.domain.Airport;
 
@@ -19,5 +20,11 @@ public class AirlineRepository implements PanacheRepositoryBase<Airline,Integer>
                     Parameters.with("airlineName", name + "%").map())
                     .list();
         }
+
+    @Transactional
+    public void deleteAirline(Integer id){
+        Airline airline = findById(id);
+        delete(airline);
+    }
     }
 

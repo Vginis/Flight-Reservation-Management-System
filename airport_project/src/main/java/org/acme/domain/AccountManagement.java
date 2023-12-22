@@ -14,7 +14,7 @@ public class AccountManagement {
 
     @Id
     @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
     @Column(name = "username", nullable = false, length = 20,unique = true)
@@ -35,6 +35,10 @@ public class AccountManagement {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer newId) {
+        this.id=newId;
     }
 
     public String getUsername() {

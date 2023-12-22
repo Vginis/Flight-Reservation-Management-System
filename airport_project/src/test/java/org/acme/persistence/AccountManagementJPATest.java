@@ -24,7 +24,7 @@ public class AccountManagementJPATest extends JPATest {
     @Transactional
     public void listAirlines() {
         List<Airline> result = em.createQuery("select a from Airline a").getResultList();
-        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(3, result.size());
     }
 
     @Test

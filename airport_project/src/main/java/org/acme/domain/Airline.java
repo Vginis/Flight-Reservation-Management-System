@@ -21,8 +21,8 @@ public class Airline extends AccountManagement {
     private List<Flight> flights = new ArrayList<>();
 
     public Airline() {
-        this.name = "";
-        this.u2digitCode = "";
+        this.name = "sdfsdf";
+        this.u2digitCode = "KK";
         this.setUsername("airl");
         this.setPassword("JeandDig1@");
         this.flights = new ArrayList<>();

@@ -10,6 +10,10 @@ public class Fixture {
         public static int RESERVATION_ONE_WAY_ID = 9;
     }
 
+    public static class Airlines {
+        public static int AIRLINE_ID=5;
+    }
+
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
         dto.airportId = 4;
@@ -22,9 +26,11 @@ public class Fixture {
 
     public static AirlineRepresentation getAirlineRepresentation(){
         AirlineRepresentation dto = new AirlineRepresentation();
-        dto.airlineId = 1000;
+        dto.id = 12;
         dto.name = "British Airways";
         dto.u2digitCode = "BR";
+        dto.username="british";
+        dto.password="JeandDig1@";
         return dto;
     }
 }
