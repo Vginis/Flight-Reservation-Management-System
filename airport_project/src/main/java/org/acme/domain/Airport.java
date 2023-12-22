@@ -9,11 +9,10 @@ import java.util.Objects;
 public class Airport {
 
     @Id
-    @Column(name="airportId")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Integer airportId;
+    @Column(name="airportId", length = 10)
+    private Integer airportId;
 
-    @Column(name="name", nullable = false, length = 30,unique = true)
+    @Column(name="name", nullable = false, length = 30, unique = true)
     private String name;
 
     @Column(name="city", nullable = false, length = 20)
@@ -35,9 +34,11 @@ public class Airport {
         this.u3digitCode = u3digitCode;
     }
 
-    public Integer getId() {
+    public Integer getAirportId() {
         return airportId;
     }
+
+    public void setAirportId(Integer airportId) {this.airportId = airportId;}
 
     public String getName() {
         return name;

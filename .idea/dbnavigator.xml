@@ -29,7 +29,7 @@
     <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/airport_project/src/main/resources/META-INF/import.sql" connection-id="51303ea1-0016-46a3-9fe9-92fd1c916690" session-id="MAIN" current-schema="PUBLIC" />
+    <mapping file-url="file://$PROJECT_DIR$/airport_project/src/main/resources/import.sql" connection-id="51303ea1-0016-46a3-9fe9-92fd1c916690" session-id="MAIN" current-schema="PUBLIC" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />

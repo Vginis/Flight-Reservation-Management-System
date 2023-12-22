@@ -12,11 +12,11 @@ public class Fixture {
 
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
-        dto.name = "My Airport";
-        dto.city = "Agios Dimitrios";
-        dto.country = "Greece";
-        dto.u3digitCode = "BRH";
-
+        dto.airportId = 4;
+        dto.name = "Furina_De_Chateau";
+        dto.city = "Cardinale";
+        dto.country = "Fontaine";
+        dto.u3digitCode = "FON";
         return dto;
     }
 

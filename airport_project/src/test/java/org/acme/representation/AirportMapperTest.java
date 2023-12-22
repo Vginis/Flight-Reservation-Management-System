@@ -20,8 +20,8 @@ public class AirportMapperTest {
     @Inject
     private AirportRepository airportRepository;
 
-    private Airport findAuthor(List<Airport> authors, String name){
-        return authors.stream().filter(a -> a.getName().contains(name))
+    private Airport findAirport(List<Airport> airport, String name){
+        return airport.stream().filter(a -> a.getName().contains(name))
                 .findFirst().orElse(null);
     }
 

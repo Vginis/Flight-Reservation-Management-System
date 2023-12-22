@@ -1,117 +1,89 @@
-package org.acme.resource;
+package org.acme.resourceTest;
 
-import static io.restassured.RestAssured.when;
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.acme.persistence.JPATest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import org.acme.persistence.JPATest;
-
 import org.acme.representation.AirportRepresentation;
-
+import org.acme.resource.AirportProjectURIs;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.QuarkusTest;
-
 import java.util.List;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static io.smallrye.common.constraint.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class AirportResourceTest extends JPATest {
-
-    public static Integer AIRPORT_ID = 1;
-
     @Test
-    public void find() {
-        AirportRepresentation a1 = when().get(Fixture.API_ROOT+AirportProjectURIs.AIRPORTS+"/"+ AIRPORT_ID)
+    public void findAirportById() {
+        AirportRepresentation a1 = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
-        assertEquals("ATH", a1.u3digitCode);
+        assertEquals(3, a1.airportId);
     }
 
     @Test
-    public void search() throws JsonMappingException, JsonProcessingException {
+    public void searchAirportById() throws JsonMappingException, JsonProcessingException {
 
 
-        List<AirportRepresentation> airports = given().queryParam("name", "Eleftherios Venizelos").when().get(Fixture.API_ROOT+AirportProjectURIs.AIRPORTS)
+        List<AirportRepresentation> airports = given().queryParam("airportId", 3).when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
                 .statusCode(200)
-                .extract().as(new TypeRef<List<AirportRepresentation>>() {}) ;
+                .extract().as(new TypeRef<List<AirportRepresentation>>() {});
 
-        assertEquals(1, airports.size());
+        assertEquals(3, airports.size());
 
     }
 
     @Test
-    public void findNonExisting() {
+    public void findNonExistingAirport() {
         when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4711)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    void submitArticle() {
+    public void createAirport() {
 
-        AirportRepresentation articleRepresentation = Fixture.getAirportRepresentation();
-
-        AirportRepresentation newAirport = given()
-                .contentType(ContentType.JSON)
-                .body(articleRepresentation)
-                .when()
-                .post(Fixture.API_ROOT + "/Airports")
-                .then().statusCode(201)
+        AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
+        AirportRepresentation createdAirport = given().contentType(ContentType.JSON).body(airportRepresentation).when()
+                .put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4)
                 .extract().as(AirportRepresentation.class);
-        /*
-        assertEquals(3, newAirport.airportId);
-        assertEquals("My Airport",newAirport.name);
-        assertEquals("Agios Dimitrios",newAirport.city);
-        assertEquals("Greece",newAirport.country);
-        assertEquals("BRH",newAirport.u3digitCode);*/
+
+        assertEquals(4, createdAirport.airportId);
     }
 
 
-    /*
-
-    @Test
-    public void update() {
-        AirportRepresentation airport = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 2)
+   @Test
+    public void updateAirport() {
+        AirportRepresentation airport = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        airport.name = "New Airport";
+        airport.name = "Furina_De_Chateau";
 
         given()
                 .contentType(ContentType.JSON)
                 .body(airport)
-                .when().put(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 2)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then().statusCode(204);
 
 
-        AirportRepresentation updated = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 2)
+        AirportRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        Assertions.assertEquals("New Airport", updated.name);
+        assertEquals("Furina_De_Chateau", updated.name);
     }
 
-    @Test
-    public void create() {
-        AirportRepresentation representation = Fixture.getAirportRepresentation();
 
-
-        AirportRepresentation created = given()
-                .contentType(ContentType.JSON)
-                .body(representation)
-                .when().put("http://localhost:8081/Airports")
-                .then().statusCode(201).extract().as(AirportRepresentation.class);
-
-
-        Assertions.assertEquals(3, created.airportId);
-    }*/
 }
