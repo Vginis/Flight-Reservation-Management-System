@@ -7,13 +7,21 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.security.PublicKey;
 import java.util.*;
 
 @Mapper(componentModel = "jakarta",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {ReservationMapper.class})
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        uses = {ReservationMapper.class})
 public abstract class PassengerMapper {
 
-    @Inject
+    public abstract PassengerRepresentation toRepresentation(Passenger passenger);
+
+    public abstract List<PassengerRepresentation> toRepresentationList(List<Passenger> passengers);
+
+    public abstract Passenger toModel(PassengerRepresentation representation);
+
+    /*@Inject
     ReservationMapper reservationMapper;
 
     public PassengerRepresentation toRepresentation(Passenger passenger) {
@@ -63,5 +71,5 @@ public abstract class PassengerMapper {
         passenger.setReservations(representation.RepresentationToReservation());
         return passenger;
 
-    }
+    }*/
 }

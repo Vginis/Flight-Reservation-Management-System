@@ -13,13 +13,13 @@ public class Passenger extends AccountManagement {
     @Column(name = "email", nullable = true, length = 20)
     private String email;
 
-    @Column(name = "phoneNum", nullable = true, length = 20)
+    @Column(name = "phoneNum", length = 20)
     private String phoneNum;
 
-    @Column(name = "passport_id", nullable = true, length = 20,unique = true)
+    @Column(name = "passport_id", length = 20, unique = true)
     private String passport_id;
 
-    @OneToMany(mappedBy ="passenger",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy ="passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
     public Passenger(){

@@ -42,8 +42,8 @@ public class Fixture {
         representation.email = "email@gmail.com";
         representation.password = "VGinis12@djsj";
         representation.username = "passenger123";
-        representation.passportId = "AK810399";
-        representation.phoneNumber = "8388383838";
+        representation.passport_id = "AK810399";
+        representation.phoneNum = "8388383838";
         representation.reservations = new ArrayList<>();
         representation.reservations.add(getReservationRepresentation());
         return representation;

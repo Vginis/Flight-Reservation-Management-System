@@ -23,6 +23,7 @@ import static org.acme.resource.AirportProjectURIs.PASSENGERS;
 @Path(PASSENGERS)
 @RequestScoped
 public class PassengerResource {
+
     @Context
     UriInfo uriInfo;
 
@@ -49,16 +50,16 @@ public class PassengerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<PassengerRepresentation> searchPassengerByName(@QueryParam("name") String name) {
-        return passengerMapper.toRepresentationList(passengerRepository.searchByName(name));
+    public List<PassengerRepresentation> searchPassengerByEmail(@QueryParam("email") String email) {
+        return passengerMapper.toRepresentationList(passengerRepository.searchByEmail(email));
     }
-
+/* Δεν χρειάζεται...το κάνει η passengerRepository.searchByEmail()
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public  List<PassengerRepresentation> list() {
         return passengerMapper.toRepresentationList(passengerRepository.listAll());
-    }
+    }*/
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

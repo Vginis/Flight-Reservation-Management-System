@@ -62,6 +62,7 @@ public class ReservationResource {
     }*/
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createReservation(ReservationRepresentation reservationDto){

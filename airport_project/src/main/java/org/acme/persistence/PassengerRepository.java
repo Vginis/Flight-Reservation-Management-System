@@ -8,16 +8,14 @@ import org.acme.domain.Passenger;
 import java.util.List;
 
 @RequestScoped
-public class PassengerRepository implements PanacheRepositoryBase<Passenger,Integer> {
+public class PassengerRepository implements PanacheRepositoryBase<Passenger, Integer> {
 
-    //I have to change the name here
-    public List<Passenger> searchByName(String name) {
-        if (name == null) {
+    public List<Passenger> searchByEmail(String email) {
+        if (email == null) {
             return listAll();
         }
-
-        return find("select a from Passenger a where a.name like :passengerName" ,
-                Parameters.with("passengerName", name + "%").map())
+        return find("select a from Passenger a where a.email like :email" ,
+                Parameters.with("email", email + "%").map())
                 .list();
     }
 

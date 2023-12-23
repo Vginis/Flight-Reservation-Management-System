@@ -2,7 +2,6 @@ package org.acme.representation;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RegisterForReflection
