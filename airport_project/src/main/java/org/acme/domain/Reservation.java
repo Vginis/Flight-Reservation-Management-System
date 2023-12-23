@@ -11,7 +11,8 @@ public class Reservation {
 
     @Id
     @Column(name="reservationId")
-    private Integer reservationId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Integer reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passengerId", nullable = true)
