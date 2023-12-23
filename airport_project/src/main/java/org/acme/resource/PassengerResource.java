@@ -54,12 +54,14 @@ public class PassengerResource {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public  List<PassengerRepresentation> list() {
         return passengerMapper.toRepresentationList(passengerRepository.listAll());
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createPassenger(PassengerRepresentation passengerDto){

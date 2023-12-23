@@ -2,24 +2,52 @@ package org.acme.representation;
 
 import jakarta.inject.Inject;
 import org.acme.domain.Passenger;
-import org.acme.persistence.ReservationRepository;
+import org.acme.domain.Reservation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.util.List;
+import java.util.*;
 
 @Mapper(componentModel = "jakarta",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {ReservationMapper.class})
 public abstract class PassengerMapper {
 
     @Inject
-    ReservationRepository reservationRepository;
+    ReservationMapper reservationMapper;
 
-    public abstract PassengerRepresentation toRepresentation(Passenger passenger);
+    public PassengerRepresentation toRepresentation(Passenger passenger) {
+        if (passenger == null) {
+            return null;
+        }
 
+        PassengerRepresentation passengerRepresentation = new PassengerRepresentation();
+
+        passengerRepresentation.username = passenger.getUsername();
+        passengerRepresentation.password = passenger.getPassword();
+        passengerRepresentation.id = passenger.getId();
+        passengerRepresentation.email = passenger.getEmail();
+        passengerRepresentation.phoneNumber = passenger.getPhoneNum();
+        passengerRepresentation.passportId = passenger.getPassport_id();
+        List<Reservation> list = passenger.getReservations();
+        if (list != null) {
+            List<ReservationRepresentation> list1 = new ArrayList<>();
+            for (Reservation r : list){
+                ReservationRepresentation reservationRepresentation = reservationMapper.toRepresentation(r);
+                list1.add(reservationRepresentation);
+            }
+
+            passengerRepresentation.reservations=list1;
+        }
+
+        return passengerRepresentation;
+
+    }
+
+    @Mapping(target = "reservations", ignore = true)
     public abstract List<PassengerRepresentation> toRepresentationList(List<Passenger> passengers);
 
-    public  Passenger toModel(PassengerRepresentation representation){
+    public Passenger toModel(PassengerRepresentation representation){
         if ( representation == null ) {
             return null;
         }
@@ -32,6 +60,8 @@ public abstract class PassengerMapper {
         passenger.setEmail( representation.email );
         passenger.setPassport_id(representation.passportId);
         passenger.setPhoneNum(representation.phoneNumber);
+        passenger.setReservations(representation.RepresentationToReservation());
         return passenger;
-    };
+
+    }
 }

@@ -44,6 +44,8 @@ public class Fixture {
         representation.username = "passenger123";
         representation.passportId = "AK810399";
         representation.phoneNumber = "8388383838";
+        representation.reservations = new ArrayList<>();
+        representation.reservations.add(getReservationRepresentation());
         return representation;
     }
 

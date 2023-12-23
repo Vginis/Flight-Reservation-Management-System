@@ -52,15 +52,18 @@ public class PassengerResourceTest extends JPATest {
     }
 
     @Test
-    public void create(){
+    public void createPassenger(){
         PassengerRepresentation passengerRepresentation = Fixture.getPassengerRepresentation();
         PassengerRepresentation savedPassenger = given().contentType(ContentType.JSON).body(passengerRepresentation).when()
                 .post(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS).then().statusCode(201).extract().as(PassengerRepresentation.class);
 
         assertNotNull(savedPassenger);
+        assertEquals(44,savedPassenger.id);
+        assertEquals("passenger123",savedPassenger.username);
+        assertEquals("AK810399",savedPassenger.passportId);
+        assertEquals("8388383838",savedPassenger.phoneNumber);
         assertEquals("email@gmail.com", savedPassenger.email);
         assertEquals("VGinis12@djsj", savedPassenger.password);
-
-
+        //assertEquals(240L,savedPassenger.reservations.get(0).totalPrice);
     }
 }
