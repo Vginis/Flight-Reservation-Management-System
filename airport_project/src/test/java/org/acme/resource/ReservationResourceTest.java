@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class ReservationResourceTest extends JPATest {
 
     @Test
-    public void find() {
+    public void findReservation() {
         ReservationRepresentation a = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + Fixture.Reservations.RESERVATION_ONE_WAY_ID)
                 .then()
                 .statusCode(200)

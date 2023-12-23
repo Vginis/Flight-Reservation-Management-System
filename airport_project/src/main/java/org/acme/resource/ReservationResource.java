@@ -31,18 +31,16 @@ public class ReservationResource {
     ReservationMapper reservationMapper;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<ReservationRepresentation> searchReservationByPassengerId(@QueryParam("passengerId") Integer passengerId) {
-        return reservationMapper.toRepresentationList(reservationRepository.search(passengerId));
+    public List<ReservationRepresentation> listAll() {
+        return reservationMapper.toRepresentationList(reservationRepository.listAll());
     }
 
     @GET
-    @Path("{reservationId:[0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{reservationId}")
     @Transactional
-    public Response find(@PathParam("reservationId") Integer reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId);
+    public Response findReservationById(@PathParam("reservationId") Integer reservationId) {
+        Reservation reservation = reservationRepository.findReservationById(reservationId);
         if (reservation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

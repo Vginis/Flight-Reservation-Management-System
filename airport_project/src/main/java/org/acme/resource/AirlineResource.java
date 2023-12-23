@@ -56,7 +56,6 @@ public class AirlineResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response submitAirline(AirlineRepresentation airlineDto){
         Airline airline = airlineMapper.toModel(airlineDto);

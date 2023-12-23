@@ -13,12 +13,12 @@ public class Fixture {
     }
 
     public static class Airlines {
-        public static int AIRLINE_ID=5;
+        public static int AIRLINE_ID = 5;
     }
 
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
-        dto.airportId = 4;
+        dto.airportId = 5;
         dto.name = "Furina_De_Chateau";
         dto.city = "Cardinale";
         dto.country = "Fontaine";

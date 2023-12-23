@@ -85,7 +85,7 @@ public class AirlineResourceTest extends JPATest {
     public void removeExistingAirline(){
 
         when()
-                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/9")
+                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 9)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }

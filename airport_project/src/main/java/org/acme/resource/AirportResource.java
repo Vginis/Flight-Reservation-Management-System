@@ -1,11 +1,13 @@
 package org.acme.resource;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -69,13 +71,13 @@ public class AirportResource {
         }
         Airport airport = airportMapper.toModel(airportDto);
         airportRepository.persist(airport);
-        //URI location = uriInfo.getAbsolutePathBuilder().path((airport.getName())).build();
         URI location = UriBuilder.fromResource(AirportResource.class).path(String.valueOf(airport.getAirportId())).build();
         return Response
                 .created(location)
                 .entity(airportMapper.toRepresentation(airport))
                 .build();
     }
+
     @PUT
     @Path("/{id}")
     @Transactional
@@ -91,4 +93,15 @@ public class AirportResource {
         return Response.noContent().build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Response removedAirportById(@PathParam("id") Integer id) {
+        Airport airport = airportRepository.find("id", id).firstResult();
+        if (airport == null) {
+            return Response.status(404).build();
+        }
+        airportRepository.deleteAirport(id);
+        return Response.noContent().build();
+    }
 }

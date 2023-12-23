@@ -4,11 +4,13 @@ import org.acme.persistence.JPATest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.acme.representation.AirportRepresentation;
 import org.acme.resource.AirportProjectURIs;
 import org.acme.util.Fixture;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static io.smallrye.common.constraint.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @QuarkusTest
 public class AirportResourceTest extends JPATest {
@@ -38,7 +41,7 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirportRepresentation>>() {});
 
-        assertEquals(3, airports.size());
+        assertEquals(4, airports.size());
 
     }
 
@@ -54,10 +57,10 @@ public class AirportResourceTest extends JPATest {
 
         AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
         AirportRepresentation createdAirport = given().contentType(ContentType.JSON).body(airportRepresentation).when()
-                .put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4)
+                .put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 5)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals(4, createdAirport.airportId);
+        assertEquals(5, createdAirport.airportId);
     }
 
 
@@ -85,5 +88,24 @@ public class AirportResourceTest extends JPATest {
         assertEquals("Furina_De_Chateau", updated.name);
     }
 
+    @Test
+    @TestTransaction
+    public void removeExistingAirport() {
+
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestTransaction
+    void removeNonExistingAirport(){
+
+        when()
+                .delete(Fixture.API_ROOT +  AirportProjectURIs.AIRPORTS + "/" + 8)
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
 
 }

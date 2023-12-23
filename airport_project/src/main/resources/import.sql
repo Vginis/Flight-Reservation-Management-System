@@ -15,6 +15,7 @@ insert into AccountManagement(id, username, password, type, admin_id, name, u2di
 insert into Airports(airportId, name, city, country, u3digitCode) values (1, 'Eleftherios Venizelos', 'Athens', 'Greece', 'ATH');
 insert into Airports(airportId, name, city, country, u3digitCode) values (2, 'Fiumicino', 'Rome', 'Italy', 'FCO');
 insert into Airports(airportId, name, city, country, u3digitCode) values (3, 'Venezuelo', 'Madrid', 'Spain', 'SPA');
+insert into Airports(airportId, name, city, country, u3digitCode) values (4, 'Toussaint', 'Fontaine', 'Teyvat', 'TEY');
 
 
 insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (7, 'FR8438', 5, 1, '2023-07-19 21:00:00', 2, '2023-07-19 21:00:00', 200, 'Boeing-767', 100, 199);
