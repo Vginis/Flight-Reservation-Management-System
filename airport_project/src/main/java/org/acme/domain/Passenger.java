@@ -10,7 +10,7 @@ import java.util.regex.*;
 @DiscriminatorValue("PASSENGER")
 public class Passenger extends AccountManagement {
 
-    @Column(name = "email", nullable = true, length = 20)
+    @Column(name = "email", length = 20)
     private String email;
 
     @Column(name = "phoneNum", length = 20)
@@ -19,10 +19,11 @@ public class Passenger extends AccountManagement {
     @Column(name = "passport_id", length = 20, unique = true)
     private String passport_id;
 
-    @OneToMany(mappedBy ="passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy ="passenger", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Reservation> reservations = new ArrayList<>();
 
     public Passenger(){
+        super();
     }
 
     public Passenger(String email, String phoneNum, String passport_id, String username, String password){

@@ -22,7 +22,7 @@ public abstract class AirportMapper {
 
         Airport airport = new Airport();
         airport.setAirportId(representation.airportId);
-        airport.setName(representation.name);
+        airport.setAirportName(representation.airportName);
         airport.setCity(representation.city);
         airport.setCountry(representation.country);
         airport.setU3digitCode(representation.u3digitCode);

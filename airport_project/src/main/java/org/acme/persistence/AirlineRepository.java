@@ -5,7 +5,6 @@ import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airline;
-import org.acme.domain.Airport;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class AirlineRepository implements PanacheRepositoryBase<Airline,Integer>
                 return listAll();
             }
 
-            return find("select a from Airline a where a.name like :airlineName" ,
+            return find("select a from Airline a where a.airlineName like :airlineName" ,
                     Parameters.with("airlineName", name + "%").map())
                     .list();
         }
@@ -26,5 +25,5 @@ public class AirlineRepository implements PanacheRepositoryBase<Airline,Integer>
         Airline airline = findById(id);
         delete(airline);
     }
-    }
 
+}

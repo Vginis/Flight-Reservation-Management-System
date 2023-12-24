@@ -1,25 +1,13 @@
 package org.acme.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.common.mapper.TypeRef;
-import io.restassured.http.ContentType;
 import org.acme.persistence.JPATest;
 import org.acme.representation.ReservationRepresentation;
-import org.acme.representation.TicketRepresentation;
 import org.acme.util.Fixture;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 public class ReservationResourceTest extends JPATest {
@@ -33,7 +21,7 @@ public class ReservationResourceTest extends JPATest {
         assertEquals(Fixture.Reservations.RESERVATION_ONE_WAY_ID, a.reservationId);
     }
 
-    /* Όταν φτιαχτεί η PassengerRepresentation
+    /* TODO Όταν φτιαχτεί η PassengerRepresentation
     @Test
     public void search() throws JsonMappingException, JsonProcessingException {
         List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
@@ -44,7 +32,8 @@ public class ReservationResourceTest extends JPATest {
         assertEquals(2, reservations.size());
     }*/
 
-    /*@Test
+    /* TODO δεν πρόλαβα
+    @Test
     public void createReservation() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
         ReservationRepresentation savedArticle = given()

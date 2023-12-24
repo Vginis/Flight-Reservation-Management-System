@@ -8,10 +8,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import org.acme.domain.Airline;
 import org.acme.domain.Passenger;
 import org.acme.persistence.PassengerRepository;
-import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.PassengerMapper;
 import org.acme.representation.PassengerRepresentation;
 
@@ -51,9 +49,9 @@ public class PassengerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<PassengerRepresentation> searchPassengerByEmail(@QueryParam("email") String email) {
-        return passengerMapper.toRepresentationList(passengerRepository.searchByEmail(email));
+        return passengerMapper.toRepresentationList(passengerRepository.findByEmail(email));
     }
-/* Δεν χρειάζεται...το κάνει η passengerRepository.searchByEmail()
+    /* TODO Δεν χρειάζεται...το κάνει η passengerRepository.searchByEmail()
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional

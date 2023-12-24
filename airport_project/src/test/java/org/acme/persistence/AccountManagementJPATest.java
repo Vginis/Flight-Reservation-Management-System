@@ -34,7 +34,8 @@ public class AccountManagementJPATest extends JPATest {
         Assertions.assertEquals(1, result.size());
     }
 
-    /*@Test
+    /* TODO I guess :)
+    @Test
     @Transactional
     public void denySavingAirlineWithSamey2DigitCode() {
         Airline a3 = new Airline("Aegean Airlinessss", "A3", "aegn", "JeandDig1@");

@@ -1,17 +1,13 @@
 package org.acme.persistence;
 
-import jakarta.inject.Inject;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
-import org.acme.domain.Airport;
+import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
-import org.acme.representation.AirportRepresentation;
 import jakarta.transaction.Transactional;
-
-
-import java.util.List;
+import org.acme.domain.Airport;
 
 @RequestScoped
 public class AirportRepository implements PanacheRepositoryBase<Airport, Integer> {

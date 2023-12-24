@@ -19,7 +19,7 @@ public class Fixture {
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
         dto.airportId = 5;
-        dto.name = "Furina_De_Chateau";
+        dto.airportName = "Furina_De_Chateau";
         dto.city = "Cardinale";
         dto.country = "Fontaine";
         dto.u3digitCode = "FON";
@@ -29,7 +29,7 @@ public class Fixture {
     public static AirlineRepresentation getAirlineRepresentation(){
         AirlineRepresentation dto = new AirlineRepresentation();
         dto.id = 12;
-        dto.name = "British Airways";
+        dto.airlineName = "British Airways";
         dto.u2digitCode = "BR";
         dto.username="british";
         dto.password="JeandDig1@";

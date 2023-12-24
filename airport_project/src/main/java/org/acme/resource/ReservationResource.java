@@ -34,7 +34,7 @@ public class ReservationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<ReservationRepresentation> searchReservationByPassengerId(@QueryParam("passengerId") Integer passengerId) {
-        return reservationMapper.toRepresentationList(reservationRepository.search(passengerId));
+        return reservationMapper.toRepresentationList(reservationRepository.findByPassengerId(passengerId));
     }
 
     @GET
@@ -49,7 +49,8 @@ public class ReservationResource {
         return Response.ok().entity(reservationMapper.toRepresentation(reservation)).build();
     }
 
-    /*@PUT
+    /* TODO Δεν πρόλαβα να τη δω ξανά
+    @PUT
     @Transactional
     public Response createReservation(ReservationRepresentation representation) {
         if (representation.reservationId == null) {

@@ -16,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AirportMapperTest {
 
     @Inject
-    private AirportMapper airportMapper;
+    AirportMapper airportMapper;
     @Inject
-    private AirportRepository airportRepository;
+    AirportRepository airportRepository;
 
     private Airport findAirport(List<Airport> airport, String name){
-        return airport.stream().filter(a -> a.getName().contains(name))
+        return airport.stream().filter(a -> a.getAirportName().contains(name))
                 .findFirst().orElse(null);
     }
 
@@ -33,7 +33,7 @@ public class AirportMapperTest {
 
         Airport entity = airportMapper.toModel(airportRepresentation);
 
-        assertEquals(entity.getName(), airportRepresentation.name);
+        assertEquals(entity.getAirportName(), airportRepresentation.airportName);
         assertEquals(entity.getCity(), airportRepresentation.city);
         assertEquals(entity.getCountry(), airportRepresentation.country);
         assertEquals(entity.getU3digitCode(), airportRepresentation.u3digitCode);

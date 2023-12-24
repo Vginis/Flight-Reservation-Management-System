@@ -27,30 +27,22 @@ public class PassengerTest {
     @Test
     public void DenyReservationForAnOtherPassenger(){
         Passenger passenger2 = new Passenger("emp@gmail.com", "100254435", "AK155644","oooo", "JeandDig1@");
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            passenger2.addReservation(reservation);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> passenger2.addReservation(reservation));
     }
 
     @Test
     public void DenyDuplicateReservation(){
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            passenger.addReservation(reservation);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> passenger.addReservation(reservation));
     }
 
     @Test
     public void DenyRemovingNonExistingReservation(){
         passenger.removeReservation(reservation);
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            passenger.removeReservation(reservation);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> passenger.removeReservation(reservation));
     }
 
     @Test
     public void DenyInvalidEmail(){
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            passenger.setEmail("dfsdfs");
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> passenger.setEmail("dfsdfs"));
     }
 }

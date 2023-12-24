@@ -8,7 +8,6 @@ import io.quarkus.test.TestTransaction;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.acme.representation.AirportRepresentation;
-import org.acme.resource.AirportProjectURIs;
 import org.acme.util.Fixture;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static io.smallrye.common.constraint.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -71,7 +69,7 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        airport.name = "Furina_De_Chateau";
+        airport.airportName = "Furina_De_Chateau";
 
         given()
                 .contentType(ContentType.JSON)
@@ -85,7 +83,7 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals("Furina_De_Chateau", updated.name);
+        assertEquals("Furina_De_Chateau", updated.airportName);
     }
 
     @Test

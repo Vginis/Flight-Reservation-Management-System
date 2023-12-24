@@ -10,7 +10,7 @@ import java.util.List;
 @RequestScoped
 public class PassengerRepository implements PanacheRepositoryBase<Passenger, Integer> {
 
-    public List<Passenger> searchByEmail(String email) {
+    public List<Passenger> findByEmail(String email) {
         if (email == null) {
             return listAll();
         }
@@ -19,7 +19,7 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
                 .list();
     }
 
-    /*
+    /* TODO Δεν πρόλαβα να τις δώ αν λειτουργούν
     @Transactional
     public void delete(Integer id){
         Passenger passenger = findById(id);

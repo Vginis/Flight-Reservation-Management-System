@@ -22,27 +22,21 @@ public class AirlineTest {
     public void denyExistingFlights(){
         Flight flight1 = new Flight("A3651", airline, airport2, "202307191900", airport1, "202307192100", 178, "Airbus-A320", 80L);
         airline.addFlight(flight1);
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            airline.addFlight(flight1);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> airline.addFlight(flight1));
     }
 
     @Test
     public void denyFlightFromAnotherAirline(){
         Airline airline2 = new Airline("Transavia", "TV", "trans", "JeandDig1@");
         Flight flight2 = new Flight("A3651", airline2, airport2, "202307191900", airport1, "202307192100", 178, "Airbus-A320", 80L);
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            airline.addFlight(flight2);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> airline.addFlight(flight2));
     }
 
     @Test
     public void denyNonExistingDelete (){
         Airline airline2 = new Airline("Transavia", "TV", "trans", "JeandDig1@");
         Flight flight2 = new Flight("A3651", airline2, airport2, "202307192100", airport1, "202307192100", 178, "Airbus-A320", 80L);
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            airline.removeFlight(flight2);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> airline.removeFlight(flight2));
     }
 
     @Test

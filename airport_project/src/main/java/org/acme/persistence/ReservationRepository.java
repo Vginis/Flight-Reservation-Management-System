@@ -22,11 +22,11 @@ public class ReservationRepository implements PanacheRepositoryBase<Reservation,
 
     }
 
-    public List<Reservation> search(Integer passengerId) {
+    public List<Reservation> findByPassengerId(Integer passengerId) {
         if (passengerId == null) {
             return listAll();
         }
-        return find("select r from Reservation r where r.passenger = :id" ,
+        return find("select r from Reservation r where r.passenger.id = :id" ,
                 Parameters.with("id", passengerId).map())
                 .list();
     }

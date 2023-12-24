@@ -1,14 +1,10 @@
 package org.acme.representation;
 
-import jakarta.inject.Inject;
 import org.acme.domain.Passenger;
-import org.acme.domain.Reservation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-import java.security.PublicKey;
-import java.util.*;
+import java.util.List;
 
 @Mapper(componentModel = "jakarta",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
@@ -21,7 +17,8 @@ public abstract class PassengerMapper {
 
     public abstract Passenger toModel(PassengerRepresentation representation);
 
-    /*@Inject
+    /* TODO θα πρέπει να βάλεις @Mapping για να σου τα εμφανίζει...δεν χρειάζεται να την υλοποιήσεις εσύ
+    @Inject
     ReservationMapper reservationMapper;
 
     public PassengerRepresentation toRepresentation(Passenger passenger) {

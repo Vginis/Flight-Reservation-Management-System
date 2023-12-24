@@ -13,7 +13,7 @@ public class Airport {
     private Integer airportId;
 
     @Column(name="name", nullable = false, length = 30, unique = true)
-    private String name;
+    private String airportName;
 
     @Column(name="city", nullable = false, length = 20)
     private String city;
@@ -21,14 +21,15 @@ public class Airport {
     @Column(name="country", nullable = false, length = 20)
     private String country;
 
-    @Column(name="u3digitCode", nullable = false, length = 3,unique = true)
+    @Column(name="u3digitCode", nullable = false, length = 3, unique = true)
     private String u3digitCode;
 
     public Airport(){
+        super();
     }
 
-    public Airport(String name, String city, String country, String u3digitCode){
-        this.name = name;
+    public Airport(String airportName, String city, String country, String u3digitCode){
+        this.airportName = airportName;
         this.city = city;
         this.country = country;
         this.u3digitCode = u3digitCode;
@@ -40,12 +41,12 @@ public class Airport {
 
     public void setAirportId(Integer airportId) {this.airportId = airportId;}
 
-    public String getName() {
-        return name;
+    public String getAirportName() {
+        return airportName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAirportName(String name) {
+        this.airportName = name;
     }
 
     public String getU3digitCode() {
@@ -77,7 +78,7 @@ public class Airport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Airport airport = (Airport) o;
-        return Objects.equals(airportId, airport.airportId) && Objects.equals(name, airport.name) && Objects.equals(city, airport.city)
+        return Objects.equals(airportId, airport.airportId) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city)
                 && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
     }
 

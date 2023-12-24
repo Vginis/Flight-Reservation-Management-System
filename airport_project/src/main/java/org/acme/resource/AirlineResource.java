@@ -35,7 +35,7 @@ public class AirlineResource {
     AirlineMapper airlineMapper;
 
     @GET
-    @Path("{id}")
+    @Path("{id:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response find(@PathParam("id") Integer id) {

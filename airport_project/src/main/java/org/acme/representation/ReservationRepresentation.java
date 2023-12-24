@@ -7,9 +7,9 @@ import java.util.List;
 @RegisterForReflection
 public class ReservationRepresentation {
     public Integer reservationId;
-    //public Integer passenger;
-    //public List<FlightRepresentation> outgoingFlights;
-    //public List<FlightRepresentation> ingoingFlights;
+    public Integer passengerId;
+    public List<String> outgoingFlights;
+    public List<String> ingoingFlights;
     public List<TicketRepresentation> ticketsList;
     public Long totalPrice;
 

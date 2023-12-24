@@ -30,7 +30,7 @@ public class Flight {
     @Column(name = "depTime")
     private LocalDateTime departureTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "arrAirportId")
     private Airport arrivalAirport;
 
@@ -49,7 +49,7 @@ public class Flight {
     @Column(name="availableSeats")
     private Integer availableSeats;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.MERGE)
     private List<Ticket> ticketList;
 
     public Flight() {
@@ -71,6 +71,10 @@ public class Flight {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFlightNo() {
@@ -127,6 +131,10 @@ public class Flight {
         this.departureTime = LocalDateTime.parse(departureTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
     public Airport getArrivalAirport() {
         return arrivalAirport;
     }
@@ -149,6 +157,10 @@ public class Flight {
 
     public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+    }
+
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public Integer getAircraftCapacity() {
@@ -182,6 +194,10 @@ public class Flight {
         return availableSeats;
     }
 
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
     private void calculateAvailableSeats() {
         Integer soldTickets = this.ticketList.size();
         if (this.availableSeats > 0)
@@ -190,6 +206,10 @@ public class Flight {
 
     public List<Ticket> getTicketList() {
         return new ArrayList<>(ticketList);
+    }
+
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 
     public void addTicket(Ticket ticket) {

@@ -11,26 +11,22 @@ import java.util.Map;
 @DiscriminatorValue("AIRLINE")
 public class Airline extends AccountManagement {
 
-    @Column(name = "name", nullable = true, length = 30,unique = true)
-    private String name;
+    @Column(name = "name", length = 30, unique = true)
+    private String airlineName;
 
-    @Column(name = "u2digitCode", nullable = true, length = 2,unique = true)
+    @Column(name = "u2digitCode", length = 2, unique = true)
     private String u2digitCode;
 
-    @OneToMany(mappedBy = "airline")
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.MERGE)
     private List<Flight> flights = new ArrayList<>();
 
     public Airline() {
-        this.name = "sdfsdf";
-        this.u2digitCode = "KK";
-        this.setUsername("airl");
-        this.setPassword("JeandDig1@");
-        this.flights = new ArrayList<>();
+        super();
     }
 
-    public Airline(String name, String u2digitCode, String username, String password) {
+    public Airline(String airlineName, String u2digitCode, String username, String password) {
         super(username, password);
-        this.name = name;
+        this.airlineName = airlineName;
         this.u2digitCode = u2digitCode;
         this.flights = new ArrayList<>();
     }
@@ -39,12 +35,12 @@ public class Airline extends AccountManagement {
         return flights;
     }
 
-    public String getName() {
-        return name;
+    public String getAirlineName() {
+        return airlineName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAirlineName(String name) {
+        this.airlineName = name;
     }
 
     public String getU2digitCode() {
@@ -96,7 +92,7 @@ public class Airline extends AccountManagement {
             }
         }
 
-        return (mostVisitedAirport != null) ? mostVisitedAirport.getName() : null;
+        return (mostVisitedAirport != null) ? mostVisitedAirport.getAirportName() : null;
     }
 
     public double completeness(){

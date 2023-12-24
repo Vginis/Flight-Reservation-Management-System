@@ -1,7 +1,6 @@
 package org.acme;
 
 
-@SuppressWarnings("serial")
 public class AcmeException extends RuntimeException {
 
     public AcmeException() { }

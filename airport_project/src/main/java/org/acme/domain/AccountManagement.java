@@ -14,18 +14,16 @@ public class AccountManagement {
 
     @Id
     @Column(name="id")
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name = "username", nullable = false, length = 20,unique = true)
+    @Column(name = "username", nullable = false, length = 20, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
     public AccountManagement() {
-        this.username = "addd";
-        this.setPassword("JeandDig1@");
     }
 
     public AccountManagement(String username, String password) {

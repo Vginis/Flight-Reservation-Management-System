@@ -14,8 +14,8 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer reservationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "passengerId", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "passengerId", nullable = false)
     private Passenger passenger;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -35,7 +35,7 @@ public class Reservation {
     @Column(name = "totalPrice", nullable = false)
     private Long totalPrice;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.MERGE)
     private List<Ticket> ticketsList;
 
     public Reservation() {

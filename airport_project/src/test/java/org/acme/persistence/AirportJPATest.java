@@ -17,7 +17,8 @@ public class AirportJPATest extends JPATest {
         Assertions.assertEquals(4, result.size());
     }
 
-    /*@Test
+    /* TODO I guess :)
+    @Test
     @Transactional
     public void denySavingAirportWithSameU3digitCode() {
         Airport ai1 = new Airport("Fotis Ioannidis","Athens","Greece","ATH");
