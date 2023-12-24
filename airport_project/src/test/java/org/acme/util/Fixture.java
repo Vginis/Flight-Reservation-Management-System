@@ -33,19 +33,19 @@ public class Fixture {
         dto.u2digitCode = "BR";
         dto.username="british";
         dto.password="JeandDig1@";
+        dto.flights = new ArrayList<>();
         return dto;
     }
 
     public static PassengerRepresentation getPassengerRepresentation(){
         PassengerRepresentation representation = new PassengerRepresentation();
-        representation.id = 44;
+        representation.id = 2;
         representation.email = "email@gmail.com";
         representation.password = "VGinis12@djsj";
         representation.username = "passenger123";
         representation.passport_id = "AK810399";
         representation.phoneNum = "8388383838";
         representation.reservations = new ArrayList<>();
-        representation.reservations.add(getReservationRepresentation());
         return representation;
     }
 
@@ -72,4 +72,5 @@ public class Fixture {
         return representation;
     }
 
+    //public static FlightRepresentation getFlightRepresentation(){}
 }

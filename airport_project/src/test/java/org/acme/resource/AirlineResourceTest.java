@@ -17,6 +17,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 public class AirlineResourceTest extends JPATest {
@@ -41,7 +42,7 @@ public class AirlineResourceTest extends JPATest {
         assertEquals(1, airlines.size());
 
     }
-/* TODO δεν μπορώ να καταλάβω τι φταίει
+/* TODO δεν μπορώ να καταλάβω τι φταίει*/
     @Test
     public void submitAirline(){
         AirlineRepresentation airlineRepresentation = Fixture.getAirlineRepresentation();
@@ -51,7 +52,7 @@ public class AirlineResourceTest extends JPATest {
         assertNotNull(savedAirline);
         assertEquals("British Airways", savedAirline.airlineName);
 
-    }*/
+    }
 
     @Test
     public void updateAirline() {

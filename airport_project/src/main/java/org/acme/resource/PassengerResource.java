@@ -2,6 +2,7 @@ package org.acme.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -31,6 +32,9 @@ public class PassengerResource {
     @Inject
     PassengerMapper passengerMapper;
 
+    @Inject
+    EntityManager em;
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,20 +55,13 @@ public class PassengerResource {
     public List<PassengerRepresentation> searchPassengerByEmail(@QueryParam("email") String email) {
         return passengerMapper.toRepresentationList(passengerRepository.findByEmail(email));
     }
-    /* TODO Δεν χρειάζεται...το κάνει η passengerRepository.searchByEmail()
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public  List<PassengerRepresentation> list() {
-        return passengerMapper.toRepresentationList(passengerRepository.listAll());
-    }*/
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createPassenger(PassengerRepresentation passengerDto){
         Passenger passenger = passengerMapper.toModel(passengerDto);
+        passenger = em.merge(passenger);
         passengerRepository.persist(passenger);
         URI location = uriInfo.getAbsolutePathBuilder().path(
                 Integer.toString(passenger.getId())).build();

@@ -1,11 +1,17 @@
 package org.acme.resource;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.common.mapper.TypeRef;
 import org.acme.persistence.JPATest;
 import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +27,6 @@ public class ReservationResourceTest extends JPATest {
         assertEquals(Fixture.Reservations.RESERVATION_ONE_WAY_ID, a.reservationId);
     }
 
-    /* TODO Όταν φτιαχτεί η PassengerRepresentation
     @Test
     public void search() throws JsonMappingException, JsonProcessingException {
         List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
@@ -30,7 +35,7 @@ public class ReservationResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
         assertEquals(2, reservations.size());
-    }*/
+    }
 
     /* TODO δεν πρόλαβα
     @Test
