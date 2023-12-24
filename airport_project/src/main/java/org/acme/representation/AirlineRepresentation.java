@@ -4,6 +4,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.acme.domain.Flight;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @RegisterForReflection
 public class AirlineRepresentation{
@@ -13,5 +14,4 @@ public class AirlineRepresentation{
     public String airlineName;
     public String u2digitCode;
     public List<FlightRepresentation> flights;
-
 }

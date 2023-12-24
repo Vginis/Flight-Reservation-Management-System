@@ -39,6 +39,10 @@ public class Airline extends AccountManagement {
         return airlineName;
     }
 
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
+    }
+
     public void setAirlineName(String name) {
         this.airlineName = name;
     }

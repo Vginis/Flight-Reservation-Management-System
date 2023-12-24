@@ -2,6 +2,7 @@ package org.acme.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -20,6 +21,9 @@ import static org.acme.resource.AirportProjectURIs.AIRPORTS;
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class AirportResource {
+
+    @Inject
+    EntityManager em;
 
     @Context
     UriInfo uriInfo;
@@ -56,6 +60,7 @@ public class AirportResource {
             throw new RuntimeException();
         }
         Airport airport = airportMapper.toModel(airportDto);
+        airport = em.merge(airport);
         airportRepository.persist(airport);
         URI location = UriBuilder.fromResource(AirportResource.class).path(String.valueOf(airport.getAirportId())).build();
         return Response

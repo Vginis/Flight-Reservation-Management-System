@@ -49,7 +49,7 @@ public class ReservationResource {
         return Response.ok().entity(reservationMapper.toRepresentation(reservation)).build();
     }
 
-    /* TODO Δεν πρόλαβα να τη δω ξανά
+    //TODO Δεν πρόλαβα να τη δω ξανά
     @PUT
     @Transactional
     public Response createReservation(ReservationRepresentation representation) {
@@ -60,8 +60,9 @@ public class ReservationResource {
         reservationRepository.persist(reservation);
         URI uri = UriBuilder.fromResource(ReservationResource.class).path(String.valueOf(reservation.getReservationId())).build();
         return Response.created(uri).entity(reservationMapper.toRepresentation(reservation)).build();
-    }*/
+    }
 
+    /*
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -75,6 +76,6 @@ public class ReservationResource {
                 .created(location)
                 .entity(reservationMapper.toRepresentation(reservation))
                 .build();
-    }
+    } */
 
 }

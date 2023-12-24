@@ -3,6 +3,7 @@ package org.acme.representation;
 import org.acme.domain.Passenger;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public abstract class PassengerMapper {
 
     public abstract List<PassengerRepresentation> toRepresentationList(List<Passenger> passengers);
 
+    @Mapping(target = "reservations", ignore = true)
     public abstract Passenger toModel(PassengerRepresentation representation);
 
     /* TODO θα πρέπει να βάλεις @Mapping για να σου τα εμφανίζει...δεν χρειάζεται να την υλοποιήσεις εσύ

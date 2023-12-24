@@ -3,6 +3,7 @@ package org.acme.util;
 import org.acme.representation.*;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class Fixture {
 
@@ -23,6 +24,23 @@ public class Fixture {
         dto.city = "Cardinale";
         dto.country = "Fontaine";
         dto.u3digitCode = "FON";
+        return dto;
+    }
+
+    public static FlightRepresentation getFlightRepresentation(){
+        FlightRepresentation dto = new FlightRepresentation ();
+        dto.id = 10;
+        dto.flightNo = "BS3456";
+        dto.airlineName = "Grand_Cross";
+        dto.departureAirport = "Camelot";
+        dto.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
+        dto.arrivalAirport = "Teyvat";
+        dto.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
+        dto.aircraftCapacity = 120;
+        dto.aircraftType = "BSA-4545";
+        dto.ticketPrice = (long) 48;
+        dto.availableSeats = 24;
+        dto.ticketList = new ArrayList<TicketRepresentation>();
         return dto;
     }
 

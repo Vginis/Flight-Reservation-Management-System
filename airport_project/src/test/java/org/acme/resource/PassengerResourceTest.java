@@ -66,4 +66,28 @@ public class PassengerResourceTest extends JPATest {
         assertEquals("VGinis12@djsj", savedPassenger.password);
         assertNotNull(savedPassenger.reservations);
     }
+
+    @Test
+    public void updatePassenger() {
+        PassengerRepresentation passenger = when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
+                .then()
+                .statusCode(200)
+                .extract().as(PassengerRepresentation.class);
+
+        passenger.username = "passenger123";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(passenger)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
+                .then().statusCode(204);
+
+
+        PassengerRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
+                .then()
+                .statusCode(200)
+                .extract().as(PassengerRepresentation.class);
+
+        assertEquals("passenger123", updated.username);
+    }
 }

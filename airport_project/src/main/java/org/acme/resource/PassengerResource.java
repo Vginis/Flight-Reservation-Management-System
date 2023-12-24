@@ -70,4 +70,21 @@ public class PassengerResource {
                 .entity(passengerMapper.toRepresentation(passenger))
                 .build();
     }
+
+    @PUT
+    @Path("/{id}")
+    @Transactional
+    public Response updatePassengerById(@PathParam("id") Integer passengerid,
+                                        PassengerRepresentation representation) {
+        if (!(passengerid.equals(representation.id))) {
+            throw new RuntimeException();
+        }
+
+        Passenger passenger = passengerMapper.toModel(representation);
+        passengerRepository.getEntityManager().merge(passenger);
+
+        return Response.noContent().build();
+    }
+
+
 }
