@@ -92,6 +92,7 @@ public class Flight {
     }
 
     private boolean validateFlightNo(String flightNo) {
+        if (this.airline == null) return true;
         return this.airline.getU2digitCode().matches(flightNo.substring(0, 2));
     }
 

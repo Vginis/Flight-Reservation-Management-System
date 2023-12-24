@@ -69,7 +69,8 @@ public class Fixture {
 
     public static TicketRepresentation getTicketRepresentation() {
         TicketRepresentation representation = new TicketRepresentation();
-        //representation.reservation = getReservationRepresentation();
+        //representation.reservation = getReservationRepresentation().reservationId;
+        representation.flightNo = "A3654";
         representation.firstName = "Alice";
         representation.lastName = "Waves";
         representation.passportId = "GH76J90";
@@ -81,11 +82,11 @@ public class Fixture {
 
     public static ReservationRepresentation getReservationRepresentation() {
         ReservationRepresentation representation = new ReservationRepresentation();
-        //representation.passenger = ???
-        //representation.outgoingFlights = new ArrayList<>();
-        //representation.ingoingFlights = new ArrayList<>();
-        representation.ticketsList = new ArrayList<>();
-        representation.ticketsList.add(getTicketRepresentation());
+        representation.passengerId = getPassengerRepresentation().id;
+        representation.outgoingFlights = new ArrayList<>();
+        representation.ingoingFlights = new ArrayList<>();
+        representation.ticketList = new ArrayList<>();
+        representation.ticketList.add(getTicketRepresentation());
         representation.totalPrice = 240L;
         return representation;
     }

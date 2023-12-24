@@ -58,7 +58,6 @@ public class PassengerResourceTest extends JPATest {
                 .post(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS).then().statusCode(201).extract().as(PassengerRepresentation.class);
 
         assertNotNull(savedPassenger);
-        assertEquals(2,savedPassenger.id);
         assertEquals("passenger123",savedPassenger.username);
         assertEquals("AK810399",savedPassenger.passport_id);
         assertEquals("8388383838",savedPassenger.phoneNum);

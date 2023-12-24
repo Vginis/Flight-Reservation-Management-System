@@ -62,6 +62,10 @@ public class Reservation {
         return new ArrayList<>(outgoingFlights);
     }
 
+    public void setOutgoingFlights(List<Flight> outgoingFlights) {
+        this.outgoingFlights = outgoingFlights;
+    }
+
     public void addOutgoingFlight(Flight outFlight) {
         if (outFlight == null) return;
         if (this.outgoingFlights.contains(outFlight)) {
@@ -80,6 +84,10 @@ public class Reservation {
 
     public List<Flight> getIngoingFlights() {
         return new ArrayList<>(ingoingFlights);
+    }
+
+    public void setIngoingFlights(List<Flight> ingoingFlights) {
+        this.ingoingFlights = ingoingFlights;
     }
 
     public void addIngoingFlight(Flight inFlight) {
@@ -112,6 +120,10 @@ public class Reservation {
         return totalPrice;
     }
 
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     private void calculateTotalPrice() {
         if (this.ticketsList.isEmpty()) return;
         for (Ticket ticket : this.ticketsList) {
@@ -121,6 +133,10 @@ public class Reservation {
 
     public List<Ticket> getTicketsList() {
         return new ArrayList<>(ticketsList);
+    }
+
+    public void setTicketsList(List<Ticket> ticketsList) {
+        this.ticketsList = ticketsList;
     }
 
     public void addTicket(Ticket ticket) {

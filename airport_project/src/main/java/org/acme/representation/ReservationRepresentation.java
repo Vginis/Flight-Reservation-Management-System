@@ -10,7 +10,7 @@ public class ReservationRepresentation {
     public Integer passengerId;
     public List<String> outgoingFlights;
     public List<String> ingoingFlights;
-    public List<TicketRepresentation> ticketsList;
+    public List<TicketRepresentation> ticketList;
     public Long totalPrice;
 
 }

@@ -14,7 +14,7 @@ public class AccountManagement {
 
     @Id
     @Column(name="id")
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
     @Column(name = "username", nullable = false, length = 20, unique = true)

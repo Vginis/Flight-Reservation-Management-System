@@ -21,6 +21,7 @@ public abstract class ReservationMapper {
     @Mapping(target = "passengerId", source = "passenger.id")
     @Mapping(target = "outgoingFlights", expression = "java(reservation.getOutgoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")
     @Mapping(target = "ingoingFlights", expression = "java(reservation.getIngoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")
+    @Mapping(target = "ticketList", source = "ticketsList")
     public abstract ReservationRepresentation toRepresentation(Reservation reservation);
 
     public abstract List<ReservationRepresentation> toRepresentationList(List<Reservation> reservations);
@@ -28,7 +29,8 @@ public abstract class ReservationMapper {
     @Mapping(target = "passenger.id", source = "passengerId")
     @Mapping(target = "outgoingFlights", ignore = true)
     @Mapping(target = "ingoingFlights", ignore = true)
-    @Mapping(target = "ticketsList", ignore = true)
+    @Mapping(target = "ticketsList", source = "ticketList")
+    @Mapping(target = "totalPrice", source = "totalPrice")
     public abstract Reservation toModel(ReservationRepresentation representation);
 
 }

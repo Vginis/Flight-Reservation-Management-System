@@ -23,7 +23,7 @@ insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId
 
 
 insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (9, 6, false, 100);
-insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (10, 6, true, 380);
+insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (10, 6, true, 180);
 
 insert into OutFlightsReservations(flightId, reservationId) values (7, 9);
 insert into OutFlightsReservations(flightId, reservationId) values (7, 10);
@@ -32,5 +32,5 @@ insert into InFlightsReservations(flightId, reservationId) values (8, 10);
 
 insert into Tickets(ticketId, reservationId, luggageIncluded, weight, pieces, ticketPrice, seatNo, firstName, lastName, passportId, flightId) values (11, 9, false, 0, 0, 100, '1A', 'Bob', 'Wonder', 'CP152D45', 7);
 insert into Tickets(ticketId, reservationId, luggageIncluded, weight, pieces, ticketPrice, seatNo, firstName, lastName, passportId, flightId) values (12, 10, false, 0, 0, 100, '1F', 'Art', 'Buster', 'AB42J34D', 7);
-insert into Tickets(ticketId, reservationId, luggageIncluded, weight, pieces, ticketPrice, seatNo, firstName, lastName, passportId, flightId) values (13, 10, false, 0, 0, 280, '1A', 'Art', 'Buster', 'AB42J34D', 8);
+insert into Tickets(ticketId, reservationId, luggageIncluded, weight, pieces, ticketPrice, seatNo, firstName, lastName, passportId, flightId) values (13, 10, false, 0, 0, 80, '1A', 'Art', 'Buster', 'AB42J34D', 8);
 
