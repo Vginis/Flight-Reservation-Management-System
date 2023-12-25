@@ -70,7 +70,7 @@ public class Fixture {
     public static TicketRepresentation getTicketRepresentation() {
         TicketRepresentation representation = new TicketRepresentation();
         representation.ticketId = 14;
-        //representation.reservation = getReservationRepresentation().reservationId;
+        representation.reservationId = 20;
         representation.flightNo = "A3654";
         representation.firstName = "Alice";
         representation.lastName = "Waves";

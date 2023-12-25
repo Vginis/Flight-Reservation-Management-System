@@ -9,11 +9,12 @@ import org.mapstruct.Mapping;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public abstract class TicketMapper {
 
-    //@Mapping(target = "reservation", source = "reservation.reservationId")
+    @Mapping(target = "reservationId", source = "reservation.reservationId")
     @Mapping(target = "flightNo", source = "flight.flightNo")
     public abstract TicketRepresentation toRepresentation(Ticket ticket);
 
     @Mapping(target = "flight.flightNo", source = "flightNo")
+    @Mapping(target = "reservation.reservationId", source = "reservationId")
     public abstract Ticket toModel(TicketRepresentation representation);
 
 }

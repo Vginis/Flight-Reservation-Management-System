@@ -45,6 +45,10 @@ public class Reservation {
         return reservationId;
     }
 
+    public void setReservationId(Integer reservationId) {
+        this.reservationId = reservationId;
+    }
+
     public Passenger getPassenger() {
         return passenger;
     }
