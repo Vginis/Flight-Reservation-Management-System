@@ -22,6 +22,6 @@ public class FlightRepresentation {
     public String aircraftType;
     public Long ticketPrice;
     public Integer availableSeats;
-    public List<TicketRepresentation> ticketList;
+    public List<Integer> ticketList;
 
 }

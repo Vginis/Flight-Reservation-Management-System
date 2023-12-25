@@ -28,7 +28,7 @@ public class ReservationMapperTest {
     @Transactional
     public void testToRepresentation() {
         Reservation reservation = reservationRepository.findById(9);
-        ReservationRepresentation reservationRepresentation =reservationMapper.toRepresentation(reservation);
+        ReservationRepresentation reservationRepresentation = reservationMapper.toRepresentation(reservation);
 
         assertEquals(reservation.getReservationId(), reservationRepresentation.reservationId);
         assertEquals(reservation.getPassenger().getId(), reservationRepresentation.passengerId);
@@ -40,7 +40,7 @@ public class ReservationMapperTest {
         }
         assertEquals(0, reservationRepresentation.ingoingFlights.size());
         assertEquals(1, reservationRepresentation.ticketList.size());
-        List<Ticket>tickets = new ArrayList<>(reservation.getTicketsList());
+        List<Ticket> tickets = new ArrayList<>(reservation.getTicketsList());
         for (TicketRepresentation r : reservationRepresentation.ticketList) {
             Ticket t = tickets.stream().filter(a -> a.getPassportId().contains(r.passportId)).findFirst().orElse(null);
             assert t != null;
@@ -57,9 +57,9 @@ public class ReservationMapperTest {
         }
     }
 
-    @Transactional
     @Test
-    void testToModel() {
+    @Transactional
+    public void testToModel() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
         Reservation entity = reservationMapper.toModel(reservationRepresentation);
 

@@ -6,15 +6,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "jakarta",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        uses = {TicketMapper.class})
+        uses = {TicketMapper.class},
+        imports = {Collectors.class})
 public abstract class FlightMapper {
 
     @Mapping(target = "airlineName", source = "airline.airlineName")
     @Mapping(target = "departureAirport", source = "departureAirport.airportName")
     @Mapping(target = "arrivalAirport", source = "arrivalAirport.airportName")
+    @Mapping(target = "ticketList", expression = "java(flight.getTicketList().stream().map(org.acme.domain.Ticket::getTicketId).collect(Collectors.toList()))")
     public abstract FlightRepresentation toRepresentation(Flight flight);
 
     public abstract List<FlightRepresentation> toRepresentationList(List<Flight> flights);

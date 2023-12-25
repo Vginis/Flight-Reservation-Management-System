@@ -12,7 +12,7 @@ public class PassengerRepresentation {
     public String email;
     public String phoneNum;
     public String passport_id;
-    public List<ReservationRepresentation> reservations;
+    public List<Integer> reservationsId;
 
     /* TODO κοίτα μια τη ReservationMapper -> γραμμές 22 & 23
     Method that turns ReservationRepresentation to Reservation, used for toModel implementation in PassengerMapper

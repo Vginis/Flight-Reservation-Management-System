@@ -63,7 +63,7 @@ public class PassengerResourceTest extends JPATest {
         assertEquals("8388383838",savedPassenger.phoneNum);
         assertEquals("email@gmail.com", savedPassenger.email);
         assertEquals("VGinis12@djsj", savedPassenger.password);
-        assertNotNull(savedPassenger.reservations);
+        assertNotNull(savedPassenger.reservationsId);
     }
 
     @Test

@@ -70,7 +70,7 @@ public class AirlineMapperTest {
             assertEquals(f.getArrivalAirport().getAirportName(),r.arrivalAirport);
             assertEquals(f.getDepartureAirport().getAirportName(),r.departureAirport);
             assertEquals(f.getAircraftType(),r.aircraftType);
-            assertEquals(f.getTicketList().get(0).getTicketPrice(),r.ticketList.get(0).ticketPrice);
+            assertEquals(f.getTicketList().get(0).getTicketId(),r.ticketList.get(0));
             assertEquals(f.getDepartureTime(),r.departureTime);
             assertEquals(f.getArrivalTime(),r.arrivalTime);
 

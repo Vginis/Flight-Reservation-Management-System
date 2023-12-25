@@ -1,6 +1,5 @@
 package org.acme.util;
 
-import org.acme.domain.Passenger;
 import org.acme.representation.*;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class Fixture {
         dto.aircraftType = "BSA-4545";
         dto.ticketPrice = (long) 48;
         dto.availableSeats = 24;
-        dto.ticketList = new ArrayList<TicketRepresentation>();
+        dto.ticketList = new ArrayList<Integer>();
         return dto;
     }
 
@@ -64,12 +63,13 @@ public class Fixture {
         representation.username = "passenger123";
         representation.passport_id = "AK810399";
         representation.phoneNum = "8388383838";
-        representation.reservations = new ArrayList<>();
+        representation.reservationsId = new ArrayList<>();
         return representation;
     }
 
     public static TicketRepresentation getTicketRepresentation() {
         TicketRepresentation representation = new TicketRepresentation();
+        representation.ticketId = 14;
         //representation.reservation = getReservationRepresentation().reservationId;
         representation.flightNo = "A3654";
         representation.firstName = "Alice";
@@ -77,6 +77,8 @@ public class Fixture {
         representation.passportId = "GH76J90";
         representation.seatNo = "11A";
         representation.luggageIncluded = false;
+        representation.amount = 0;
+        representation.weight = 0;
         representation.ticketPrice = 240L;
         return representation;
     }

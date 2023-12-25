@@ -21,18 +21,18 @@ public class Flight {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn (name = "airlineId")
-    private Airline airline;
+    private Airline airline = new Airline();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "depAirportId")
-    private Airport departureAirport;
+    private Airport departureAirport = new Airport();
 
     @Column(name = "depTime")
     private LocalDateTime departureTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "arrAirportId")
-    private Airport arrivalAirport;
+    private Airport arrivalAirport = new Airport();
 
     @Column(name = "arrTime")
     private LocalDateTime arrivalTime;
@@ -47,10 +47,10 @@ public class Flight {
     private Long ticketPrice;
 
     @Column(name="availableSeats")
-    private Integer availableSeats;
+    private Integer availableSeats = 0;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.MERGE)
-    private List<Ticket> ticketList;
+    private List<Ticket> ticketList = new ArrayList<>();
 
     public Flight() {
     }
@@ -92,7 +92,7 @@ public class Flight {
     }
 
     private boolean validateFlightNo(String flightNo) {
-        if (this.airline == null) return true;
+        if (this.airline.getU2digitCode() == null) return true;
         return this.airline.getU2digitCode().matches(flightNo.substring(0, 2));
     }
 
@@ -109,6 +109,7 @@ public class Flight {
     }
 
     private boolean validateAirline(Airline airline) {
+        if (this.flightNo == null) return true;
         return airline.getU2digitCode().matches(this.flightNo.substring(0, 2));
     }
 
