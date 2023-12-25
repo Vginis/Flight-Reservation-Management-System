@@ -1,6 +1,5 @@
 package org.acme.representation;
 
-import org.acme.domain.Reservation;
 import org.acme.domain.Ticket;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

@@ -2,6 +2,7 @@ package org.acme.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -20,6 +21,9 @@ import static org.acme.resource.AirportProjectURIs.RESERVATIONS;
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class ReservationResource {
+
+    @Inject
+    EntityManager em;
 
     @Context
     UriInfo uriInfo;
@@ -50,7 +54,7 @@ public class ReservationResource {
     }
 
     //TODO Δεν πρόλαβα να τη δω ξανά
-    @PUT
+    /*@PUT
     @Transactional
     public Response createReservation(ReservationRepresentation representation) {
         if (representation.reservationId == null) {
@@ -60,15 +64,15 @@ public class ReservationResource {
         reservationRepository.persist(reservation);
         URI uri = UriBuilder.fromResource(ReservationResource.class).path(String.valueOf(reservation.getReservationId())).build();
         return Response.created(uri).entity(reservationMapper.toRepresentation(reservation)).build();
-    }
+    }*/
 
-    /*
-    @POST
+    /*@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createReservation(ReservationRepresentation reservationDto){
         Reservation reservation = reservationMapper.toModel(reservationDto);
+        reservation = em.merge(reservation);
         reservationRepository.persist(reservation);
         URI location = uriInfo.getAbsolutePathBuilder().path(
                 Integer.toString(reservation.getReservationId())).build();
@@ -76,6 +80,6 @@ public class ReservationResource {
                 .created(location)
                 .entity(reservationMapper.toRepresentation(reservation))
                 .build();
-    } */
+    }*/
 
 }

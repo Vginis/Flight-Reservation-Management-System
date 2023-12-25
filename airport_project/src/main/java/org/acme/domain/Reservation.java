@@ -22,27 +22,23 @@ public class Reservation {
     @JoinTable(name = "OutFlightsReservations",
             joinColumns = {@JoinColumn(name = "reservationId")},
             inverseJoinColumns = {@JoinColumn(name = "flightId")})
-    private List<Flight> outgoingFlights;
+    private List<Flight> outgoingFlights = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "InFlightsReservations",
             joinColumns = {@JoinColumn(name = "reservationId")},
             inverseJoinColumns = {@JoinColumn(name = "flightId")})
-    private List<Flight> ingoingFlights;
+    private List<Flight> ingoingFlights = new ArrayList<>();
 
-    private Boolean returnFlight;
+    private Boolean returnFlight = false;
 
-    @Column(name = "totalPrice", nullable = false)
-    private Long totalPrice;
+    @Column(name = "totalPrice")
+    private Long totalPrice = 0L;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.MERGE)
-    private List<Ticket> ticketsList;
+    private List<Ticket> ticketsList = new ArrayList<>();
 
     public Reservation() {
-        outgoingFlights = new ArrayList<>();
-        returnFlight = false;
-        totalPrice = 0L;
-        ticketsList = new ArrayList<>();
     }
 
     public Integer getReservationId() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
+import io.restassured.http.ContentType;
 import org.acme.persistence.JPATest;
 import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
@@ -37,8 +38,8 @@ public class ReservationResourceTest extends JPATest {
         assertEquals(2, reservations.size());
     }
 
-    /* TODO δεν πρόλαβα
-    @Test
+    // TODO δεν πρόλαβα
+    /*@Test
     public void createReservation() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
         ReservationRepresentation savedArticle = given()
@@ -51,7 +52,7 @@ public class ReservationResourceTest extends JPATest {
         //assertEquals(???, savedArticle.passenger);
         //assertEquals(1, savedArticle.outgoingFlights.size());
         //assertEquals(1, savedArticle.ingoingFlights.size());
-        assertEquals(1, savedArticle.ticketsList.size());
+        assertEquals(1, savedArticle.ticketList.size());
         assertEquals(0L, savedArticle.totalPrice);
     }*/
 

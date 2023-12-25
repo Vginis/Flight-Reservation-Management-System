@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
         imports = {Collectors.class})
 public abstract class ReservationMapper {
 
-    @Inject
-    FlightMapper flightMapper;
-
     @Mapping(target = "passengerId", source = "passenger.id")
     @Mapping(target = "outgoingFlights", expression = "java(reservation.getOutgoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")
     @Mapping(target = "ingoingFlights", expression = "java(reservation.getIngoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")

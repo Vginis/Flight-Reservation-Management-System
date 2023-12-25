@@ -1,5 +1,6 @@
 package org.acme.util;
 
+import org.acme.domain.Passenger;
 import org.acme.representation.*;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class Fixture {
 
     public static ReservationRepresentation getReservationRepresentation() {
         ReservationRepresentation representation = new ReservationRepresentation();
-        representation.passengerId = getPassengerRepresentation().id;
+        representation.passengerId = 6;
         representation.outgoingFlights = new ArrayList<>();
         representation.ingoingFlights = new ArrayList<>();
         representation.ticketList = new ArrayList<>();

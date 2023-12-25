@@ -28,7 +28,10 @@ public class AccountManagement {
 
     public AccountManagement(String username, String password) {
         this.username = username;
-        this.setPassword(password);
+        if (passwordValidation(password))
+            this.password = password;
+        else
+            throw new RuntimeException("Invalid Password");
     }
 
     public Integer getId() {
@@ -67,6 +70,7 @@ public class AccountManagement {
     }
 
     public boolean passwordValidation(String password){
+        if (password == null) return true;
         String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
