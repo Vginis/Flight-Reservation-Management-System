@@ -12,6 +12,7 @@ import org.acme.representation.AirlineRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -55,13 +56,17 @@ public class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    @TestTransaction
     public void updateAirline() {
         AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
         airline.airlineName = "Pao Airlines";
-
+        airline.flights = new ArrayList<>();
+        airline.username = "new Username";
+        //airline.password ="KKsdfgks@2";
+        airline.u2digitCode = "TT";
 
         given()
                 .contentType(ContentType.JSON)

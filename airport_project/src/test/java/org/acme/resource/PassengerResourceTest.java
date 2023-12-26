@@ -12,6 +12,7 @@ import org.acme.util.Fixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -74,6 +75,11 @@ public class PassengerResourceTest extends JPATest {
                 .extract().as(PassengerRepresentation.class);
 
         passenger.username = "passenger123";
+        passenger.password = "jjdsfUJ23$";
+        passenger.email = "sjdfs@gmail.com";
+        passenger.phoneNum = "999999999";
+        passenger.passport_id ="AK48597";
+        passenger.reservationsId = new ArrayList<>();
 
         given()
                 .contentType(ContentType.JSON)

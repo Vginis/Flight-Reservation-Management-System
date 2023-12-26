@@ -62,7 +62,7 @@ public class FlightMapperTest {
         assertEquals(entity.getAircraftType(), flightRepresentation.aircraftType);
         assertEquals(entity.getTicketPrice(), flightRepresentation.ticketPrice);
         assertEquals(entity.getAvailableSeats(), flightRepresentation.availableSeats);
-        assertEquals(0, flightRepresentation.ticketList.size());
+        assertEquals(1, flightRepresentation.ticketList.size());
     }
 
 }

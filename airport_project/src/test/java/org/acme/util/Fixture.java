@@ -32,10 +32,10 @@ public class Fixture {
         FlightRepresentation dto = new FlightRepresentation ();
         dto.id = 190;
         dto.flightNo = "A3651";
-        dto.airlineName = getAirlineRepresentation().airlineName;
-        dto.departureAirport = getAirportRepresentation().airportName;
+        dto.airlineName = "Aegean Airlines";
+        dto.departureAirport = "Fiumicino";
         dto.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
-        dto.arrivalAirport = getAirportRepresentation().airportName;
+        dto.arrivalAirport = "Eleftherios Venizelos";
         dto.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
         dto.aircraftCapacity = 120;
         dto.aircraftType = "BSA-4545";
