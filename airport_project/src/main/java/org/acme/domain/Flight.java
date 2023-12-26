@@ -142,6 +142,7 @@ public class Flight {
     }
 
     public void setArrivalAirport(Airport arrivalAirport) {
+        if (arrivalAirport==null){return;}
         if (this.arrivalAirport.equals(arrivalAirport)) return;
         if (validateAirport(arrivalAirport))
             this.arrivalAirport = arrivalAirport;

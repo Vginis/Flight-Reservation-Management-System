@@ -65,7 +65,7 @@ public class ReservationMapperTest {
 
         assertEquals(entity.getReservationId(), reservationRepresentation.reservationId);
         assertEquals(entity.getPassenger().getId(), reservationRepresentation.passengerId);
-        assertEquals(0, reservationRepresentation.outgoingFlights.size());
+        assertEquals(1, reservationRepresentation.outgoingFlights.size());
         assertEquals(0, reservationRepresentation.ingoingFlights.size());
         assertEquals(1, reservationRepresentation.ticketList.size());
         assertEquals(entity.getTotalPrice(), reservationRepresentation.totalPrice);

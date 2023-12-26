@@ -29,7 +29,7 @@ public class Ticket {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "flightId", nullable = false)
-    private Flight flight;
+    private Flight flight = new Flight();
 
     public Ticket() {
     }

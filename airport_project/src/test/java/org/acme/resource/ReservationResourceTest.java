@@ -53,7 +53,7 @@ public class ReservationResourceTest extends JPATest {
         //assertEquals(1, savedArticle.outgoingFlights.size());
         //assertEquals(1, savedArticle.ingoingFlights.size());
         assertEquals(1, savedArticle.ticketList.size());
-        assertEquals(0L, savedArticle.totalPrice);
+        assertEquals(240L, savedArticle.totalPrice);
     }
 
 }

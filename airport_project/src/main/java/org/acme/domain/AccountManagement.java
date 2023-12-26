@@ -23,8 +23,7 @@ public class AccountManagement {
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
-    public AccountManagement() {
-    }
+    public AccountManagement(){}
 
     public AccountManagement(String username, String password) {
         this.username = username;

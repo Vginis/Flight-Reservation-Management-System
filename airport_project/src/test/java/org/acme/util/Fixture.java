@@ -1,5 +1,6 @@
 package org.acme.util;
 
+import org.acme.persistence.JPATest;
 import org.acme.representation.*;
 
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ public class Fixture {
 
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation ();
-        dto.airportId = 5;
-        dto.airportName = "Furina_De_Chateau";
+        dto.airportId = 199;
+        dto.airportName = "Furina";
         dto.city = "Cardinale";
         dto.country = "Fontaine";
         dto.u3digitCode = "FON";
@@ -29,18 +30,19 @@ public class Fixture {
 
     public static FlightRepresentation getFlightRepresentation(){
         FlightRepresentation dto = new FlightRepresentation ();
-        dto.id = 10;
-        dto.flightNo = "BS3456";
-        dto.airlineName = "Grand_Cross";
-        dto.departureAirport = "Camelot";
+        dto.id = 190;
+        dto.flightNo = "A3651";
+        dto.airlineName = getAirlineRepresentation().airlineName;
+        dto.departureAirport = getAirportRepresentation().airportName;
         dto.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
-        dto.arrivalAirport = "Teyvat";
+        dto.arrivalAirport = getAirportRepresentation().airportName;
         dto.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
         dto.aircraftCapacity = 120;
         dto.aircraftType = "BSA-4545";
-        dto.ticketPrice = (long) 48;
+        dto.ticketPrice = (long) 80;
         dto.availableSeats = 24;
         dto.ticketList = new ArrayList<Integer>();
+        dto.ticketList.add(getTicketRepresentation().ticketId);
         return dto;
     }
 
@@ -69,17 +71,17 @@ public class Fixture {
 
     public static TicketRepresentation getTicketRepresentation() {
         TicketRepresentation representation = new TicketRepresentation();
-        representation.ticketId = 14;
-        representation.reservationId = 20;
-        representation.flightNo = "A3654";
-        representation.firstName = "Alice";
-        representation.lastName = "Waves";
-        representation.passportId = "GH76J90";
-        representation.seatNo = "11A";
+        representation.ticketId = 11;
+        representation.reservationId = 9;
+        representation.flightNo = "FR8438";
+        representation.firstName = "Bob";
+        representation.lastName = "Wander";
+        representation.passportId = "CP152D35=";
+        representation.seatNo = "1A";
         representation.luggageIncluded = false;
         representation.amount = 0;
         representation.weight = 0;
-        representation.ticketPrice = 240L;
+        representation.ticketPrice = 100L;
         return representation;
     }
 
@@ -87,6 +89,7 @@ public class Fixture {
         ReservationRepresentation representation = new ReservationRepresentation();
         representation.passengerId = 6;
         representation.outgoingFlights = new ArrayList<>();
+        representation.outgoingFlights.add(getFlightRepresentation().flightNo);
         representation.ingoingFlights = new ArrayList<>();
         representation.ticketList = new ArrayList<>();
         representation.ticketList.add(getTicketRepresentation());

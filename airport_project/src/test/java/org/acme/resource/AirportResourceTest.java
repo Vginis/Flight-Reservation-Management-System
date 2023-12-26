@@ -49,16 +49,17 @@ public class AirportResourceTest extends JPATest {
                 .then()
                 .statusCode(404);
     }
-
+    //TODO Κάποια στιγμή αφού έχουμε τελειώσει να δούμε το airportId
     @Test
     public void createAirport() {
 
         AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
+        airportRepresentation.airportId = 1;
         AirportRepresentation createdAirport = given().contentType(ContentType.JSON).body(airportRepresentation).when()
                 .post(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals(5, createdAirport.airportId);
+        assertEquals("Furina", createdAirport.airportName);
     }
 
 

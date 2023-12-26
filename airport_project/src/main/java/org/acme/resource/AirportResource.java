@@ -72,10 +72,10 @@ public class AirportResource {
     }*/
 
     @POST
-    //@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createAirport(AirportRepresentation airportDto) {
-
         Airport airport = airportMapper.toModel(airportDto);
         airport = em.merge(airport);
         airportRepository.persist(airport);

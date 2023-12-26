@@ -9,9 +9,9 @@ import java.util.Objects;
 public class Airport {
 
     @Id
-    @Column(name="airportId", length = 10)
+    @Column(name="airportId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer airportId;
+    protected Integer airportId;
 
     @Column(name="name", nullable = false, length = 30, unique = true)
     private String airportName;
@@ -71,7 +71,7 @@ public class Airport {
     public void setCity(String city) {
         this.city = city;
     }
-
+/*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,6 +79,6 @@ public class Airport {
         Airport airport = (Airport) o;
         return Objects.equals(airportId, airport.airportId) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city)
                 && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
-    }
+    }*/
 
 }

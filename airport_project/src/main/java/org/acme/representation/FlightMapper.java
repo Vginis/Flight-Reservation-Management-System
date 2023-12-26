@@ -1,10 +1,13 @@
 package org.acme.representation;
 
-import org.acme.domain.Airport;
-import org.acme.domain.Flight;
+import org.acme.domain.*;
+import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.AirportRepository;
+import org.acme.persistence.TicketRepository;
 import org.mapstruct.*;
 import jakarta.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +19,10 @@ public abstract class FlightMapper {
 
     @Inject
     AirportRepository airportRepository;
-
+    @Inject
+    AirlineRepository airlineRepository;
+    @Inject
+    TicketRepository ticketRepository;
 
     @Mapping(target = "airlineName", source = "airline.airlineName")
     @Mapping(target = "departureAirport", source = "departureAirport.airportName")
@@ -31,6 +37,19 @@ public abstract class FlightMapper {
     @Mapping(target = "arrivalAirport", ignore = true)
     @Mapping(target = "ticketList", ignore = true)
     public abstract Flight toModel(FlightRepresentation representation);
+
+
+    @AfterMapping
+    public void resolveAirlineByName(FlightRepresentation dto, @MappingTarget Flight flight){
+
+        Airline airline = null;
+        if (dto.airlineName != null){
+            airline = airlineRepository.find("airlineName", dto.airlineName)
+                    .firstResultOptional().orElse(null);
+        }
+        flight.setAirline(airline);
+    }
+
 
     @AfterMapping
     public void resolveAirportByDepartureAirport(FlightRepresentation dto, @MappingTarget Flight flight){
@@ -53,4 +72,18 @@ public abstract class FlightMapper {
         }
         flight.setArrivalAirport(airport);
     }
+
+    @AfterMapping
+    public void resolveTicketListById(FlightRepresentation dto, @MappingTarget Flight flight){
+        List<Ticket> ticket_list = new ArrayList<>(dto.ticketList.size());
+        Ticket ticket = null;
+        for (Integer i : dto.ticketList) {
+            if (i != null) {
+                ticket = ticketRepository.find("ticketId", i).firstResultOptional().orElse(null);
+            }
+            ticket_list.add(ticket);
+        }
+        flight.setTicketList(ticket_list);
+    }
+
 }

@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Ticket;
+import org.acme.persistence.JPATest;
 import org.acme.persistence.TicketRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ public class TicketMapperTest {
     @Test
     @Transactional
     public void testToModel() {
-        TicketRepresentation ticketRepresentation = Fixture.getTicketRepresentation();
+        TicketRepresentation ticketRepresentation =Fixture.getTicketRepresentation();
         Ticket entity = ticketMapper.toModel(ticketRepresentation);
 
         assertEquals(entity.getTicketId(), ticketRepresentation.ticketId);

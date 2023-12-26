@@ -26,9 +26,6 @@ public abstract class ReservationMapper {
     @Inject
     FlightRepository flightRepository;
 
-    @Inject
-    TicketRepository ticketRepository;
-
     @Mapping(target = "passengerId", source = "passenger.id")
     @Mapping(target = "outgoingFlights", expression = "java(reservation.getOutgoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")
     @Mapping(target = "ingoingFlights", expression = "java(reservation.getIngoingFlights().stream().map(org.acme.domain.Flight::getFlightNo).collect(Collectors.toList()))")
@@ -70,6 +67,7 @@ public abstract class ReservationMapper {
 
     @AfterMapping
     public void resolveIngoingFlightsByFlightNumber(ReservationRepresentation dto, @MappingTarget Reservation reservation){
+
         List<Flight> ingoingFlights = new ArrayList<>(dto.ingoingFlights.size());
         Flight flight = null;
         for (String fr : dto.ingoingFlights) {
