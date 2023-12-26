@@ -10,6 +10,7 @@ public class Airport {
 
     @Id
     @Column(name="airportId", length = 10)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer airportId;
 
     @Column(name="name", nullable = false, length = 30, unique = true)
@@ -24,9 +25,7 @@ public class Airport {
     @Column(name="u3digitCode", nullable = false, length = 3, unique = true)
     private String u3digitCode;
 
-    public Airport(){
-        super();
-    }
+    public Airport(){}
 
     public Airport(String airportName, String city, String country, String u3digitCode){
         this.airportName = airportName;

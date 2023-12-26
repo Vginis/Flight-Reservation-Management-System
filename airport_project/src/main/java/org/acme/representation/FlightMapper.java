@@ -1,10 +1,10 @@
 package org.acme.representation;
 
+import org.acme.domain.Airport;
 import org.acme.domain.Flight;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
+import org.acme.persistence.AirportRepository;
+import org.mapstruct.*;
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
         imports = {Collectors.class})
 public abstract class FlightMapper {
 
+    @Inject
+    AirportRepository airportRepository;
+
+
     @Mapping(target = "airlineName", source = "airline.airlineName")
     @Mapping(target = "departureAirport", source = "departureAirport.airportName")
     @Mapping(target = "arrivalAirport", source = "arrivalAirport.airportName")
@@ -22,10 +26,31 @@ public abstract class FlightMapper {
 
     public abstract List<FlightRepresentation> toRepresentationList(List<Flight> flights);
 
-    @Mapping(target = "airline.airlineName", source = "airlineName")
-    @Mapping(target = "departureAirport.airportName", source = "departureAirport")
-    @Mapping(target = "arrivalAirport.airportName", source = "arrivalAirport")
+    @Mapping(target = "airline", ignore = true)
+    @Mapping(target = "departureAirport", ignore = true)
+    @Mapping(target = "arrivalAirport", ignore = true)
     @Mapping(target = "ticketList", ignore = true)
     public abstract Flight toModel(FlightRepresentation representation);
 
+    @AfterMapping
+    public void resolveAirportByDepartureAirport(FlightRepresentation dto, @MappingTarget Flight flight){
+
+        Airport airport = null;
+        if (dto.departureAirport != null){
+            airport = airportRepository.find("airportName", dto.departureAirport)
+                    .firstResultOptional().orElse(null);
+        }
+        flight.setDepartureAirport(airport);
+    }
+
+    @AfterMapping
+    public void resolveAirportByArrivalAirport(FlightRepresentation dto, @MappingTarget Flight flight){
+
+        Airport airport = null;
+        if (dto.arrivalAirport != null){
+            airport = airportRepository.find("airportName", dto.arrivalAirport)
+                    .firstResultOptional().orElse(null);
+        }
+        flight.setArrivalAirport(airport);
+    }
 }

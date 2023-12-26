@@ -55,7 +55,7 @@ public class AirportResourceTest extends JPATest {
 
         AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
         AirportRepresentation createdAirport = given().contentType(ContentType.JSON).body(airportRepresentation).when()
-                .put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 5)
+                .post(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201)
                 .extract().as(AirportRepresentation.class);
 
         assertEquals(5, createdAirport.airportId);

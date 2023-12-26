@@ -12,9 +12,6 @@ import org.acme.domain.Airport;
 @RequestScoped
 public class AirportRepository implements PanacheRepositoryBase<Airport, Integer> {
 
-    @Inject
-    AirportRepository airportRepository;
-
     @Transactional
     public void deleteAirport(Integer id){
         Airport airport = findById(id);

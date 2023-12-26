@@ -3,6 +3,7 @@ package org.acme.representation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.acme.domain.Airline;
 import org.acme.domain.Airport;
 import org.acme.persistence.AirportRepository;
 import org.acme.util.Fixture;
@@ -37,5 +38,16 @@ public class AirportMapperTest {
         assertEquals(entity.getCity(), airportRepresentation.city);
         assertEquals(entity.getCountry(), airportRepresentation.country);
         assertEquals(entity.getU3digitCode(), airportRepresentation.u3digitCode);
+    }
+
+    @Test
+    void testToRepresentation(){
+        Airport airport = airportRepository.findById(1);
+
+        AirportRepresentation airportRepresentation = airportMapper.toRepresentation(airport);
+        assertEquals(airport.getAirportName(),airportRepresentation.airportName);
+        assertEquals(airport.getCity(),airportRepresentation.city);
+        assertEquals(airport.getCountry(),airportRepresentation.country);
+        assertEquals(airport.getU3digitCode(),airportRepresentation.u3digitCode);
     }
 }

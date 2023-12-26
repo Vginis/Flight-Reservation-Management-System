@@ -66,7 +66,7 @@ public class ReservationResource {
         return Response.created(uri).entity(reservationMapper.toRepresentation(reservation)).build();
     }*/
 
-    /*@POST
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -80,6 +80,6 @@ public class ReservationResource {
                 .created(location)
                 .entity(reservationMapper.toRepresentation(reservation))
                 .build();
-    }*/
+    }
 
 }

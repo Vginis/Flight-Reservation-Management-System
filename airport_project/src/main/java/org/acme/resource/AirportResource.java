@@ -53,7 +53,9 @@ public class AirportResource {
         return Response.ok().entity(airportMapper.toRepresentation(airport)).build();
     }
 
-    @PUT
+    /*@PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createAirport(AirportRepresentation airportDto) {
         if (airportDto.airportId == null) {
@@ -63,6 +65,22 @@ public class AirportResource {
         airport = em.merge(airport);
         airportRepository.persist(airport);
         URI location = UriBuilder.fromResource(AirportResource.class).path(String.valueOf(airport.getAirportId())).build();
+        return Response
+                .created(location)
+                .entity(airportMapper.toRepresentation(airport))
+                .build();
+    }*/
+
+    @POST
+    //@Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response createAirport(AirportRepresentation airportDto) {
+
+        Airport airport = airportMapper.toModel(airportDto);
+        airport = em.merge(airport);
+        airportRepository.persist(airport);
+        URI location = uriInfo.getAbsolutePathBuilder().path(
+                Integer.toString(airport.getAirportId())).build();
         return Response
                 .created(location)
                 .entity(airportMapper.toRepresentation(airport))

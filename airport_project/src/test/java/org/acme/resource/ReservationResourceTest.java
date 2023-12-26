@@ -39,7 +39,7 @@ public class ReservationResourceTest extends JPATest {
     }
 
     // TODO δεν πρόλαβα
-    /*@Test
+    @Test
     public void createReservation() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
         ReservationRepresentation savedArticle = given()
@@ -54,6 +54,6 @@ public class ReservationResourceTest extends JPATest {
         //assertEquals(1, savedArticle.ingoingFlights.size());
         assertEquals(1, savedArticle.ticketList.size());
         assertEquals(0L, savedArticle.totalPrice);
-    }*/
+    }
 
 }
