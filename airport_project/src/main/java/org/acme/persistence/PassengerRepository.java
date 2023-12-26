@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
 import org.acme.domain.Passenger;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -19,14 +20,15 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
                 .list();
     }
 
-    /* TODO Δεν πρόλαβα να τις δώ αν λειτουργούν
+    // TODO
     @Transactional
-    public void delete(Integer id){
+    public void deletePassenger(Integer id){
         Passenger passenger = findById(id);
         passenger.clearReservations();
         delete(passenger);
     }
 
+   /*
     @Transactional
     public Passenger fetchWithReservations(Integer passengerId){
         Query query = getEntityManager().createQuery(

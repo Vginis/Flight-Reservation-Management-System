@@ -86,5 +86,19 @@ public class PassengerResource {
         return Response.noContent().build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response deletePassenger(@PathParam("id") Integer id){
+        Passenger passenger = passengerRepository.find("id",id).firstResult();
+        if (passenger==null){
+            return Response.status(404).build();
+        }
+        passengerRepository.deletePassenger(id);
+        return Response.noContent().build();
+    }
+
 
 }

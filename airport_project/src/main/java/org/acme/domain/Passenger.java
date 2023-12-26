@@ -87,6 +87,10 @@ public class Passenger extends AccountManagement {
         reservations.remove(reservation);
     }
 
+    public void clearReservations(){
+        reservations.clear();
+    }
+
     public boolean isValidEmail(String Email){
         String emailRegex = "^.{3,20}@(unipi\\.gr|outlook\\.com|aueb\\.gr|gmail\\.com)$";
         Pattern pattern = Pattern.compile(emailRegex);

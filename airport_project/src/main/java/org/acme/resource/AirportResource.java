@@ -53,24 +53,6 @@ public class AirportResource {
         return Response.ok().entity(airportMapper.toRepresentation(airport)).build();
     }
 
-    /*@PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createAirport(AirportRepresentation airportDto) {
-        if (airportDto.airportId == null) {
-            throw new RuntimeException();
-        }
-        Airport airport = airportMapper.toModel(airportDto);
-        airport = em.merge(airport);
-        airportRepository.persist(airport);
-        URI location = UriBuilder.fromResource(AirportResource.class).path(String.valueOf(airport.getAirportId())).build();
-        return Response
-                .created(location)
-                .entity(airportMapper.toRepresentation(airport))
-                .build();
-    }*/
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

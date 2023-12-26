@@ -41,6 +41,9 @@ public class FlightResource {
         return flightMapper.toRepresentationList(flightRepository.findByAirline(airlineId));
     }
 
+    //TODO GETBYID
+
+    //TODO FIX CREATE, UPDATE, DELETE
     @PUT
     @Transactional
     public Response createFLight(FlightRepresentation flightDto) {

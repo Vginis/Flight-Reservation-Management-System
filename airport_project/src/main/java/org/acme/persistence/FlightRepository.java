@@ -19,4 +19,22 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
                 .list();
     }
 
+    public List<Flight> findAirportByName(String airportName) {
+        if (airportName == null) {
+            return listAll();
+        }
+        return find("select a from Flight a where a.airport.name = :name" ,
+                Parameters.with("name", airportName).map())
+                .list();
+    }
+
+    public List<Flight> findAirlineByName(String airlineName) {
+        if (airlineName == null) {
+            return listAll();
+        }
+        return find("select a from Flight a where a.airline.airlineName = :airlineName" ,
+                Parameters.with("airlineName", airlineName).map())
+                .list();
+    }
+
 }

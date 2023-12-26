@@ -30,17 +30,18 @@ public class FlightResourceTest extends JPATest {
     }
 
     //TODO (Kkostakis work in progress)
-   /* @Test
+    @Test
     public void createFlight() {
 
         FlightRepresentation flightRepresentation = Fixture.getFlightRepresentation();
         FlightRepresentation createdFlight = given().contentType(ContentType.JSON).body(flightRepresentation).when()
-                .put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.FLIGHT+ "/" + 9)
+                .put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/9")
                 .extract().as(FlightRepresentation.class);
 
         assertEquals(9, createdFlight.id);
     }
 
+    //TODO (Kkostakis work in progress)
     @Test
     public void updateFlight() {
         FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 4)
@@ -63,6 +64,6 @@ public class FlightResourceTest extends JPATest {
                 .extract().as(FlightRepresentation.class);
 
         assertEquals("A4651", updated.flightNo);
-    } */
+    }
 
 }

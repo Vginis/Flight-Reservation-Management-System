@@ -11,6 +11,7 @@ insert into AccountManagement(id, username, password, type, admin_id, name, u2di
 insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (5, 'rayan', 'CAshaasjh!23', 'AIRLINE', null, 'Ryanair Ltd.', 'FR', null, null, null);
 insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (6, 'passenger', 'CAshaasjh!23', 'PASSENGER', null, null, null, 'passenger@gmail.com', '1234567890', 'AK45FH5');
 insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (9, 'transavia', 'CAshaasjh!23', 'AIRLINE', null, 'Transavia Airlines', 'TR', null, null, null);
+insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (12, 'passengers', 'CAshaasjh!23', 'PASSENGER', null, null, null, 'passengers@gmail.com', '1234567891', 'AK45FH6');
 
 insert into Airports(airportId, name, city, country, u3digitCode) values (1, 'Eleftherios Venizelos', 'Athens', 'Greece', 'ATH');
 insert into Airports(airportId, name, city, country, u3digitCode) values (2, 'Fiumicino', 'Rome', 'Italy', 'FCO');
