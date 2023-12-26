@@ -43,7 +43,7 @@ public class AirlineResourceTest extends JPATest {
         assertEquals(1, airlines.size());
 
     }
-/* TODO δεν μπορώ να καταλάβω τι φταίει*/
+
     @Test
     public void submitAirline(){
         AirlineRepresentation airlineRepresentation = Fixture.getAirlineRepresentation();
@@ -64,7 +64,7 @@ public class AirlineResourceTest extends JPATest {
                 .extract().as(AirlineRepresentation.class);
         airline.airlineName = "Pao Airlines";
         airline.flights = new ArrayList<>();
-        airline.username = "new Username";
+        //airline.username = "new Username";
         //airline.password ="KKsdfgks@2";
         airline.u2digitCode = "TT";
 

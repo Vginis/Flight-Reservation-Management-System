@@ -6,6 +6,7 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.core.Response;
 import org.acme.persistence.JPATest;
 import org.acme.representation.PassengerRepresentation;
 import org.acme.util.Fixture;
@@ -94,5 +95,15 @@ public class PassengerResourceTest extends JPATest {
                 .extract().as(PassengerRepresentation.class);
 
         assertEquals("passenger123", updated.username);
+    }
+
+    @Test
+    @TestTransaction
+    public void removeExistingPassenger(){
+
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 12)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 }

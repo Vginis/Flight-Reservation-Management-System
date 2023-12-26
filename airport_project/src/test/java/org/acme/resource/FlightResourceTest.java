@@ -6,10 +6,13 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import org.acme.persistence.JPATest;
 import org.acme.representation.FlightRepresentation;
+import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 import io.restassured.http.ContentType;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -29,41 +32,55 @@ public class FlightResourceTest extends JPATest {
 
     }
 
-    //TODO (Kkostakis work in progress)
     @Test
     public void createFlight() {
 
         FlightRepresentation flightRepresentation = Fixture.getFlightRepresentation();
-        FlightRepresentation createdFlight = given().contentType(ContentType.JSON).body(flightRepresentation).when()
-                .put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT).then().statusCode(201).header("Location", Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/9")
+        FlightRepresentation savedFlight = given()
+                .contentType(ContentType.JSON)
+                .body(flightRepresentation)
+                .when()
+                .post(Fixture.API_ROOT + AirportProjectURIs.FLIGHT)
+                .then().statusCode(201)
                 .extract().as(FlightRepresentation.class);
 
-        assertEquals(9, createdFlight.id);
+        assertEquals("A3651", savedFlight.flightNo);
+        assertEquals("Aegean Airlines",savedFlight.airlineName);
+        assertEquals("Fiumicino", savedFlight.departureAirport);
+
     }
 
-    //TODO (Kkostakis work in progress)
     @Test
     public void updateFlight() {
-        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 4)
+        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
-        flight.flightNo = "A4651";
-
+        flight.flightNo = "A3651";
+        flight.airlineName = "Aegean Airlines";
+        flight.departureAirport = "Fiumicino";
+        flight.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
+        flight.arrivalAirport = "Eleftherios Venizelos";
+        flight.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
+        flight.aircraftCapacity = 120;
+        flight.aircraftType = "BSA-4545";
+        flight.ticketPrice = (long) 80;
+        flight.availableSeats = 24;
+        flight.ticketList = new ArrayList<>();
         given()
                 .contentType(ContentType.JSON)
                 .body(flight)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 4)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
                 .then().statusCode(204);
 
 
-        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 4)
+        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
-        assertEquals("A4651", updated.flightNo);
+        assertEquals("A3651", updated.flightNo);
     }
 
 }

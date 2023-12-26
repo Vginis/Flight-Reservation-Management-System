@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.domain.Flight;
+import org.acme.domain.Reservation;
 import org.acme.persistence.FlightRepository;
 import org.acme.representation.FlightMapper;
 import org.acme.representation.FlightRepresentation;
@@ -40,11 +41,24 @@ public class FlightResource {
     public List<FlightRepresentation> findByAirline(@QueryParam("airlineId") Integer airlineId) {
         return flightMapper.toRepresentationList(flightRepository.findByAirline(airlineId));
     }
+    //TODO testaki kai na ftiaksoume mia get:searchByDepartureAirport,ArrivalAirport,Departure/ArrivalDate,PassengerCount me QueryParams
+    @GET
+    @Path("{flightId:[0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response find(@PathParam("flightId") Integer flightId) {
+        Flight flight = flightRepository.findById(flightId);
+        if (flight == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(flightMapper.toRepresentation(flight)).build();
+    }
 
-    //TODO GETBYID
 
-    //TODO FIX CREATE, UPDATE, DELETE
-    @PUT
+    //TODO DELETE
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createFLight(FlightRepresentation flightDto) {
         if (flightDto.id == null) {
@@ -53,7 +67,8 @@ public class FlightResource {
         Flight flight = flightMapper.toModel(flightDto);
         flight = em.merge(flight);
         flightRepository.persist(flight);
-        URI location = UriBuilder.fromResource(FlightResource.class).path(String.valueOf(flight.getId())).build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(
+                Integer.toString(flight.getId())).build();
         return Response
                 .created(location)
                 .entity(flightMapper.toRepresentation(flight))

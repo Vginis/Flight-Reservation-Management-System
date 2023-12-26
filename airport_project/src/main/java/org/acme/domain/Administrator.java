@@ -10,6 +10,7 @@ public class Administrator extends AccountManagement {
 
     @Column(name = "admin_id", nullable = true, length = 20)
     public String admin_id;
+    //TODO what are we doing??
 /* Μια (πιθανή) λύση: Να δημιουργήσουμε συσχετίσεις πολλά-προς-ενα στις παρακάτω κλάσεις με την Administrator και ταυτόχρονα να σβήσουμε την κληρονομικότητα της Administrator.
 Μετά θα δουλέψουν λογικά και τα Annotations OneToMany.
     @OneToMany(mappedBy = "airportId", cascade = CascadeType.REMOVE, orphanRemoval = true)
