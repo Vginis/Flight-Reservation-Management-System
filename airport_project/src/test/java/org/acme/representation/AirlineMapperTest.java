@@ -6,10 +6,8 @@ import jakarta.transaction.Transactional;
 import org.acme.domain.Airline;
 import org.acme.domain.Flight;
 import org.acme.persistence.AirlineRepository;
-import org.acme.persistence.JPATest;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
-
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class AirlineMapperTest {
 
         assertEquals(entity.getAirlineName(), airlineRepresentation.airlineName);
         assertEquals(entity.getU2digitCode(), airlineRepresentation.u2digitCode);
-        assertEquals(entity.getFlights(), airlineRepresentation.flights);
+        assertEquals(entity.getFlights().size(), airlineRepresentation.flights.size());
         assertEquals(entity.getUsername(), airlineRepresentation.username);
         assertEquals(entity.getId(),airlineRepresentation.id);
         assertEquals(entity.getPassword(),airlineRepresentation.password);

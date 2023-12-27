@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.domain.Airport;
+import org.acme.domain.Flight;
 import org.acme.persistence.AirportRepository;
 import org.acme.representation.AirportMapper;
 import org.acme.representation.AirportRepresentation;
@@ -36,8 +37,8 @@ public class AirportResource {
 
     @GET
     @Transactional
-    public List<AirportRepresentation> findBy() {
-        return airportMapper.toRepresentationList(airportRepository.listAll());
+    public List<AirportRepresentation> findBy3DCode(@QueryParam("code") String code) {
+        return airportMapper.toRepresentationList(airportRepository.findAirportBy3DCode(code));
     }
 
     @GET

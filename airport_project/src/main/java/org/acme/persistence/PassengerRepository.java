@@ -20,7 +20,6 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
                 .list();
     }
 
-    // TODO
     @Transactional
     public void deletePassenger(Integer id){
         Passenger passenger = findById(id);
@@ -28,15 +27,5 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
         delete(passenger);
     }
 
-   /*
-    @Transactional
-    public Passenger fetchWithReservations(Integer passengerId){
-        Query query = getEntityManager().createQuery(
-                " select a from Passenger a" +
-                        " left join fetch a.reservations r where a.id = :id");
-        query.setParameter("id",passengerId);
-        Passenger passenger = (Passenger) query.getSingleResult();
-        return passenger;
-    }*/
 }
 

@@ -5,12 +5,14 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.acme.domain.Flight;
 import org.acme.persistence.FlightRepository;
 import org.acme.representation.FlightMapper;
 import org.acme.representation.FlightRepresentation;
-import java.time.LocalDateTime;
 
 import java.net.URI;
 import java.util.List;
@@ -41,7 +43,7 @@ public class FlightResource {
     public List<FlightRepresentation> findByAirlineId(@QueryParam("airlineId") Integer airlineId) {
         return flightMapper.toRepresentationList(flightRepository.findFlightByAirlineId(airlineId));
     }
-    //TODO testaki kai na ftiaksoume mia get:searchByDepartureAirport,ArrivalAirport,Departure/ArrivalDate,PassengerCount me QueryParams
+
     @GET
     @Path("{flightId:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -147,10 +149,10 @@ public class FlightResource {
     }
 
     @GET
-    @Path("dep/{departuteAirport}/arr/{arrivalAirport}/dept/{departureTime}/arrt/{arrivalTime}/passc/{passCount}")
+    @Path("dep/{departureAirport}/arr/{arrivalAirport}/dept/{departureTime}/arrt/{arrivalTime}/passc/{passCount}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response SearchByParams(@PathParam("departuteAirport") String depAirport,
+    public Response SearchByParams(@PathParam("departureAirport") String depAirport,
                                                      @PathParam("arrivalAirport") String arrAirport,
                                                      @PathParam("departureTime") String depTime,
                                                      @PathParam("arrivalTime") String arrTime,
@@ -159,8 +161,5 @@ public class FlightResource {
         if (flights.isEmpty()) return Response.status(404).build();
         return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
     }
-
-
-
 
 }

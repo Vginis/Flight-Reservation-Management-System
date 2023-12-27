@@ -4,10 +4,10 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airport;
+
+import java.util.List;
 
 @RequestScoped
 public class AirportRepository implements PanacheRepositoryBase<Airport, Integer> {
@@ -18,16 +18,13 @@ public class AirportRepository implements PanacheRepositoryBase<Airport, Integer
         delete(airport);
     }
 
-    // TODO Μήπως να το κάναμε findBy3DCode?
-    /*public Airport findAirportById(Integer id) {
-        PanacheQuery<Airport> query = find("select a from Airport a where a.airportId = :id",
-                Parameters.with("id", id).map());
-        try {
-            return query.singleResult();
-        } catch(NoResultException ex) {
-            return null;
+    public List<Airport> findAirportBy3DCode(String code) {
+        if (code == null) {
+            return listAll();
         }
-
-    }*/
+        return find("select a from Airport a where a.u3digitCode like :code",
+                Parameters.with("code", code + "%").map())
+                .list();
+    }
 
 }

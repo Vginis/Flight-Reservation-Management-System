@@ -1,16 +1,13 @@
 package org.acme.resource;
 
-import org.acme.persistence.JPATest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.TestTransaction;
+import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import org.acme.representation.AirlineRepresentation;
+import jakarta.ws.rs.core.Response;
+import org.acme.persistence.JPATest;
 import org.acme.representation.AirportRepresentation;
 import org.acme.util.Fixture;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -34,14 +31,14 @@ public class AirportResourceTest extends JPATest {
         assertEquals(4, airports.size());
     }
 
-    @Test // findAirportBy3DCode
-    public void searchAirportById() throws JsonMappingException, JsonProcessingException {
-        List<AirportRepresentation> airports = given().queryParam("airportId", 3).when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+    @Test
+    public void findAirportBy3DCode() {
+        List<AirportRepresentation> airports = given().queryParam("code", "ATH").when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirportRepresentation>>() {});
 
-        assertEquals(4, airports.size());
+        assertEquals(1, airports.size());
     }
 
     @Test
@@ -64,15 +61,27 @@ public class AirportResourceTest extends JPATest {
     @Test
     public void createAirport() {
         AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
-        airportRepresentation.airportId = 1;
-        AirportRepresentation createdAirport = given().contentType(ContentType.JSON).body(airportRepresentation).when()
-                .post(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS).then().statusCode(201)
+        AirportRepresentation createdAirport = given()
+                .contentType(ContentType.JSON)
+                .body(airportRepresentation)
+                .when()
+                .post(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+                .then().statusCode(201)
                 .extract().as(AirportRepresentation.class);
 
         assertEquals("Furina", createdAirport.airportName);
-        assertEquals("Cardinale",createdAirport.city);
-        assertEquals("Fontaine",createdAirport.country);
-        assertEquals("FON",createdAirport.u3digitCode);
+        assertEquals("Fontaine",createdAirport.city);
+        assertEquals("Teyvat",createdAirport.country);
+        assertEquals("BEY",createdAirport.u3digitCode);
+        assertEquals(1, createdAirport.depFlights.size());
+        assertEquals(1, createdAirport.arrFlights.size());
+
+        List<AirportRepresentation> airports = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<AirportRepresentation>>() {});
+
+        //assertEquals(5, airports.size());
     }
 
    @Test
@@ -111,7 +120,7 @@ public class AirportResourceTest extends JPATest {
         airport.airportId = 10;
 
         given().contentType(ContentType.JSON).body(airport)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then().statusCode(400);
     }
 

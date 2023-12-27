@@ -1,17 +1,13 @@
 package org.acme.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.acme.persistence.JPATest;
-import org.acme.representation.FlightRepresentation;
 import org.acme.representation.PassengerRepresentation;
 import org.acme.util.Fixture;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,7 +31,7 @@ public class PassengerResourceTest extends JPATest {
     }
 
     @Test
-    public void findPassengerByEmail() throws JsonMappingException, JsonProcessingException {
+    public void findPassengerByEmail() {
         List<PassengerRepresentation> passengers = given().queryParam("email", "passenger@gmail.com").when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS)
                 .then()
                 .statusCode(200)

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class JPATest {
@@ -21,7 +22,7 @@ public class JPATest {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("import.sql");
         String sql = convertStreamToString(in);
         try {
-            in.close();
+            Objects.requireNonNull(in).close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

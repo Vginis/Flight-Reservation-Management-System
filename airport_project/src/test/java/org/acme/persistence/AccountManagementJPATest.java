@@ -2,7 +2,6 @@ package org.acme.persistence;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
-import org.acme.domain.Administrator;
 import org.acme.domain.Airline;
 import org.acme.domain.Passenger;
 import org.junit.jupiter.api.Assertions;
@@ -25,13 +24,6 @@ public class AccountManagementJPATest extends JPATest {
     public void listAirlines() {
         List<Airline> result = em.createQuery("select a from Airline a").getResultList();
         Assertions.assertEquals(4, result.size());
-    }
-
-    @Test
-    @Transactional
-    public void listAdministrator() {
-        List<Administrator> result = em.createQuery("select ad from Administrator ad").getResultList();
-        Assertions.assertEquals(1, result.size());
     }
 
     /* TODO I guess :)

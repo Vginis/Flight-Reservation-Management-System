@@ -2,9 +2,7 @@ package org.acme.representation;
 
 import jakarta.inject.Inject;
 import org.acme.domain.Airport;
-
 import org.acme.domain.Flight;
-import org.acme.domain.Reservation;
 import org.acme.persistence.FlightRepository;
 import org.mapstruct.*;
 

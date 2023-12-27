@@ -1,10 +1,8 @@
 package org.acme.representation;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.acme.domain.Flight;
 
 import java.util.List;
-import java.util.ArrayList;
 
 @RegisterForReflection
 public class AirlineRepresentation{

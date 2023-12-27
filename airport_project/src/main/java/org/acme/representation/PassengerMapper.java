@@ -1,11 +1,11 @@
 package org.acme.representation;
 
-import org.acme.domain.Flight;
+import jakarta.inject.Inject;
 import org.acme.domain.Passenger;
 import org.acme.domain.Reservation;
 import org.acme.persistence.ReservationRepository;
 import org.mapstruct.*;
-import jakarta.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

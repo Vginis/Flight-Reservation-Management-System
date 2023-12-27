@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//TODO Statistics endpoints
+
 @Entity
 @DiscriminatorValue("AIRLINE")
 public class Airline extends AccountManagement {
@@ -96,7 +96,7 @@ public class Airline extends AccountManagement {
     public double completeness(){
         double sum=0;
         int count=0;
-        double average=0;
+        double average;
         for (Flight flight : flights){
             count+=1;
             sum += (double)flight.getAvailableSeats()/flight.getAircraftCapacity();

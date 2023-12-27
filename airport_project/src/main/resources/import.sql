@@ -6,13 +6,12 @@ delete from Flights;
 delete from Airports;
 delete from AccountManagement;
 
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (3, 'admin', 'CAshaasjh!23', 'ADMINISTRATOR', 'IDK', null, null, null, null, null);
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (4, 'aegean', 'CAshaasjh!23', 'AIRLINE', null, 'Aegean Airlines', 'A3', null, null, null);
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (5, 'rayan', 'CAshaasjh!23', 'AIRLINE', null, 'Ryanair Ltd.', 'FR', null, null, null);
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (6, 'passenger', 'CAshaasjh!23', 'PASSENGER', null, null, null, 'passenger@gmail.com', '1234567890', 'AK45FH5');
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (9, 'transavia', 'CAshaasjh!23', 'AIRLINE', null, 'Transavia Airlines', 'TR', null, null, null);
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (12, 'passengers', 'CAshaasjh!23', 'PASSENGER', null, null, null, 'passengers@gmail.com', '1234567891', 'AK45FH6');
-insert into AccountManagement(id, username, password, type, admin_id, name, u2digitCode, email, phoneNum, passport_id) values (13, 'bahamas', 'CAshaasjh!23', 'AIRLINE', null, 'Bahamas Airlines', 'BA', null, null, null);
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (4, 'aegean', 'CAshaasjh!23', 'AIRLINE', 'Aegean Airlines', 'A3', null, null, null);
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (5, 'rayan', 'CAshaasjh!23', 'AIRLINE', 'Ryanair Ltd.', 'FR', null, null, null);
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (6, 'passenger', 'CAshaasjh!23', 'PASSENGER', null, null, 'passenger@gmail.com', '1234567890', 'AK45FH5');
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (9, 'transavia', 'CAshaasjh!23', 'AIRLINE', 'Transavia Airlines', 'TR', null, null, null);
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (12, 'passengers', 'CAshaasjh!23', 'PASSENGER', null, null, 'passengers@gmail.com', '1234567891', 'AK45FH6');
+insert into AccountManagement(id, username, password, type, name, u2digitCode, email, phoneNum, passport_id) values (13, 'bahamas', 'CAshaasjh!23', 'AIRLINE', 'Bahamas Airlines', 'BA', null, null, null);
 
 insert into Airports(airportId, name, city, country, u3digitCode) values (1, 'Eleftherios Venizelos', 'Athens', 'Greece', 'ATH');
 insert into Airports(airportId, name, city, country, u3digitCode) values (2, 'Fiumicino', 'Rome', 'Italy', 'FCO');

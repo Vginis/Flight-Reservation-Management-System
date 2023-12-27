@@ -30,10 +30,7 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     }
 
     public List<Flight> findFlightByDepartureAirport(String airportName) {
-        if (airportName == null) {
-            return listAll();
-        }
-        return find("select a from Flight a where a.departureAirport.airportName = :name" ,
+        return find("select a from Flight a where a.departureAirport.airportName like :name" ,
                 Parameters.with("name", airportName).map())
                 .list();
     }
@@ -46,20 +43,14 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     }
 
     public List<Flight> findFlightByArrivalAirport(String airportName) {
-        if (airportName == null) {
-            return listAll();
-        }
-        return find("select a from Flight a where a.arrivalAirport.airportName = :name" ,
-                Parameters.with("name", airportName).map())
+        return find("select a from Flight a where a.arrivalAirport.airportName like :name" ,
+                Parameters.with("name", airportName+ "%").map())
                 .list();
     }
 
     public List<Flight> findFlightByDepartureTime(String datetime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime depTime = LocalDateTime.parse(datetime, formatter);
-        if (depTime == null) {
-            return listAll();
-        }
         return find("select f from Flight f where f.departureTime = :departureTime" ,
                 Parameters.with("departureTime", depTime).map())
                 .list();
@@ -68,9 +59,6 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     public List<Flight> findFlightByArrivalTime(String datetime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime arrTime = LocalDateTime.parse(datetime, formatter);
-        if (arrTime == null) {
-            return listAll();
-        }
         return find("select f from Flight f where f.arrivalTime = :arrivalTime" ,
                 Parameters.with("arrivalTime", arrTime).map())
                 .list();
@@ -83,14 +71,6 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime arrTime = LocalDateTime.parse(arTime, formatter2);
 
-        if (depTime == null) {
-            return listAll();
-        }
-
-        if (arrTime == null) {
-            return listAll();
-        }
-
         return find("select f from Flight f where (f.arrivalTime = :arrivalTime) AND (f.departureTime = :departureTime) AND (f.departureAirport.airportName = :dname) AND (f.arrivalAirport.airportName = :aname) AND ((f.availableSeats - :passCount) > 0)",
                 Parameters.with("arrivalTime", arrTime)
                         .and("departureTime", depTime)
@@ -100,15 +80,5 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
                         .map()).list();
 
     }
-
-/*
-    public List<Flight> findAirlineByName(String airlineName) {
-        if (airlineName == null) {
-            return listAll();
-        }
-        return find("select a from Flight a where a.airline.airlineName = :airlineName" ,
-                Parameters.with("airlineName", airlineName).map())
-                .list();
-    }*/
 
 }

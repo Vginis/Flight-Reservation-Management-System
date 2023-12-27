@@ -1,30 +1,21 @@
 package org.acme.util;
 
-import org.acme.persistence.JPATest;
 import org.acme.representation.*;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Fixture {
 
-    public static String API_ROOT  = "http://localhost:8081";
-
-    public static class Reservations {
-        public static int RESERVATION_ONE_WAY_ID = 9;
-    }
-
-    public static class Airlines {
-        public static int AIRLINE_ID = 5;
-    }
+    public final static String API_ROOT  = "http://localhost:8081";
 
     public static AirportRepresentation getAirportRepresentation(){
-        AirportRepresentation dto = new AirportRepresentation ();
-        dto.airportId = 199;
+        AirportRepresentation dto = new AirportRepresentation();
+        dto.airportId = 1;
         dto.airportName = "Furina";
-        dto.city = "Cardinale";
-        dto.country = "Fontaine";
-        dto.u3digitCode = "FON";
+        dto.city = "Fontaine";
+        dto.country = "Teyvat";
+        dto.u3digitCode = "BEY";
         dto.depFlights = new ArrayList<>();
         dto.depFlights.add(7);
         dto.arrFlights = new ArrayList<>();
@@ -45,7 +36,7 @@ public class Fixture {
         dto.aircraftType = "BSA-4545";
         dto.ticketPrice = (long) 80;
         dto.availableSeats = 24;
-        dto.ticketList = new ArrayList<Integer>();
+        dto.ticketList = new ArrayList<>();
         dto.ticketList.add(getTicketRepresentation().ticketId);
         return dto;
     }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-//TODO Statistics endpoints
+
 @Entity
 @Table(name = "Flights")
 public class Flight {

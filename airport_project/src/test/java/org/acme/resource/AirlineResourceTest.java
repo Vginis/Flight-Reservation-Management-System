@@ -33,7 +33,7 @@ public class AirlineResourceTest extends JPATest {
     }
 
     @Test
-    public void findAirlineByName() throws JsonMappingException, JsonProcessingException {
+    public void findAirlineByName() {
         List<AirlineRepresentation> airlines = given().queryParam("name", "Aegean Airlines").when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES)
                 .then()
                 .statusCode(200)
@@ -86,23 +86,21 @@ public class AirlineResourceTest extends JPATest {
 
     @Test
     public void updateAirline() {
-        AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+        AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
         airline.airlineName = "Pao Airlines";
         airline.flights = new ArrayList<>();
-        //airline.username = "new Username";
-        //airline.password ="KKsdfgks@2";
         airline.u2digitCode = "TT";
 
         given()
                 .contentType(ContentType.JSON)
                 .body(airline)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then().statusCode(204);
 
-        AirlineRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+        AirlineRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
@@ -112,14 +110,14 @@ public class AirlineResourceTest extends JPATest {
 
     @Test
     public void updateAirlineWithNotTheSameId() {
-        AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+        AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
         airline.id = 10;
 
         given().contentType(ContentType.JSON).body(airline)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then().statusCode(400);
     }
 

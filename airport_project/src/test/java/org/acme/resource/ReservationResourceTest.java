@@ -1,20 +1,17 @@
 package org.acme.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.core.Response;
 import org.acme.persistence.JPATest;
-import org.acme.representation.FlightRepresentation;
 import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
-import io.quarkus.test.TestTransaction;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -33,7 +30,7 @@ public class ReservationResourceTest extends JPATest {
     }
 
     @Test
-    public void findReservationByPassengerId() throws JsonMappingException, JsonProcessingException {
+    public void findReservationByPassengerId() {
         List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
                 .when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
                 .then().statusCode(200)
@@ -43,11 +40,11 @@ public class ReservationResourceTest extends JPATest {
 
     @Test
     public void findExistingReservation() {
-        ReservationRepresentation a = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + Fixture.Reservations.RESERVATION_ONE_WAY_ID)
+        ReservationRepresentation a = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(ReservationRepresentation.class);
-        assertEquals(Fixture.Reservations.RESERVATION_ONE_WAY_ID, a.reservationId);
+        assertEquals(9, a.reservationId);
     }
 
     @Test
@@ -57,7 +54,6 @@ public class ReservationResourceTest extends JPATest {
                 .statusCode(404);
     }
 
-    // TODO δεν πρόλαβα
     @Test
     public void createReservation() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
