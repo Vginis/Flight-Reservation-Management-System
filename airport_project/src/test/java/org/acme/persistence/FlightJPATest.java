@@ -16,7 +16,7 @@ public class FlightJPATest extends JPATest {
     @Transactional
     public void listFlights(){
         List<Flight> result = em.createQuery("select p from Flight p").getResultList();
-        Assertions.assertEquals(3, result.size());
+        Assertions.assertEquals(4, result.size());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class FlightJPATest extends JPATest {
         Query query = em.createQuery("select f from Flight f where f.airline.id=:airline");
         query.setParameter("airline", 4);
         List<Flight> result = query.getResultList();
-        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(2, result.size());
     }
 
 }

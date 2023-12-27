@@ -26,4 +26,17 @@ public class AirlineRepository implements PanacheRepositoryBase<Airline, Integer
         delete(airline);
     }
 
+    public String getMostPopularAirportByAirline(Integer id){
+        Airline airline = findById(id);
+        String popularAirport;
+        popularAirport = airline.mostPopularAirport();
+        return popularAirport;
+    }
+
+    public Double getCompletenessByAirline(Integer id) {
+        Airline airline = findById(id);
+        double completeness;
+        completeness = airline.completeness();
+        return completeness;
+    }
 }

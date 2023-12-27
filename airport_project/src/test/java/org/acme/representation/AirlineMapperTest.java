@@ -46,7 +46,7 @@ public class AirlineMapperTest {
     @Transactional
     @Test
     void testToRepresentation(){
-        Airline airline = airlineRepository.findById(4);
+        Airline airline = airlineRepository.findById(5);
 
         AirlineRepresentation airlineRepresentation = airlineMapper.toRepresentation(airline);
         assertEquals(airline.getId(), airlineRepresentation.id);

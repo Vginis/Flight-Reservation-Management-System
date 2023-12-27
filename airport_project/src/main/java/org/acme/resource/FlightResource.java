@@ -55,6 +55,16 @@ public class FlightResource {
     }
 
     @GET
+    @Path("Completeness/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response getCompletenessByFlightId(@PathParam("id") Integer id){
+        Double stat = flightRepository.getCompletenessByFlight(id);
+        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok(stat, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
     @Path("departure/{departureAirport}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional

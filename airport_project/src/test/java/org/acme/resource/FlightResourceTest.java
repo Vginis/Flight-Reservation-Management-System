@@ -30,7 +30,7 @@ public class FlightResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
-        assertEquals(3, flights.size());
+        assertEquals(4, flights.size());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class FlightResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {}) ;
-        assertEquals(1, flights.size());
+        assertEquals(2, flights.size());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class FlightResourceTest extends JPATest {
 
     @Test
     public void findNoExistingFlight() {
-        when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 10)
+        when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 1000)
                 .then()
                 .statusCode(404);
     }
@@ -119,7 +119,7 @@ public class FlightResourceTest extends JPATest {
 
     @Test
     public void updateFlight() {
-        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
@@ -137,10 +137,10 @@ public class FlightResourceTest extends JPATest {
         flight.ticketList = new ArrayList<>();
 
         given().contentType(ContentType.JSON).body(flight)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then().statusCode(204);
 
-        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);

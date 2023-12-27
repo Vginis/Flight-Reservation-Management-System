@@ -60,6 +60,21 @@ public class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    public void verifyMostPopularAirportByAirline(){
+        String popularAirport = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/MostPopularAirport/4")
+                .then().statusCode(200).extract().asString();
+        assertNotNull(popularAirport);
+        assertEquals("Fiumicino",popularAirport);
+    }
+
+    @Test
+    public void verifyAirlineCompleteness(){
+        String airlineCompleteness = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/Completeness/4")
+                .then().statusCode(200).extract().asString();
+        assertEquals("33.61423220973782",airlineCompleteness);
+    }
+
+    @Test
     public void createAirline(){
         AirlineRepresentation airlineRepresentation = Fixture.getAirlineRepresentation();
         AirlineRepresentation savedAirline = given().contentType(ContentType.JSON).body(airlineRepresentation).when()

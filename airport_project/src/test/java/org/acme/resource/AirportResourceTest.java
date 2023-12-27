@@ -70,6 +70,9 @@ public class AirportResourceTest extends JPATest {
                 .extract().as(AirportRepresentation.class);
 
         assertEquals("Furina", createdAirport.airportName);
+        assertEquals("Cardinale",createdAirport.city);
+        assertEquals("Fontaine",createdAirport.country);
+        assertEquals("FON",createdAirport.u3digitCode);
     }
 
    @Test

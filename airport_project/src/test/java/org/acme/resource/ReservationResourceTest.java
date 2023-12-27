@@ -61,18 +61,18 @@ public class ReservationResourceTest extends JPATest {
     @Test
     public void createReservation() {
         ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
-        ReservationRepresentation savedArticle = given()
+        ReservationRepresentation savedReservation = given()
                 .contentType(ContentType.JSON)
                 .body(reservationRepresentation)
                 .when()
                 .post(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
                 .then().statusCode(201)
                 .extract().as(ReservationRepresentation.class);
-        //assertEquals(???, savedArticle.passenger);
-        //assertEquals(1, savedArticle.outgoingFlights.size());
-        //assertEquals(1, savedArticle.ingoingFlights.size());
-        assertEquals(1, savedArticle.ticketList.size());
-        assertEquals(240L, savedArticle.totalPrice);
+        assertEquals(1, savedReservation.outgoingFlights.size());
+        assertEquals("A3651", savedReservation.outgoingFlights.get(0));
+        assertEquals(1, savedReservation.ingoingFlights.size());
+        assertEquals(1, savedReservation.ticketList.size());
+        assertEquals(240L, savedReservation.totalPrice);
     }
 
     @Test

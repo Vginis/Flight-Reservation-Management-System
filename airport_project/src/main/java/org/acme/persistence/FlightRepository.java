@@ -38,7 +38,12 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
                 .list();
     }
 
-
+    public Double getCompletenessByFlight(Integer id){
+        Flight flight = findById(id);
+        double completeness;
+        completeness = flight.flightCompletness();
+        return completeness;
+    }
 
     public List<Flight> findFlightByArrivalAirport(String airportName) {
         if (airportName == null) {

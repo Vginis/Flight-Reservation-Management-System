@@ -55,6 +55,26 @@ public class AirlineResource {
         return Response.ok().entity(airlineMapper.toRepresentation(airline)).build();
     }
 
+    @GET
+    @Path("MostPopularAirport/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response getMostPopularAirport(@PathParam("id") Integer id){
+        String stat = airlineRepository.getMostPopularAirportByAirline(id);
+        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok(stat, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("Completeness/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response getCompletenessByAirlineId(@PathParam("id") Integer id){
+        Double stat = airlineRepository.getCompletenessByAirline(id);
+        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok(stat, MediaType.APPLICATION_JSON).build();
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
