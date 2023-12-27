@@ -10,7 +10,7 @@ import java.util.List;
 public class Reservation {
 
     @Id
-    @Column(name="reservationId")
+    @Column(name = "reservationId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer reservationId;
 
@@ -105,10 +105,6 @@ public class Reservation {
             this.ingoingFlights.remove(inFlight);
         else
             throw new RuntimeException("Ingoing Flight is not on the list.");
-    }
-
-    public Boolean getReturnFlight() {
-        return returnFlight;
     }
 
     private void setReturnFlight() {

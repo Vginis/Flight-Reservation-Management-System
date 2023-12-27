@@ -6,6 +6,7 @@ import java.util.List;
 
 @RegisterForReflection
 public class ReservationRepresentation {
+
     public Integer reservationId;
     public Integer passengerId;
     public List<String> outgoingFlights;

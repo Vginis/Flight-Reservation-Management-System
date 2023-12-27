@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 //TODO Statistics endpoints
 @Entity
-@Table(name="Flights")
+@Table(name = "Flights")
 public class Flight {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name="FlightNo", length = 20)
+    @Column(name = "FlightNo", length = 20)
     private String flightNo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -37,16 +37,16 @@ public class Flight {
     @Column(name = "arrTime")
     private LocalDateTime arrivalTime;
 
-    @Column(name="aircraftCapacity")
+    @Column(name = "aircraftCapacity")
     private Integer aircraftCapacity;
 
-    @Column(name="aircraftType", length = 20)
+    @Column(name = "aircraftType", length = 20)
     private String aircraftType;
 
-    @Column(name="TicketPrice")
+    @Column(name = "TicketPrice")
     private Long ticketPrice;
 
-    @Column(name="availableSeats")
+    @Column(name = "availableSeats")
     private Integer availableSeats = 0;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.MERGE)
@@ -129,10 +129,6 @@ public class Flight {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = LocalDateTime.parse(departureTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
-    }
-
     public void setDepartureTime(LocalDateTime departureTime) {
         this.departureTime = departureTime;
     }
@@ -156,10 +152,6 @@ public class Flight {
 
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 
     public void setArrivalTime(LocalDateTime arrivalTime) {

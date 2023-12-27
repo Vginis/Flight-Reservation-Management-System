@@ -36,24 +36,20 @@ public class PassengerResource {
     EntityManager em;
 
     @GET
-    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response find(@PathParam("id") Integer id) {
-
-        Passenger passenger = passengerRepository.findById(id);
-        if (passenger == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok().entity(passengerMapper.toRepresentation(passenger)).build();
+    public List<PassengerRepresentation> findByEmail(@QueryParam("email") String email) {
+        return passengerMapper.toRepresentationList(passengerRepository.findPassengerByEmail(email));
     }
 
     @GET
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<PassengerRepresentation> searchPassengerByEmail(@QueryParam("email") String email) {
-        return passengerMapper.toRepresentationList(passengerRepository.findByEmail(email));
+    public Response findByPathParamId(@PathParam("id") Integer id) {
+        Passenger passenger = passengerRepository.findById(id);
+        if (passenger == null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok().entity(passengerMapper.toRepresentation(passenger)).build();
     }
 
     @POST
@@ -63,26 +59,17 @@ public class PassengerResource {
         Passenger passenger = passengerMapper.toModel(passengerDto);
         passenger = em.merge(passenger);
         passengerRepository.persist(passenger);
-        URI location = uriInfo.getAbsolutePathBuilder().path(
-                Integer.toString(passenger.getId())).build();
-        return Response
-                .created(location)
-                .entity(passengerMapper.toRepresentation(passenger))
-                .build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(passenger.getId())).build();
+        return Response.created(location).entity(passengerMapper.toRepresentation(passenger)).build();
     }
 
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response updatePassengerById(@PathParam("id") Integer passengerid,
-                                        PassengerRepresentation representation) {
-        if (!(passengerid.equals(representation.id))) {
-            throw new RuntimeException();
-        }
-
+    public Response updatePassenger(@PathParam("id") Integer passengerId, PassengerRepresentation representation) {
+        if (!(passengerId.equals(representation.id))) return Response.status(400).build();
         Passenger passenger = passengerMapper.toModel(representation);
         passengerRepository.getEntityManager().merge(passenger);
-
         return Response.noContent().build();
     }
 

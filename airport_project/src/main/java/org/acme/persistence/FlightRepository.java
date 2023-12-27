@@ -10,16 +10,16 @@ import java.util.List;
 @RequestScoped
 public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> {
 
-    public List<Flight> findByAirline(Integer airlineId) {
+    public List<Flight> findFlightByAirlineId(Integer airlineId) {
         if (airlineId == null) {
             return listAll();
         }
-        return find("select a from Flight a where a.airline.id = :airlineId" ,
+        return find("select a from Flight a where a.airline.id = :airlineId",
                 Parameters.with("airlineId", airlineId).map())
                 .list();
     }
 
-    public List<Flight> findAirportByName(String airportName) {
+    /*public List<Flight> findAirportByName(String airportName) {
         if (airportName == null) {
             return listAll();
         }
@@ -35,6 +35,6 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
         return find("select a from Flight a where a.airline.airlineName = :airlineName" ,
                 Parameters.with("airlineName", airlineName).map())
                 .list();
-    }
+    }*/
 
 }

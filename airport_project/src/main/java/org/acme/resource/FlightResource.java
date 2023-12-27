@@ -7,7 +7,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.domain.Flight;
-import org.acme.domain.Reservation;
 import org.acme.persistence.FlightRepository;
 import org.acme.representation.FlightMapper;
 import org.acme.representation.FlightRepresentation;
@@ -15,9 +14,9 @@ import org.acme.representation.FlightRepresentation;
 import java.net.URI;
 import java.util.List;
 
-import static org.acme.resource.AirportProjectURIs.FLIGHT;
+import static org.acme.resource.AirportProjectURIs.FLIGHTS;
 
-@Path(FLIGHT)
+@Path(FLIGHTS)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -38,15 +37,15 @@ public class FlightResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<FlightRepresentation> findByAirline(@QueryParam("airlineId") Integer airlineId) {
-        return flightMapper.toRepresentationList(flightRepository.findByAirline(airlineId));
+    public List<FlightRepresentation> findByAirlineId(@QueryParam("airlineId") Integer airlineId) {
+        return flightMapper.toRepresentationList(flightRepository.findFlightByAirlineId(airlineId));
     }
     //TODO testaki kai na ftiaksoume mia get:searchByDepartureAirport,ArrivalAirport,Departure/ArrivalDate,PassengerCount me QueryParams
     @GET
     @Path("{flightId:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response find(@PathParam("flightId") Integer flightId) {
+    public Response findByPathParamId(@PathParam("flightId") Integer flightId) {
         Flight flight = flightRepository.findById(flightId);
         if (flight == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -61,32 +60,20 @@ public class FlightResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createFLight(FlightRepresentation flightDto) {
-        if (flightDto.id == null) {
-            throw new RuntimeException();
-        }
         Flight flight = flightMapper.toModel(flightDto);
         flight = em.merge(flight);
         flightRepository.persist(flight);
-        URI location = uriInfo.getAbsolutePathBuilder().path(
-                Integer.toString(flight.getId())).build();
-        return Response
-                .created(location)
-                .entity(flightMapper.toRepresentation(flight))
-                .build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(flight.getId())).build();
+        return Response.created(location).entity(flightMapper.toRepresentation(flight)).build();
     }
 
     @PUT
     @Path("/{flightId}")
     @Transactional
-    public Response updateFlightById(@PathParam("flightId") Integer id,
-                                      FlightRepresentation representation) {
-        if (!(id.equals(representation.id))) {
-            throw new RuntimeException();
-        }
-
+    public Response updateFlight(@PathParam("flightId") Integer id, FlightRepresentation representation) {
+        if (!(id.equals(representation.id))) return Response.status(400).build();
         Flight flight = flightMapper.toModel(representation);
         flightRepository.getEntityManager().merge(flight);
-
         return Response.noContent().build();
     }
 

@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class FlightTest {
 
     Airline airline;
@@ -28,18 +31,18 @@ public class FlightTest {
 
     @Test
     public void FlightNoLessThan2Characters() {
-        Assertions.assertThrows(RuntimeException.class, () -> flight.setFlightNo("A"));
+        assertThrows(RuntimeException.class, () -> flight.setFlightNo("A"));
     }
 
     @Test
     public void FlightNoDoesNotMatchAirline() {
-        Assertions.assertThrows(RuntimeException.class, () -> flight.setFlightNo("FR"));
+        assertThrows(RuntimeException.class, () -> flight.setFlightNo("FR"));
     }
 
     @Test
     public void AirlineDoesNotMatchFlightNo() {
         Airline airline2 = new Airline("Ryanair Ltd.", "FR", "ryanair", "JeandDig1@");
-        Assertions.assertThrows(RuntimeException.class, () -> flight.setAirline(airline2));
+        assertThrows(RuntimeException.class, () -> flight.setAirline(airline2));
     }
 
     @Test
@@ -47,7 +50,7 @@ public class FlightTest {
         flight.addTicket(ticket1);
         flight.addTicket(ticket2);
         flight.addTicket(ticket3);
-        Assertions.assertThrows(RuntimeException.class, () -> flight.setAircraftCapacity(2));
+        assertThrows(RuntimeException.class, () -> flight.setAircraftCapacity(2));
     }
 
     @Test
@@ -55,25 +58,35 @@ public class FlightTest {
         flight.addTicket(ticket1);
         flight.addTicket(ticket2);
         flight.setAircraftCapacity(2);
-        Assertions.assertThrows(RuntimeException.class, () -> flight.addTicket(ticket3));
+        assertThrows(RuntimeException.class, () -> flight.addTicket(ticket3));
     }
 
     @Test
     public void AddSameTicket2Times() {
         flight.addTicket(ticket1);
-        Assertions.assertThrows(RuntimeException.class, () -> flight.addTicket(ticket1));
+        assertThrows(RuntimeException.class, () -> flight.addTicket(ticket1));
+    }
+
+    @Test
+    public void RemoveExistingTicket() {
+        flight.addTicket(ticket1);
+        assertEquals(1, flight.getTicketList().size());
+        flight.removeTicket(ticket1);
+        assertEquals(0, flight.getTicketList().size());
     }
 
     @Test
     public void RemoveNoExistTicket() {
         flight.addTicket(ticket1);
-        Assertions.assertThrows(RuntimeException.class, () -> flight.removeTicket(ticket2));
+        assertThrows(RuntimeException.class, () -> flight.removeTicket(ticket2));
     }
 
     @Test
     public void SameAirportForDepartureAndArrival() {
         flight.setDepartureAirport(airport1);
-        Assertions.assertThrows(RuntimeException.class, () -> flight.setArrivalAirport(airport1));
+        assertThrows(RuntimeException.class, () -> flight.setArrivalAirport(airport1));
+        flight.setArrivalAirport(airport2);
+        assertThrows(RuntimeException.class, () -> flight.setDepartureAirport(airport2));
     }
 
     @Test
@@ -86,7 +99,7 @@ public class FlightTest {
         flight1.addTicket(ticket1);
         flight1.addTicket(ticket2);
         flight1.addTicket(ticket3);
-        Assertions.assertEquals(25,flight1.flightCompletness());
+        assertEquals(25,flight1.flightCompletness());
     }
 
 }

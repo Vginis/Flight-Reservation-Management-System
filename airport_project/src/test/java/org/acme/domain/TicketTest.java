@@ -22,9 +22,16 @@ public class TicketTest {
     @Test
     public void CalculateTicketPrice() {
         assertEquals(80, ticket.getTicketPrice());
-
         ticket.setLuggageIncluded(true);
         assertEquals(110, ticket.getTicketPrice());
+
+        assertEquals(0, ticket.getWeight());
+        ticket.setWeight(20);
+        assertEquals(20, ticket.getWeight());
+
+        assertEquals(0, ticket.getAmount());
+        ticket.setAmount(1);
+        assertEquals(1, ticket.getAmount());
     }
 
 }

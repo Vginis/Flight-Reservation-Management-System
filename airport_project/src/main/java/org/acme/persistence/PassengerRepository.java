@@ -11,11 +11,11 @@ import java.util.List;
 @RequestScoped
 public class PassengerRepository implements PanacheRepositoryBase<Passenger, Integer> {
 
-    public List<Passenger> findByEmail(String email) {
+    public List<Passenger> findPassengerByEmail(String email) {
         if (email == null) {
             return listAll();
         }
-        return find("select a from Passenger a where a.email like :email" ,
+        return find("select a from Passenger a where a.email like :email",
                 Parameters.with("email", email + "%").map())
                 .list();
     }

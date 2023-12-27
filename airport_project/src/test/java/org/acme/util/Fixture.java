@@ -66,6 +66,7 @@ public class Fixture {
         representation.passport_id = "AK810399";
         representation.phoneNum = "8388383838";
         representation.reservationsId = new ArrayList<>();
+        representation.reservationsId.add(10);
         return representation;
     }
 
@@ -91,6 +92,7 @@ public class Fixture {
         representation.outgoingFlights = new ArrayList<>();
         representation.outgoingFlights.add(getFlightRepresentation().flightNo);
         representation.ingoingFlights = new ArrayList<>();
+        representation.ingoingFlights.add("FR8438");
         representation.ticketList = new ArrayList<>();
         representation.ticketList.add(getTicketRepresentation());
         representation.totalPrice = 240L;

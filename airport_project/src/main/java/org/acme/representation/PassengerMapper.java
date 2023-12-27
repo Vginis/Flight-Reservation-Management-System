@@ -28,7 +28,7 @@ public abstract class PassengerMapper {
     public abstract Passenger toModel(PassengerRepresentation representation);
 
     @AfterMapping
-    public void resolveReservationsById(PassengerRepresentation dto, @MappingTarget Passenger passenger){
+    public void resolveReservationsById(PassengerRepresentation dto, @MappingTarget Passenger passenger) {
         List<Reservation> reservationsList = new ArrayList<>(dto.reservationsId.size());
         Reservation reservation = null;
         for (Integer i : dto.reservationsId) {

@@ -35,12 +35,12 @@ public class Airline extends AccountManagement {
         return flights;
     }
 
-    public String getAirlineName() {
-        return airlineName;
-    }
-
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
+    }
+
+    public String getAirlineName() {
+        return airlineName;
     }
 
     public void setAirlineName(String name) {
@@ -76,26 +76,20 @@ public class Airline extends AccountManagement {
 
     public String mostPopularAirport() {
         Map<Airport, Integer> airportCounts = new HashMap<>();
-
         for (Flight flight : flights) {
             Airport departureAirport = flight.getDepartureAirport();
             Airport arrivalAirport = flight.getArrivalAirport();
-
-
             airportCounts.put(departureAirport, airportCounts.getOrDefault(departureAirport, 0) + 1);
             airportCounts.put(arrivalAirport, airportCounts.getOrDefault(arrivalAirport, 0) + 1);
         }
-
         int maxCount = 0;
         Airport mostVisitedAirport = null;
-
         for (Map.Entry<Airport, Integer> entry : airportCounts.entrySet()) {
             if (entry.getValue() > maxCount) {
                 maxCount = entry.getValue();
                 mostVisitedAirport = entry.getKey();
             }
         }
-
         return (mostVisitedAirport != null) ? mostVisitedAirport.getAirportName() : null;
     }
 

@@ -39,40 +39,32 @@ public class AirlineResource {
     AirlineMapper airlineMapper;
 
     @GET
-    @Path("{id:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response find(@PathParam("id") Integer id) {
-
-        Airline airline = airlineRepository.findById(id);
-        if (airline == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok().entity(airlineMapper.toRepresentation(airline)).build();
+    public List<AirlineRepresentation> findByName(@QueryParam("name") String name) {
+        return airlineMapper.toRepresentationList(airlineRepository.findAirlineByAirlineName(name));
     }
 
     @GET
+    @Path("{id:[0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<AirlineRepresentation> searchAirportByName(@QueryParam("name") String name) {
-        return airlineMapper.toRepresentationList(airlineRepository.search(name));
+    public Response findByPathParamId(@PathParam("id") Integer id) {
+        Airline airline = airlineRepository.findById(id);
+        if (airline == null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok().entity(airlineMapper.toRepresentation(airline)).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response submitAirline(AirlineRepresentation airlineDto){
+    public Response createAirline(AirlineRepresentation airlineDto){
         Airline airline = airlineMapper.toModel(airlineDto);
         airline = em.merge(airline);
         airlineRepository.persist(airline);
-        URI location = uriInfo.getAbsolutePathBuilder().path(
-                Integer.toString(airline.getId())).build();
-        return Response
-                .created(location)
-                .entity(airlineMapper.toRepresentation(airline))
-                .build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(airline.getId())).build();
+        return Response.created(location).entity(airlineMapper.toRepresentation(airline)).build();
     }
 
     @PUT
@@ -80,15 +72,10 @@ public class AirlineResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response updateAirline(@PathParam("id") Integer id,
-                                      AirlineRepresentation representation) {
-        if (!(id.equals(representation.id))) {
-            throw new RuntimeException();
-        }
-
+    public Response updateAirline(@PathParam("id") Integer id, AirlineRepresentation representation) {
+        if (!(id.equals(representation.id))) return Response.status(400).build();
         Airline airline = airlineMapper.toModel(representation);
         airlineRepository.getEntityManager().merge(airline);
-
         return Response.noContent().build();
     }
 
@@ -98,11 +85,10 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response deleteAirline(@PathParam("id") Integer id){
-        Airline airline = airlineRepository.find("id",id).firstResult();
-        if (airline==null){
-            return Response.status(404).build();
-        }
+        Airline airline = airlineRepository.find("id", id).firstResult();
+        if (airline == null) return Response.status(404).build();
         airlineRepository.deleteAirline(id);
         return Response.noContent().build();
     }
+
 }

@@ -19,8 +19,10 @@ public abstract class FlightMapper {
 
     @Inject
     AirportRepository airportRepository;
+
     @Inject
     AirlineRepository airlineRepository;
+
     @Inject
     TicketRepository ticketRepository;
 
@@ -38,10 +40,8 @@ public abstract class FlightMapper {
     @Mapping(target = "ticketList", ignore = true)
     public abstract Flight toModel(FlightRepresentation representation);
 
-
     @AfterMapping
-    public void resolveAirlineByName(FlightRepresentation dto, @MappingTarget Flight flight){
-
+    public void resolveAirlineByName(FlightRepresentation dto, @MappingTarget Flight flight) {
         Airline airline = null;
         if (dto.airlineName != null){
             airline = airlineRepository.find("airlineName", dto.airlineName)
@@ -50,10 +50,8 @@ public abstract class FlightMapper {
         flight.setAirline(airline);
     }
 
-
     @AfterMapping
-    public void resolveAirportByDepartureAirport(FlightRepresentation dto, @MappingTarget Flight flight){
-
+    public void resolveAirportByDepartureAirport(FlightRepresentation dto, @MappingTarget Flight flight) {
         Airport airport = null;
         if (dto.departureAirport != null){
             airport = airportRepository.find("airportName", dto.departureAirport)
@@ -63,8 +61,7 @@ public abstract class FlightMapper {
     }
 
     @AfterMapping
-    public void resolveAirportByArrivalAirport(FlightRepresentation dto, @MappingTarget Flight flight){
-
+    public void resolveAirportByArrivalAirport(FlightRepresentation dto, @MappingTarget Flight flight) {
         Airport airport = null;
         if (dto.arrivalAirport != null){
             airport = airportRepository.find("airportName", dto.arrivalAirport)
@@ -74,7 +71,7 @@ public abstract class FlightMapper {
     }
 
     @AfterMapping
-    public void resolveTicketListById(FlightRepresentation dto, @MappingTarget Flight flight){
+    public void resolveTicketListById(FlightRepresentation dto, @MappingTarget Flight flight) {
         List<Ticket> ticket_list = new ArrayList<>(dto.ticketList.size());
         Ticket ticket = null;
         for (Integer i : dto.ticketList) {

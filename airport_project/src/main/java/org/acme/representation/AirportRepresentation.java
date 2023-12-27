@@ -4,6 +4,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
 public class AirportRepresentation {
+
     public Integer airportId;
     public String airportName;
     public String city;

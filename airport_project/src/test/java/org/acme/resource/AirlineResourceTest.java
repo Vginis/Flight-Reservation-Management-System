@@ -17,46 +17,59 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class AirlineResourceTest extends JPATest {
+
     @Test
-    public void findAirline() {
+    public void findAllAirlines() {
+        List<AirlineRepresentation> airlines = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<AirlineRepresentation>>() {});
+
+        assertEquals(3, airlines.size());
+    }
+
+    @Test
+    public void findAirlineByName() throws JsonMappingException, JsonProcessingException {
+        List<AirlineRepresentation> airlines = given().queryParam("name", "Aegean Airlines").when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<AirlineRepresentation>>() {});
+
+        assertEquals(1, airlines.size());
+    }
+
+    @Test
+    public void findExistingAirline() {
         AirlineRepresentation a1 = when().get(Fixture.API_ROOT+ AirportProjectURIs.AIRLINES+"/"+ 5)
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
+
         assertEquals("FR", a1.u2digitCode);
     }
 
     @Test
-    public void searchAirline() throws JsonMappingException, JsonProcessingException {
-
-
-        List<AirlineRepresentation> airlines = given().queryParam("name", "Aegean Airlines").when().get(Fixture.API_ROOT+AirportProjectURIs.AIRLINES)
+    public void findNoExistingAirline() {
+        when().get(Fixture.API_ROOT+ AirportProjectURIs.AIRLINES+"/"+ 10)
                 .then()
-                .statusCode(200)
-                .extract().as(new TypeRef<List<AirlineRepresentation>>() {}) ;
-
-        assertEquals(1, airlines.size());
-
+                .statusCode(404);
     }
 
     @Test
-    public void submitAirline(){
+    public void createAirline(){
         AirlineRepresentation airlineRepresentation = Fixture.getAirlineRepresentation();
         AirlineRepresentation savedAirline = given().contentType(ContentType.JSON).body(airlineRepresentation).when()
-                                            .post(Fixture.API_ROOT + "/Airlines").then().statusCode(201).extract().as(AirlineRepresentation.class);
+                                            .post(Fixture.API_ROOT + AirportProjectURIs.AIRLINES).then().statusCode(201).extract().as(AirlineRepresentation.class);
 
         assertNotNull(savedAirline);
         assertEquals("British Airways", savedAirline.airlineName);
-
     }
 
     @Test
-    @TestTransaction
     public void updateAirline() {
         AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
                 .then()
@@ -74,7 +87,6 @@ public class AirlineResourceTest extends JPATest {
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
                 .then().statusCode(204);
 
-
         AirlineRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
                 .then()
                 .statusCode(200)
@@ -84,13 +96,34 @@ public class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    public void updateAirlineWithNotTheSameId() {
+        AirlineRepresentation airline = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+                .then()
+                .statusCode(200)
+                .extract().as(AirlineRepresentation.class);
+        airline.id = 10;
+
+        given().contentType(ContentType.JSON).body(airline)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + Fixture.Airlines.AIRLINE_ID)
+                .then().statusCode(400);
+    }
+
+    @Test
     @TestTransaction
     public void removeExistingAirline(){
-
         when()
                 .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 9)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestTransaction
+    public void removeNoExistingAirline(){
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 3)
+                .then()
+                .statusCode(404);
     }
 
 }

@@ -8,6 +8,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.acme.persistence.JPATest;
+import org.acme.representation.FlightRepresentation;
 import org.acme.representation.PassengerRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Assertions;
@@ -23,30 +24,38 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 public class PassengerResourceTest extends JPATest {
+
     @Test
-    public void findPassenger() {
-        PassengerRepresentation p = when().get(Fixture.API_ROOT+ AirportProjectURIs.PASSENGERS+"/"+ 6)
+    public void findAllPassengers() {
+        List<PassengerRepresentation> passengers = when().get(Fixture.API_ROOT+AirportProjectURIs.PASSENGERS)
                 .then()
                 .statusCode(200)
-                .extract().as(PassengerRepresentation.class);
-        assertEquals("passenger", p.username);
+                .extract().as(new TypeRef<List<PassengerRepresentation>>() {});
+        assertEquals(2, passengers.size());
     }
 
     @Test
-    public void search() throws JsonMappingException, JsonProcessingException {
-
-
+    public void findPassengerByEmail() throws JsonMappingException, JsonProcessingException {
         List<PassengerRepresentation> passengers = given().queryParam("email", "passenger@gmail.com").when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<PassengerRepresentation>>() {}) ;
 
-        Assertions.assertEquals(1, passengers.size());
-
+        assertEquals(1, passengers.size());
     }
 
     @Test
-    public void findNonExisting() {
+    public void findExistingPassenger() {
+        PassengerRepresentation p = when().get(Fixture.API_ROOT+ AirportProjectURIs.PASSENGERS+"/"+ 6)
+                .then()
+                .statusCode(200)
+                .extract().as(PassengerRepresentation.class);
+
+        assertEquals("passenger", p.username);
+    }
+
+    @Test
+    public void findNoExistingPassenger() {
         when().get(Fixture.API_ROOT +AirportProjectURIs.PASSENGERS + "/" + 666)
                 .then()
                 .statusCode(404);
@@ -88,7 +97,6 @@ public class PassengerResourceTest extends JPATest {
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
                 .then().statusCode(204);
 
-
         PassengerRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
                 .then()
                 .statusCode(200)
@@ -98,12 +106,35 @@ public class PassengerResourceTest extends JPATest {
     }
 
     @Test
+    public void updatePassengerWithNotTheSameId() {
+        PassengerRepresentation passenger = when().get(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
+                .then()
+                .statusCode(200)
+                .extract().as(PassengerRepresentation.class);
+
+        passenger.id = 10;
+
+        given().contentType(ContentType.JSON).body(passenger)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
+                .then().statusCode(400);
+    }
+
+    @Test
     @TestTransaction
     public void removeExistingPassenger(){
-
         when()
                 .delete(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 12)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
+
+    @Test
+    @TestTransaction
+    public void removeNoExistingPassenger(){
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 4)
+                .then()
+                .statusCode(404);
+    }
+
 }

@@ -6,7 +6,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import org.acme.persistence.JPATest;
 import org.acme.representation.FlightRepresentation;
-import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 import io.restassured.http.ContentType;
@@ -23,36 +22,59 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FlightResourceTest extends JPATest {
 
     @Test
-    public void findFlight() throws JsonMappingException, JsonProcessingException {
-        List<FlightRepresentation> flights = given().queryParam("airlineId", 4).when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT)
+    public void findAllFlights() {
+        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<FlightRepresentation>>() {});
+        assertEquals(2, flights.size());
+    }
+
+    @Test
+    public void findFlightByAirlineId() throws JsonMappingException, JsonProcessingException {
+        List<FlightRepresentation> flights = given().queryParam("airlineId", 4).when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {}) ;
         assertEquals(1, flights.size());
+    }
 
+    @Test
+    public void findExistingFlight() {
+        FlightRepresentation f = when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 7)
+                .then()
+                .statusCode(200)
+                .extract().as(FlightRepresentation.class);
+
+        assertEquals("FR8438", f.flightNo);
+    }
+
+    @Test
+    public void findNoExistingAirline() {
+        when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 10)
+                .then()
+                .statusCode(404);
     }
 
     @Test
     public void createFlight() {
-
         FlightRepresentation flightRepresentation = Fixture.getFlightRepresentation();
         FlightRepresentation savedFlight = given()
                 .contentType(ContentType.JSON)
                 .body(flightRepresentation)
                 .when()
-                .post(Fixture.API_ROOT + AirportProjectURIs.FLIGHT)
+                .post(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS)
                 .then().statusCode(201)
                 .extract().as(FlightRepresentation.class);
 
         assertEquals("A3651", savedFlight.flightNo);
         assertEquals("Aegean Airlines",savedFlight.airlineName);
         assertEquals("Fiumicino", savedFlight.departureAirport);
-
     }
 
     @Test
     public void updateFlight() {
-        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
+        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
@@ -68,19 +90,30 @@ public class FlightResourceTest extends JPATest {
         flight.ticketPrice = (long) 80;
         flight.availableSeats = 24;
         flight.ticketList = new ArrayList<>();
-        given()
-                .contentType(ContentType.JSON)
-                .body(flight)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
+
+        given().contentType(ContentType.JSON).body(flight)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then().statusCode(204);
 
-
-        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHT + "/" + 7)
+        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
         assertEquals("A3651", updated.flightNo);
+    }
+
+    @Test
+    public void updateFlightWithNotTheSameId() {
+        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+                .then()
+                .statusCode(200)
+                .extract().as(FlightRepresentation.class);
+        flight.id = 15;
+
+        given().contentType(ContentType.JSON).body(flight)
+                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+                .then().statusCode(400);
     }
 
 }

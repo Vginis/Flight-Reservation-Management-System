@@ -6,6 +6,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.acme.persistence.JPATest;
+import org.acme.representation.FlightRepresentation;
 import org.acme.representation.ReservationRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ReservationResourceTest extends JPATest {
 
     @Test
-    public void findReservation() {
+    public void findAllReservations() {
+        List<ReservationRepresentation> reservations = when().get(Fixture.API_ROOT+AirportProjectURIs.RESERVATIONS)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
+        assertEquals(2, reservations.size());
+    }
+
+    @Test
+    public void findReservationByPassengerId() throws JsonMappingException, JsonProcessingException {
+        List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
+                .when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
+                .then().statusCode(200)
+                .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
+        assertEquals(2, reservations.size());
+    }
+
+    @Test
+    public void findExistingReservation() {
         ReservationRepresentation a = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + Fixture.Reservations.RESERVATION_ONE_WAY_ID)
                 .then()
                 .statusCode(200)
@@ -29,13 +48,10 @@ public class ReservationResourceTest extends JPATest {
     }
 
     @Test
-    public void search() throws JsonMappingException, JsonProcessingException {
-        List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
-                .when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
+    public void findNoExistingReservation() {
+        when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 32)
                 .then()
-                .statusCode(200)
-                .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
-        assertEquals(2, reservations.size());
+                .statusCode(404);
     }
 
     // TODO δεν πρόλαβα

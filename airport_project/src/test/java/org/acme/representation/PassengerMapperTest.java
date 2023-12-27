@@ -52,7 +52,7 @@ public class PassengerMapperTest {
         assertEquals(entity.getEmail(), passengerRepresentation.email);
         assertEquals(entity.getPhoneNum(), passengerRepresentation.phoneNum);
         assertEquals(entity.getPassport_id(), passengerRepresentation.passport_id);
-        assertEquals(0, passengerRepresentation.reservationsId.size());
+        assertEquals(1, passengerRepresentation.reservationsId.size());
     }
 
 }

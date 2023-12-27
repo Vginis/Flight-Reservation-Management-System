@@ -27,9 +27,9 @@ public abstract class TicketMapper {
     public abstract Ticket toModel(TicketRepresentation representation);
 
     @AfterMapping
-    public void resolveFlightByNo(TicketRepresentation dto, @MappingTarget Ticket ticket){
+    public void resolveFlightByNo(TicketRepresentation dto, @MappingTarget Ticket ticket) {
         Flight flight = null;
-        if (dto.flightNo != null){
+        if (dto.flightNo != null) {
             flight = flightRepository.find("flightNo", dto.flightNo)
                     .firstResultOptional().orElse(null);
         }
@@ -37,7 +37,7 @@ public abstract class TicketMapper {
     }
 
     @AfterMapping
-    public void resolveReservationById(TicketRepresentation dto, @MappingTarget Ticket ticket){
+    public void resolveReservationById(TicketRepresentation dto, @MappingTarget Ticket ticket) {
         Reservation reservation = null;
         if (dto.reservationId != null){
             reservation = reservationRepository.find("reservationId", dto.reservationId)

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Ticket {
 
     @Id
-    @Column(name="ticketId")
+    @Column(name = "ticketId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer ticketId;
 
@@ -93,8 +93,6 @@ public class Ticket {
     }
 
     private void calculateTicketPrice() {
-        if (this.flight == null)
-            throw new RuntimeException("Flight is null.");
         this.ticketPrice = flight.getTicketPrice();
         if (isLuggageIncluded()) this.ticketPrice += 30;
 
@@ -139,4 +137,5 @@ public class Ticket {
     public void setFlight(Flight flight) {
         this.flight = flight;
     }
+
 }

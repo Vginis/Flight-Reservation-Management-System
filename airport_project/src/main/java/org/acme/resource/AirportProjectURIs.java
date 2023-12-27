@@ -10,6 +10,6 @@ public class AirportProjectURIs {
 
 	public static final String PASSENGERS = "/Passengers";
 
-	public static final String FLIGHT = "/Flights";
+	public static final String FLIGHTS = "/Flights";
 
 }

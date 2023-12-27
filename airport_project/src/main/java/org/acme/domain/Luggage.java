@@ -29,9 +29,7 @@ public class Luggage {
     }
 
     public void setWeight(Integer weight) {
-        if (this.luggageIncluded) {
-            this.weight = weight;
-        }
+        if (this.luggageIncluded) this.weight = weight;
     }
 
     public Integer getAmount() {
@@ -39,9 +37,7 @@ public class Luggage {
     }
 
     public void setAmount(Integer amount) {
-        if (this.luggageIncluded) {
-            this.amount = amount;
-        }
+        if (this.luggageIncluded) this.amount = amount;
     }
 
 }

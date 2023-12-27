@@ -43,7 +43,7 @@ public abstract class ReservationMapper {
 
 
     @AfterMapping
-    public void resolvePassengerById(ReservationRepresentation dto, @MappingTarget Reservation reservation){
+    public void resolvePassengerById(ReservationRepresentation dto, @MappingTarget Reservation reservation) {
         Passenger passenger = null;
         if (dto.passengerId != null){
             passenger = passengerRepository.find("id", dto.passengerId)
@@ -53,7 +53,7 @@ public abstract class ReservationMapper {
     }
 
     @AfterMapping
-    public void resolveOutgoingFlightsByFlightNumber(ReservationRepresentation dto, @MappingTarget Reservation reservation){
+    public void resolveOutgoingFlightsByFlightNumber(ReservationRepresentation dto, @MappingTarget Reservation reservation) {
         List<Flight> outgoingFlights = new ArrayList<>(dto.outgoingFlights.size());
         Flight flight = null;
         for (String fr : dto.outgoingFlights) {
@@ -66,8 +66,7 @@ public abstract class ReservationMapper {
      }
 
     @AfterMapping
-    public void resolveIngoingFlightsByFlightNumber(ReservationRepresentation dto, @MappingTarget Reservation reservation){
-
+    public void resolveIngoingFlightsByFlightNumber(ReservationRepresentation dto, @MappingTarget Reservation reservation) {
         List<Flight> ingoingFlights = new ArrayList<>(dto.ingoingFlights.size());
         Flight flight = null;
         for (String fr : dto.ingoingFlights) {
@@ -76,7 +75,7 @@ public abstract class ReservationMapper {
             }
             ingoingFlights.add(flight);
         }
-        reservation.setOutgoingFlights(ingoingFlights);
+        reservation.setIngoingFlights(ingoingFlights);
     }
 
 }

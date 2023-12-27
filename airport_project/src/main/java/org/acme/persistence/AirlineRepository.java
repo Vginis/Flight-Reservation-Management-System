@@ -9,16 +9,16 @@ import org.acme.domain.Airline;
 import java.util.List;
 
 @RequestScoped
-public class AirlineRepository implements PanacheRepositoryBase<Airline,Integer> {
-    public List<Airline> search(String name) {
+public class AirlineRepository implements PanacheRepositoryBase<Airline, Integer> {
+
+    public List<Airline> findAirlineByAirlineName(String name) {
             if (name == null) {
                 return listAll();
             }
-
-            return find("select a from Airline a where a.airlineName like :airlineName" ,
+            return find("select a from Airline a where a.airlineName like :airlineName",
                     Parameters.with("airlineName", name + "%").map())
                     .list();
-        }
+    }
 
     @Transactional
     public void deleteAirline(Integer id){

@@ -13,7 +13,7 @@ import java.util.regex.*;
 public class AccountManagement {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
@@ -38,7 +38,7 @@ public class AccountManagement {
     }
 
     public void setId(Integer newId) {
-        this.id=newId;
+        this.id = newId;
     }
 
     public String getUsername() {

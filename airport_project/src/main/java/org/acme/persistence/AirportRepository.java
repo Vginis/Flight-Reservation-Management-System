@@ -18,14 +18,16 @@ public class AirportRepository implements PanacheRepositoryBase<Airport, Integer
         delete(airport);
     }
 
-    public Airport findAirportById(Integer id) {
-        PanacheQuery<Airport> query = find("select a from Airport a where a.airportId = :id", Parameters.with("id", id).map());
+    // TODO Μήπως να το κάναμε findBy3DCode?
+    /*public Airport findAirportById(Integer id) {
+        PanacheQuery<Airport> query = find("select a from Airport a where a.airportId = :id",
+                Parameters.with("id", id).map());
         try {
             return query.singleResult();
         } catch(NoResultException ex) {
             return null;
         }
 
-    }
+    }*/
 
 }
