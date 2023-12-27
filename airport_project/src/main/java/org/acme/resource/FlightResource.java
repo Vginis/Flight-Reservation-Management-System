@@ -10,6 +10,7 @@ import org.acme.domain.Flight;
 import org.acme.persistence.FlightRepository;
 import org.acme.representation.FlightMapper;
 import org.acme.representation.FlightRepresentation;
+import java.time.LocalDateTime;
 
 import java.net.URI;
 import java.util.List;
@@ -71,6 +72,30 @@ public class FlightResource {
     @Transactional
     public Response searchFlightsByArrivalAirport(@PathParam("arrivalAirport") String arrivalAirport) {
         List<Flight> flights = flightRepository.findFlightByArrivalAirport(arrivalAirport);
+        if (flights == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
+    }
+
+    @GET
+    @Path("arrivals/{arrivalTime}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response searchFlightsByArrivalTime(@PathParam("arrivalTime") String arrivalTime) {
+        List<Flight> flights = flightRepository.findFlightByArrivalTime(arrivalTime);
+        if (flights == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
+    }
+
+    @GET
+    @Path("departures/{departureTime}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response searchFlightsByDepartureTime(@PathParam("departureTime") String departureTime) {
+        List<Flight> flights = flightRepository.findFlightByDepartureTime(departureTime);
         if (flights == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

@@ -5,6 +5,8 @@ import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
 import org.acme.domain.*;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 import java.util.List;
@@ -36,12 +38,36 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
                 .list();
     }
 
+
+
     public List<Flight> findFlightByArrivalAirport(String airportName) {
         if (airportName == null) {
             return listAll();
         }
         return find("select a from Flight a where a.arrivalAirport.airportName = :name" ,
                 Parameters.with("name", airportName).map())
+                .list();
+    }
+
+    public List<Flight> findFlightByDepartureTime(String datetime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime depTime = LocalDateTime.parse(datetime, formatter);
+        if (depTime == null) {
+            return listAll();
+        }
+        return find("select f from Flight f where f.departureTime = :departureTime" ,
+                Parameters.with("departureTime", depTime).map())
+                .list();
+    }
+
+    public List<Flight> findFlightByArrivalTime(String datetime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime arrTime = LocalDateTime.parse(datetime, formatter);
+        if (arrTime == null) {
+            return listAll();
+        }
+        return find("select f from Flight f where f.arrivalTime = :arrivalTime" ,
+                Parameters.with("arrivalTime", arrTime).map())
                 .list();
     }
 

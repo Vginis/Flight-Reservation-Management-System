@@ -65,6 +65,26 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
+    public void findFlightByArrivalTime(){
+        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/arrivals" + "/" + "2023-07-19T21:00:00")
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<FlightRepresentation>>() {});
+        assertEquals(2, flights.size());
+        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).arrivalTime);
+    }
+
+    @Test
+    public void findFlightByDepartureTime(){
+        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departures" + "/" + "2023-07-18T21:00:00")
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<FlightRepresentation>>() {});
+        assertEquals(1, flights.size());
+        assertEquals(LocalDateTime.parse("2023-07-18T21:00:00"),flights.get(0).departureTime);
+    }
+
+    @Test
     public void findExistingFlight() {
         FlightRepresentation f = when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 7)
                 .then()
