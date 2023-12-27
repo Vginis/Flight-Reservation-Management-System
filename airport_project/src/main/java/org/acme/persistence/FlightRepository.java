@@ -76,6 +76,31 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
                 .list();
     }
 
+    public List<Flight> findFlightByParameters (String depAirport, String arrAirport, String dpTime, String arTime, Integer passCount) {
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime depTime = LocalDateTime.parse(dpTime, formatter1);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime arrTime = LocalDateTime.parse(arTime, formatter2);
+
+        if (depTime == null) {
+            return listAll();
+        }
+
+        if (arrTime == null) {
+            return listAll();
+        }
+
+        return find("select f from Flight f where (f.arrivalTime = :arrivalTime) AND (f.departureTime = :departureTime) AND (f.departureAirport.airportName = :dname) AND (f.arrivalAirport.airportName = :aname) AND ((f.availableSeats - :passCount) > 0)",
+                Parameters.with("arrivalTime", arrTime)
+                        .and("departureTime", depTime)
+                        .and("dname", depAirport)
+                        .and("aname", arrAirport)
+                        .and("passCount", passCount)
+                        .map()).list();
+
+    }
+
 /*
     public List<Flight> findAirlineByName(String airlineName) {
         if (airlineName == null) {

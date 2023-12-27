@@ -43,6 +43,16 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
+    public void findFlightByParams() throws JsonMappingException, JsonProcessingException {
+        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/dep/" + "Eleftherios Venizelos"
+                + "/arr/" + "Fiumicino" + "/dept/" + "2023-07-19T21:00:00" + "/arrt/" + "2023-07-19T21:00:00" + "/passc/" + 8)
+                .then()
+                .statusCode(200)
+                .extract().as(new TypeRef<List<FlightRepresentation>>() {}) ;
+        assertEquals(1, flights.size());
+    }
+
+    @Test
     public void findFlightByDepartureAirport(){
         List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departure/Eleftherios Venizelos")
                 .then()
@@ -76,12 +86,12 @@ public class FlightResourceTest extends JPATest {
 
     @Test
     public void findFlightByDepartureTime(){
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departures" + "/" + "2023-07-18T21:00:00")
+        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departures" + "/" + "2023-07-19T21:00:00")
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
-        assertEquals(1, flights.size());
-        assertEquals(LocalDateTime.parse("2023-07-18T21:00:00"),flights.get(0).departureTime);
+        assertEquals(2, flights.size());
+        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).departureTime);
     }
 
     @Test

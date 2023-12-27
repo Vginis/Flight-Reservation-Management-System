@@ -70,7 +70,7 @@ public class FlightResource {
     @Transactional
     public Response searchFlightsByDepartureAirport(@PathParam("departureAirport") String departureAirport) {
         List<Flight> flights = flightRepository.findFlightByDepartureAirport(departureAirport);
-        if (flights == null) {
+        if (flights.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
@@ -82,7 +82,7 @@ public class FlightResource {
     @Transactional
     public Response searchFlightsByArrivalAirport(@PathParam("arrivalAirport") String arrivalAirport) {
         List<Flight> flights = flightRepository.findFlightByArrivalAirport(arrivalAirport);
-        if (flights == null) {
+        if (flights.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
@@ -94,8 +94,8 @@ public class FlightResource {
     @Transactional
     public Response searchFlightsByArrivalTime(@PathParam("arrivalTime") String arrivalTime) {
         List<Flight> flights = flightRepository.findFlightByArrivalTime(arrivalTime);
-        if (flights == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        if (flights.isEmpty()) {
+            return Response.status(404).build();
         }
         return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
     }
@@ -106,8 +106,8 @@ public class FlightResource {
     @Transactional
     public Response searchFlightsByDepartureTime(@PathParam("departureTime") String departureTime) {
         List<Flight> flights = flightRepository.findFlightByDepartureTime(departureTime);
-        if (flights == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        if (flights.isEmpty()) {
+            return Response.status(404).build();
         }
         return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
     }
@@ -145,5 +145,22 @@ public class FlightResource {
         flightRepository.deleteFlight(id);
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("dep/{departuteAirport}/arr/{arrivalAirport}/dept/{departureTime}/arrt/{arrivalTime}/passc/{passCount}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response SearchByParams(@PathParam("departuteAirport") String depAirport,
+                                                     @PathParam("arrivalAirport") String arrAirport,
+                                                     @PathParam("departureTime") String depTime,
+                                                     @PathParam("arrivalTime") String arrTime,
+                                                     @PathParam("passCount") Integer passCount) {
+        List<Flight> flights = flightRepository.findFlightByParameters(depAirport, arrAirport, depTime, arrTime, passCount);
+        if (flights.isEmpty()) return Response.status(404).build();
+        return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
+    }
+
+
+
 
 }

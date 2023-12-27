@@ -20,10 +20,10 @@ insert into Airports(airportId, name, city, country, u3digitCode) values (3, 'Ve
 insert into Airports(airportId, name, city, country, u3digitCode) values (4, 'Toussaint', 'Fontaine', 'Teyvat', 'TEY');
 
 
-insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (7, 'FR8438', 5, 1, '2023-07-18 21:00:00', 2, '2023-07-19 21:00:00', 200, 'Boeing-767', 100, 199);
+insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (7, 'FR8438', 5, 1, '2023-07-19 21:00:00', 2, '2023-07-19 21:00:00', 200, 'Boeing-767', 100, 199);
 insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (8, 'A3651', 4, 2, '2023-07-19 21:00:00', 1, '2023-07-19 21:00:00', 178, 'Airbus-A320', 80, 177);
 insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (9, 'A3652', 9, 3, '2023-07-10 21:00:00', 3, '2023-07-10 21:00:00', 179, 'Airbus-A321', 80, 176);
-insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (10, 'A3653', 4, 2, '2023-07-19 21:00:01', 3, '2023-07-19 21:00:05',3, 'Airbus-A322' , 200, 1);
+insert into Flights(id, FlightNo, airlineId, depAirportId, depTime, arrAirportId, arrTime, aircraftCapacity, aircraftType, TicketPrice, availableSeats) values (10, 'A3653', 4, 2, '2023-07-19 21:00:01', 3, '2023-07-19 21:00:05', 3, 'Airbus-A322' , 200, 1);
 
 insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (9, 6, false, 100);
 insert into Reservations(reservationId, passengerId, returnFlight, totalPrice) values (10, 6, true, 180);
