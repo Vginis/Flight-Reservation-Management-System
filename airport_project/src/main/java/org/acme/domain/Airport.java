@@ -2,6 +2,8 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +26,12 @@ public class Airport {
 
     @Column(name = "u3digitCode", nullable = false, length = 3, unique = true)
     private String u3digitCode;
+
+    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.MERGE)
+    private List<Flight> depFlights = new ArrayList<>();
+
+    @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.MERGE)
+    private List<Flight> arrFlights = new ArrayList<>();
 
     public Airport(){
     }
@@ -73,6 +81,22 @@ public class Airport {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Flight> getDepFlights() {
+        return depFlights;
+    }
+
+    public void setDepFlights(List<Flight> depFlights) {
+        this.depFlights = depFlights;
+    }
+
+    public List<Flight> getArrFlights() {
+        return arrFlights;
+    }
+
+    public void setArrFlights(List<Flight> arrFlights) {
+        this.arrFlights = arrFlights;
     }
 
     @Override

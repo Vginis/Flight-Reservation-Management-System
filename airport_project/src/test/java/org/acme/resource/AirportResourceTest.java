@@ -79,6 +79,11 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
         airport.airportName = "Furina_De_Chateau";
+       airport.city = "Cardinale";
+       airport.country = "Fontaine";
+       airport.u3digitCode = "FON";
+       airport.depFlights = new ArrayList<>();
+       airport.arrFlights = new ArrayList<>();
 
         given()
                 .contentType(ContentType.JSON)

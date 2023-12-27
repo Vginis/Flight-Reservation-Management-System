@@ -25,6 +25,10 @@ public class Fixture {
         dto.city = "Cardinale";
         dto.country = "Fontaine";
         dto.u3digitCode = "FON";
+        dto.depFlights = new ArrayList<>();
+        dto.depFlights.add(7);
+        dto.arrFlights = new ArrayList<>();
+        dto.arrFlights.add(9);
         return dto;
     }
 
