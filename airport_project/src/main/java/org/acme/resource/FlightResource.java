@@ -53,6 +53,30 @@ public class FlightResource {
         return Response.ok().entity(flightMapper.toRepresentation(flight)).build();
     }
 
+    @GET
+    @Path("departure/{departureAirport}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response searchFlightsByDepartureAirport(@PathParam("departureAirport") String departureAirport) {
+        List<Flight> flights = flightRepository.findFlightByDepartureAirport(departureAirport);
+        if (flights == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
+    }
+
+    @GET
+    @Path("arrival/{arrivalAirport}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response searchFlightsByArrivalAirport(@PathParam("arrivalAirport") String arrivalAirport) {
+        List<Flight> flights = flightRepository.findFlightByArrivalAirport(arrivalAirport);
+        if (flights == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(flightMapper.toRepresentationList(flights)).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
