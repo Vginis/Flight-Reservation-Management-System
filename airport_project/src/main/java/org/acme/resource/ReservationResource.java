@@ -51,8 +51,6 @@ public class ReservationResource {
         return Response.ok().entity(reservationMapper.toRepresentation(reservation)).build();
     }
 
-    //TODO UPDATE, DELETE
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +65,28 @@ public class ReservationResource {
                 .created(location)
                 .entity(reservationMapper.toRepresentation(reservation))
                 .build();
+    }
+
+    @PUT
+    @Path("/{reservationId}")
+    @Transactional
+    public Response updateReservation(@PathParam("reservationId") Integer id, ReservationRepresentation representation) {
+        if (!(id.equals(representation.reservationId))) return Response.status(400).build();
+        Reservation reservation = reservationMapper.toModel(representation);
+        reservationRepository.getEntityManager().merge(reservation);
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("/{reservationId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response deleteReservation(@PathParam("reservationId") Integer id){
+        Reservation reservation = reservationRepository.find("reservationId", id).firstResult();
+        if (reservation == null) return Response.status(404).build();
+        reservationRepository.deleteReservation(id);
+        return Response.noContent().build();
     }
 
 }

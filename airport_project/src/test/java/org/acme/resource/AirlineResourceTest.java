@@ -29,7 +29,7 @@ public class AirlineResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirlineRepresentation>>() {});
 
-        assertEquals(3, airlines.size());
+        assertEquals(4, airlines.size());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class AirlineResourceTest extends JPATest {
     @TestTransaction
     public void removeExistingAirline(){
         when()
-                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 9)
+                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 13)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }

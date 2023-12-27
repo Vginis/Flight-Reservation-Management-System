@@ -53,8 +53,6 @@ public class FlightResource {
         return Response.ok().entity(flightMapper.toRepresentation(flight)).build();
     }
 
-
-    //TODO DELETE
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,6 +72,18 @@ public class FlightResource {
         if (!(id.equals(representation.id))) return Response.status(400).build();
         Flight flight = flightMapper.toModel(representation);
         flightRepository.getEntityManager().merge(flight);
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response deleteFlight(@PathParam("id") Integer id){
+        Flight flight = flightRepository.find("id", id).firstResult();
+        if (flight == null) return Response.status(404).build();
+        flightRepository.deleteFlight(id);
         return Response.noContent().build();
     }
 

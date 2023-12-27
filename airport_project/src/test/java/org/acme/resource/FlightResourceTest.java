@@ -5,10 +5,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import org.acme.persistence.JPATest;
+import io.quarkus.test.TestTransaction;
 import org.acme.representation.FlightRepresentation;
 import org.acme.util.Fixture;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import io.restassured.http.ContentType;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ public class FlightResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
-        assertEquals(2, flights.size());
+        assertEquals(3, flights.size());
     }
 
     @Test
@@ -114,6 +117,15 @@ public class FlightResourceTest extends JPATest {
         given().contentType(ContentType.JSON).body(flight)
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then().statusCode(400);
+    }
+
+    @Test
+    @TestTransaction
+    public void removeExistingFlight(){
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
 }

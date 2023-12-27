@@ -15,7 +15,7 @@ public class ReservationJPATest extends JPATest {
     @Transactional
     public void listReservations(){
         List<Reservation> result = em.createQuery("select r from Reservation r").getResultList();
-        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(3, result.size());
     }
 
 }

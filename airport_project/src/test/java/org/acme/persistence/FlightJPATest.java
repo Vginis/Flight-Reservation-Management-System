@@ -16,7 +16,7 @@ public class FlightJPATest extends JPATest {
     @Transactional
     public void listFlights(){
         List<Flight> result = em.createQuery("select p from Flight p").getResultList();
-        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(3, result.size());
     }
 
     @Test
