@@ -3,6 +3,7 @@ package org.acme.resource;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -122,10 +123,12 @@ public class PassengerResource {
     }
 
     @POST
-    @Path("/{id}/makeReservation/{flightNo}")
+    @Path("/{id}/makeReservation/{lastName}/{firstName}/{passport}/{flightNo}/{lugWeight}/{lugAmount}/{seatNo}")
     @Transactional
-    public Response makeReservation(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo){
-        Reservation reservation = createReservation(id,flightNo);
+    public Response makeReservation(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo,@PathParam("lugWeight") Integer lugWeight,
+                @PathParam("lugAmount") Integer lugAmount,@PathParam("firstName") String firstName,@PathParam("lastName") String lastName
+                ,@PathParam("seatNo") String seatNo,@PathParam("passport") String passport){
+        Reservation reservation = createReservation(id,flightNo,lugAmount,lugWeight,firstName,lastName,seatNo,passport);
         if (reservation ==null){return Response.status(404).build();}
         if (reservation.getOutgoingFlights().isEmpty()){return Response.status(406).build();}
         reservation = em.merge(reservation);
@@ -149,12 +152,24 @@ public class PassengerResource {
     }
 
     @Transactional
-    protected Reservation createReservation(Integer id,String flightNo){
+    protected Reservation createReservation(Integer id, String flightNo, Integer lugAmount,Integer lugWeight,String firstName,String lastName,String seatNo,String passport){
         Passenger passenger = passengerRepository.findById(id);
         if (passenger == null){ return null;}
         Flight flight = flightRepository.find("flightNo",flightNo).firstResult();
         if (flight == null){return null;}
         Reservation reservation = new Reservation();
+        Ticket ticket = new Ticket();
+        ticket.setReservation(reservation);
+        ticket.setFlight(flight);
+        ticket.setTicketPrice(flight.getTicketPrice());
+        ticket.setAmount(lugAmount);
+        ticket.setWeight(lugWeight);
+        ticket.setLuggageIncluded(true);
+        ticket.setFirstName(firstName);
+        ticket.setLastName(lastName);
+        ticket.setSeatNo(seatNo);
+        ticket.setPassportId(passport);
+        reservation.addTicket(ticket);
         reservation.setPassenger(passenger);
         reservation.addOutgoingFlight(flight);
         return reservation;

@@ -157,7 +157,7 @@ public class PassengerResourceTest extends JPATest {
 
     @Test
     public void makeNewReservation(){
-        when().post(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/12/makeReservation/A3651")
+        when().post(Fixture.API_ROOT + AirportProjectURIs.PASSENGERS + "/12/makeReservation/Gkinis/Evangelos/AA4839/FR8438/23/1/F4")
                 .then().statusCode(201)
                 .header("Location", Matchers.matchesPattern(".*/Reservations/[0-9]+"));
     }
@@ -165,7 +165,7 @@ public class PassengerResourceTest extends JPATest {
     @Test
     public void denyAddingExistingReservations(){
         when()
-                .post(Fixture.API_ROOT + "/6/makeReservation/FR8438")
+                .post(Fixture.API_ROOT + "/6/makeReservation/Wonder/Bob/CP152D45/FR8438/0/0/1A")
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
