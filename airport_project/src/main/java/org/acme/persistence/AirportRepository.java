@@ -13,7 +13,7 @@ import java.util.List;
 public class AirportRepository implements PanacheRepositoryBase<Airport, Integer> {
 
     @Transactional
-    public void deleteAirport(Integer id){
+    public void deleteAirport(Integer id) {
         Airport airport = findById(id);
         delete(airport);
     }

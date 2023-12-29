@@ -21,7 +21,7 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
     }
 
     @Transactional
-    public void deletePassenger(Integer id){
+    public void deletePassenger(Integer id) {
         Passenger passenger = findById(id);
         passenger.clearReservations();
         delete(passenger);

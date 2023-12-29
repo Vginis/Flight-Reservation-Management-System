@@ -24,18 +24,18 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     }
 
     @Transactional
-    public void deleteFlight(Integer id){
+    public void deleteFlight(Integer id) {
         Flight flight = findById(id);
         delete(flight);
     }
 
     public List<Flight> findFlightByDepartureAirport(String airportName) {
-        return find("select a from Flight a where a.departureAirport.airportName like :name" ,
+        return find("select a from Flight a where a.departureAirport.airportName like :name",
                 Parameters.with("name", airportName).map())
                 .list();
     }
 
-    public Double getCompletenessByFlight(Integer id){
+    public Double getCompletenessByFlight(Integer id) {
         Flight flight = findById(id);
         double completeness;
         completeness = flight.flightCompletness();
@@ -43,7 +43,7 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     }
 
     public List<Flight> findFlightByArrivalAirport(String airportName) {
-        return find("select a from Flight a where a.arrivalAirport.airportName like :name" ,
+        return find("select a from Flight a where a.arrivalAirport.airportName like :name",
                 Parameters.with("name", airportName+ "%").map())
                 .list();
     }
@@ -51,7 +51,7 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     public List<Flight> findFlightByDepartureTime(String datetime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime depTime = LocalDateTime.parse(datetime, formatter);
-        return find("select f from Flight f where f.departureTime = :departureTime" ,
+        return find("select f from Flight f where f.departureTime = :departureTime",
                 Parameters.with("departureTime", depTime).map())
                 .list();
     }
@@ -59,7 +59,7 @@ public class FlightRepository implements PanacheRepositoryBase<Flight, Integer> 
     public List<Flight> findFlightByArrivalTime(String datetime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime arrTime = LocalDateTime.parse(datetime, formatter);
-        return find("select f from Flight f where f.arrivalTime = :arrivalTime" ,
+        return find("select f from Flight f where f.arrivalTime = :arrivalTime",
                 Parameters.with("arrivalTime", arrTime).map())
                 .list();
     }

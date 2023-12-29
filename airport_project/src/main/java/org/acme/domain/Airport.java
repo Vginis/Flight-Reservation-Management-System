@@ -27,16 +27,16 @@ public class Airport {
     @Column(name = "u3digitCode", nullable = false, length = 3, unique = true)
     private String u3digitCode;
 
-    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.REMOVE)
     private List<Flight> depFlights = new ArrayList<>();
 
-    @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.REMOVE)
     private List<Flight> arrFlights = new ArrayList<>();
 
-    public Airport(){
+    public Airport() {
     }
 
-    public Airport(String airportName, String city, String country, String u3digitCode){
+    public Airport(String airportName, String city, String country, String u3digitCode) {
         this.airportName = airportName;
         this.city = city;
         this.country = country;

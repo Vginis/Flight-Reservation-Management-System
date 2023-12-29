@@ -15,13 +15,13 @@ public class ReservationRepository implements PanacheRepositoryBase<Reservation,
         if (passengerId == null) {
             return listAll();
         }
-        return find("select r from Reservation r where r.passenger.id = :id" ,
+        return find("select r from Reservation r where r.passenger.id = :id",
                 Parameters.with("id", passengerId).map())
                 .list();
     }
 
     @Transactional
-    public void deleteReservation(Integer id){
+    public void deleteReservation(Integer id) {
         Reservation reservation = findById(id);
         delete(reservation);
     }

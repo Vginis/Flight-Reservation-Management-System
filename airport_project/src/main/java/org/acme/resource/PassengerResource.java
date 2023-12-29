@@ -47,9 +47,6 @@ public class PassengerResource {
     AirlineRepository airlineRepository;
 
     @Inject
-    AirportRepository airportRepository;
-
-    @Inject
     EntityManager em;
     @Inject
     ReservationRepository reservationRepository;
@@ -75,22 +72,22 @@ public class PassengerResource {
     @Path("/searchForFlights/{airlineId}/{destAirport}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response findFlightsByDestination(@PathParam("airlineId") Integer airlineId, @PathParam("destAirport") String arrAirportName){
+    public Response findFlightsByDestination(@PathParam("airlineId") Integer airlineId, @PathParam("destAirport") String arrAirportName) {
         Airline airline = airlineRepository.findById(airlineId);
-        if(airline==null){return null;}
+        if(airline == null) return null;
         List<Flight> flightList = new ArrayList<>();
         for (Flight f :airline.getFlights()){
             if (Objects.equals(f.getArrivalAirport().getAirportName(), arrAirportName))
                 flightList.add(f);
         }
-        if (flightList.isEmpty()){return Response.status(Response.Status.NOT_FOUND).build();}
+        if (flightList.isEmpty()) return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok().entity(flightMapper.toRepresentationList(flightList)).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createPassenger(PassengerRepresentation passengerDto){
+    public Response createPassenger(PassengerRepresentation passengerDto) {
         Passenger passenger = passengerMapper.toModel(passengerDto);
         passenger = em.merge(passenger);
         passengerRepository.persist(passenger);
@@ -113,11 +110,9 @@ public class PassengerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response deletePassenger(@PathParam("id") Integer id){
+    public Response deletePassenger(@PathParam("id") Integer id) {
         Passenger passenger = passengerRepository.find("id",id).firstResult();
-        if (passenger==null){
-            return Response.status(404).build();
-        }
+        if (passenger == null) return Response.status(404).build();
         passengerRepository.deletePassenger(id);
         return Response.noContent().build();
     }
@@ -125,12 +120,17 @@ public class PassengerResource {
     @POST
     @Path("/{id}/makeReservation/{lastName}/{firstName}/{passport}/{flightNo}/{lugWeight}/{lugAmount}/{seatNo}")
     @Transactional
-    public Response makeReservation(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo,@PathParam("lugWeight") Integer lugWeight,
-                @PathParam("lugAmount") Integer lugAmount,@PathParam("firstName") String firstName,@PathParam("lastName") String lastName
-                ,@PathParam("seatNo") String seatNo,@PathParam("passport") String passport){
-        Reservation reservation = createReservation(id,flightNo,lugAmount,lugWeight,firstName,lastName,seatNo,passport);
-        if (reservation ==null){return Response.status(404).build();}
-        if (reservation.getOutgoingFlights().isEmpty()){return Response.status(406).build();}
+    public Response makeReservation(@PathParam("id") Integer id,
+                                    @PathParam("flightNo") String flightNo,
+                                    @PathParam("lugWeight") Integer lugWeight,
+                                    @PathParam("lugAmount") Integer lugAmount,
+                                    @PathParam("firstName") String firstName,
+                                    @PathParam("lastName") String lastName,
+                                    @PathParam("seatNo") String seatNo,
+                                    @PathParam("passport") String passport) {
+        Reservation reservation = createReservation(id, flightNo, lugAmount, lugWeight, firstName, lastName, seatNo, passport);
+        if (reservation == null) return Response.status(404).build();
+        if (reservation.getOutgoingFlights().isEmpty()) return Response.status(406).build();
         reservation = em.merge(reservation);
         reservationRepository.persist(reservation);
         URI makingReservationURI = uriInfo.getBaseUriBuilder().path("Reservations").path(Integer.toString(reservation.getReservationId())).build();
@@ -140,7 +140,7 @@ public class PassengerResource {
     @DELETE
     @Path("/{id}/deleteReservation/{reservationId}")
     @Transactional
-    public Response deleteReservation(@PathParam("id") Integer id, @PathParam("reservationId") Integer reservationId){
+    public Response deleteReservation(@PathParam("id") Integer id, @PathParam("reservationId") Integer reservationId) {
         List<Reservation> reservations = reservationRepository.findReservationByPassengerId(id);
         for (Reservation r : reservations) {
             if (r.getReservationId().equals(reservationId)) {
@@ -152,11 +152,11 @@ public class PassengerResource {
     }
 
     @Transactional
-    protected Reservation createReservation(Integer id, String flightNo, Integer lugAmount,Integer lugWeight,String firstName,String lastName,String seatNo,String passport){
+    protected Reservation createReservation(Integer id, String flightNo, Integer lugAmount, Integer lugWeight, String firstName, String lastName, String seatNo, String passport) {
         Passenger passenger = passengerRepository.findById(id);
-        if (passenger == null){ return null;}
+        if (passenger == null) return null;
         Flight flight = flightRepository.find("flightNo",flightNo).firstResult();
-        if (flight == null){return null;}
+        if (flight == null) return null;
         Reservation reservation = new Reservation();
         Ticket ticket = new Ticket();
         ticket.setReservation(reservation);
@@ -174,4 +174,5 @@ public class PassengerResource {
         reservation.addOutgoingFlight(flight);
         return reservation;
     }
+
 }

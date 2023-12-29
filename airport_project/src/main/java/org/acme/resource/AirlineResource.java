@@ -71,9 +71,9 @@ public class AirlineResource {
     @Path("MostPopularAirport/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getMostPopularAirport(@PathParam("id") Integer id){
+    public Response getMostPopularAirport(@PathParam("id") Integer id) {
         String stat = airlineRepository.getMostPopularAirportByAirline(id);
-        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        if (stat == null) return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok(stat, MediaType.APPLICATION_JSON).build();
     }
 
@@ -81,9 +81,9 @@ public class AirlineResource {
     @Path("Completeness/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getCompletenessByAirlineId(@PathParam("id") Integer id){
+    public Response getCompletenessByAirlineId(@PathParam("id") Integer id) {
         Double stat = airlineRepository.getCompletenessByAirline(id);
-        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        if (stat == null) return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok(stat, MediaType.APPLICATION_JSON).build();
     }
 
@@ -91,7 +91,7 @@ public class AirlineResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createAirline(AirlineRepresentation airlineDto){
+    public Response createAirline(AirlineRepresentation airlineDto) {
         Airline airline = airlineMapper.toModel(airlineDto);
         airline = em.merge(airline);
         airlineRepository.persist(airline);
@@ -116,7 +116,7 @@ public class AirlineResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response deleteAirline(@PathParam("id") Integer id){
+    public Response deleteAirline(@PathParam("id") Integer id) {
         Airline airline = airlineRepository.find("id", id).firstResult();
         if (airline == null) return Response.status(404).build();
         airlineRepository.deleteAirline(id);
@@ -126,11 +126,15 @@ public class AirlineResource {
     @POST
     @Path("/{id}/makeFlight/{flightNo}/{depAirport}/{arrAirport}/{aircraftType}/{ticketPrice}/{aircraftCapacity}")
     @Transactional
-    public Response makeFlight(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo,
-                               @PathParam("depAirport") String dep3D,@PathParam("arrAirport") String arr3D,
-                               @PathParam("aircraftType") String aircraftType, @PathParam("ticketPrice") Long ticketPrice, @PathParam("aircraftCapacity") Integer capacity){
-        Flight flight = createFlight(id,flightNo,dep3D,arr3D,aircraftType,ticketPrice,capacity);
-        if (flight ==null){return Response.status(404).build();}
+    public Response makeFlight(@PathParam("id") Integer id,
+                               @PathParam("flightNo") String flightNo,
+                               @PathParam("depAirport") String dep3D,
+                               @PathParam("arrAirport") String arr3D,
+                               @PathParam("aircraftType") String aircraftType,
+                               @PathParam("ticketPrice") Long ticketPrice,
+                               @PathParam("aircraftCapacity") Integer capacity) {
+        Flight flight = createFlight(id, flightNo, dep3D, arr3D, aircraftType, ticketPrice, capacity);
+        if (flight == null) return Response.status(404).build();
         flight = em.merge(flight);
         flightRepository.persist(flight);
         URI makingFlightURI = uriInfo.getBaseUriBuilder().path("Flights").path(Integer.toString(flight.getId())).build();
@@ -140,8 +144,10 @@ public class AirlineResource {
     @DELETE
     @Path("/{id}/deleteFlight/{flightNo}/{depAirport}/{arrAirport}")
     @Transactional
-    public Response deleteFlight(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo,
-                                 @PathParam("depAirport") String depAirport,@PathParam("arrAirport") String arrAirport){
+    public Response deleteFlight(@PathParam("id") Integer id,
+                                 @PathParam("flightNo") String flightNo,
+                                 @PathParam("depAirport") String depAirport,
+                                 @PathParam("arrAirport") String arrAirport) {
         Airport departureAirport = airportRepository.findAirportBy3DCode(depAirport).get(0);
         Airport arrivalAirport = airportRepository.findAirportBy3DCode(arrAirport).get(0);
         List<Flight> flights = flightRepository.findFlightByAirlineId(id);
@@ -155,13 +161,13 @@ public class AirlineResource {
     }
 
     @Transactional
-    protected Flight createFlight(Integer id,String flightNo,String dep3D, String arr3D,String aircraftType,Long ticketPrice,Integer capacity){
+    protected Flight createFlight(Integer id, String flightNo, String dep3D, String arr3D, String aircraftType, Long ticketPrice, Integer capacity) {
         Airline airline = airlineRepository.findById(id);
         Airport departureAirport = airportRepository.findAirportBy3DCode(dep3D).get(0);
         Airport arrivalAirport = airportRepository.findAirportBy3DCode(arr3D).get(0);
-        if (airline == null){ return null;}
-        if (departureAirport == null){ return null;}
-        if (arrivalAirport == null){ return null;}
+        if (airline == null) return null;
+        if (departureAirport == null) return null;
+        if (arrivalAirport == null) return null;
         Flight flight = new Flight();
         flight.setTicketList(new ArrayList<>());
         flight.setAirline(airline);
@@ -175,9 +181,7 @@ public class AirlineResource {
         flight.setDepartureTime(LocalDateTime.now().plusMonths(4));
         flight.setArrivalTime(flight.getDepartureTime().plusHours(4));
         for (Flight f : airline.getFlights()){
-            if (Objects.equals(f.getFlightNo(), flight.getFlightNo()) && f.getDepartureAirport()==flight.getDepartureAirport() && f.getArrivalAirport()==flight.getArrivalAirport()
-                && Objects.equals(f.getTicketPrice(), flight.getTicketPrice()) && Objects.equals(f.getAircraftType(), flight.getAircraftType()) && Objects.equals(f.getAircraftCapacity(), flight.getAircraftCapacity()))
-                return null;
+            if (f.equals(flight)) return null;
         }
         airline.addFlight(flight);
         return flight;

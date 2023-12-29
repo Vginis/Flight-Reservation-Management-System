@@ -17,7 +17,7 @@ public class Airline extends AccountManagement {
     @Column(name = "u2digitCode", length = 2, unique = true)
     private String u2digitCode;
 
-    @OneToMany(mappedBy = "airline", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.REMOVE)
     private List<Flight> flights = new ArrayList<>();
 
     public Airline() {
@@ -93,15 +93,15 @@ public class Airline extends AccountManagement {
         return (mostVisitedAirport != null) ? mostVisitedAirport.getAirportName() : null;
     }
 
-    public double completeness(){
-        double sum=0;
-        int count=0;
+    public double completeness() {
+        double sum = 0;
+        int count = 0;
         double average;
         for (Flight flight : flights){
-            count+=1;
+            count += 1;
             sum += (double)flight.getAvailableSeats()/flight.getAircraftCapacity();
         }
-        average =100-(sum/count)*100;
+        average = 100-(sum/count)*100;
         return average;
     }
 

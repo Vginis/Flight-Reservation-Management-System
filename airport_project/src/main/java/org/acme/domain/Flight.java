@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Flights")
@@ -30,7 +31,7 @@ public class Flight {
     @Column(name = "depTime")
     private LocalDateTime departureTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "arrAirportId")
     private Airport arrivalAirport = new Airport();
 
@@ -49,7 +50,7 @@ public class Flight {
     @Column(name = "availableSeats")
     private Integer availableSeats = 0;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.REMOVE)
     private List<Ticket> ticketList = new ArrayList<>();
 
     public Flight() {
@@ -82,7 +83,7 @@ public class Flight {
     }
 
     public void setFlightNo(String flightNo) {
-        if (flightNo.length()<2)
+        if (flightNo.length() < 2)
             throw new RuntimeException("The Flight Number is less than 2 characters.");
         else
             if (validateFlightNo(flightNo))
@@ -138,7 +139,7 @@ public class Flight {
     }
 
     public void setArrivalAirport(Airport arrivalAirport) {
-        if (arrivalAirport==null){return;}
+        if (arrivalAirport == null) return;
         if (this.arrivalAirport.equals(arrivalAirport)) return;
         if (validateAirport(arrivalAirport))
             this.arrivalAirport = arrivalAirport;
@@ -228,6 +229,14 @@ public class Flight {
 
     public double flightCompletness(){
         return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return Objects.equals(flightNo, flight.flightNo) && Objects.equals(departureAirport, flight.departureAirport) && Objects.equals(arrivalAirport, flight.arrivalAirport) && Objects.equals(aircraftCapacity, flight.aircraftCapacity) && Objects.equals(aircraftType, flight.aircraftType) && Objects.equals(ticketPrice, flight.ticketPrice);
     }
 
 }
