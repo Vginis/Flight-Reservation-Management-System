@@ -9,13 +9,17 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import org.acme.domain.Passenger;
-import org.acme.persistence.PassengerRepository;
+import org.acme.domain.*;
+import org.acme.persistence.*;
+import org.acme.representation.FlightMapper;
 import org.acme.representation.PassengerMapper;
 import org.acme.representation.PassengerRepresentation;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 
 import static org.acme.resource.AirportProjectURIs.PASSENGERS;
 
@@ -33,7 +37,21 @@ public class PassengerResource {
     PassengerMapper passengerMapper;
 
     @Inject
+    FlightRepository flightRepository;
+
+    @Inject
+    FlightMapper flightMapper;
+
+    @Inject
+    AirlineRepository airlineRepository;
+
+    @Inject
+    AirportRepository airportRepository;
+
+    @Inject
     EntityManager em;
+    @Inject
+    ReservationRepository reservationRepository;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -50,6 +68,22 @@ public class PassengerResource {
         Passenger passenger = passengerRepository.findById(id);
         if (passenger == null) return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok().entity(passengerMapper.toRepresentation(passenger)).build();
+    }
+
+    @GET
+    @Path("/searchForFlights/{airlineId}/{destAirport}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response findFlightsByDestination(@PathParam("airlineId") Integer airlineId, @PathParam("destAirport") String arrAirportName){
+        Airline airline = airlineRepository.findById(airlineId);
+        if(airline==null){return null;}
+        List<Flight> flightList = new ArrayList<>();
+        for (Flight f :airline.getFlights()){
+            if (Objects.equals(f.getArrivalAirport().getAirportName(), arrAirportName))
+                flightList.add(f);
+        }
+        if (flightList.isEmpty()){return Response.status(Response.Status.NOT_FOUND).build();}
+        return Response.ok().entity(flightMapper.toRepresentationList(flightList)).build();
     }
 
     @POST
@@ -87,4 +121,42 @@ public class PassengerResource {
         return Response.noContent().build();
     }
 
+    @POST
+    @Path("/{id}/makeReservation/{flightNo}")
+    @Transactional
+    public Response makeReservation(@PathParam("id") Integer id, @PathParam("flightNo") String flightNo){
+        Reservation reservation = createReservation(id,flightNo);
+        if (reservation ==null){return Response.status(404).build();}
+        if (reservation.getOutgoingFlights().isEmpty()){return Response.status(406).build();}
+        reservation = em.merge(reservation);
+        reservationRepository.persist(reservation);
+        URI makingReservationURI = uriInfo.getBaseUriBuilder().path("Reservations").path(Integer.toString(reservation.getReservationId())).build();
+        return Response.created(makingReservationURI).build();
+    }
+
+    @DELETE
+    @Path("/{id}/deleteReservation/{reservationId}")
+    @Transactional
+    public Response deleteReservation(@PathParam("id") Integer id, @PathParam("reservationId") Integer reservationId){
+        List<Reservation> reservations = reservationRepository.findReservationByPassengerId(id);
+        for (Reservation r : reservations) {
+            if (r.getReservationId().equals(reservationId)) {
+                reservationRepository.delete(r);
+                return Response.noContent().build();
+            }
+        }
+        return Response.status(404).build();
+    }
+
+    @Transactional
+    protected Reservation createReservation(Integer id,String flightNo){
+        Passenger passenger = passengerRepository.findById(id);
+        if (passenger == null){ return null;}
+        Flight flight = flightRepository.find("flightNo",flightNo).firstResult();
+        if (flight == null){return null;}
+        Reservation reservation = new Reservation();
+        reservation.setPassenger(passenger);
+        reservation.addOutgoingFlight(flight);
+        return reservation;
+    }
 }

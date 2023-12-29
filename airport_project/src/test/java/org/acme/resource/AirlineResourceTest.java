@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import org.acme.persistence.JPATest;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.util.Fixture;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -139,4 +140,39 @@ public class AirlineResourceTest extends JPATest {
                 .statusCode(404);
     }
 
+    @Test
+    @TestTransaction
+    public void makeNewFlight(){
+        when().post(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/4/makeFlight/A36543/ATH/SPA/ShitPlane/20/100")
+                .then().statusCode(201)
+                .header("Location", Matchers.matchesPattern(".*/Flights/[0-9]+"));
+    }
+
+    @Test
+    public void denyAddingWrongAirlineFlight(){
+        when()
+                .post(Fixture.API_ROOT + "/5/makeFlight/A36543/ATH/SPA/ShitPlane/20/100")
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void denyAddingExistingFlight(){
+        when().post(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/4/makeFlight/A36543/ATH/SPA/ShitPlane/20/100")
+                .then().statusCode(201)
+                .header("Location", Matchers.matchesPattern(".*/Flights/[0-9]+"));
+        when()
+                .post(Fixture.API_ROOT + "/4/makeFlight/A36543/ATH/SPA/ShitPlane/20/100")
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    @TestTransaction
+    public void deleteAflight(){
+        when()
+                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/4/deleteFlight/A3653/FCO/SPA")
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
 }
