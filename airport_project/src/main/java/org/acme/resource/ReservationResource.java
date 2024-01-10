@@ -22,9 +22,6 @@ import static org.acme.resource.AirportProjectURIs.RESERVATIONS;
 @RequestScoped
 public class ReservationResource {
 
-    @Inject
-    EntityManager em;
-
     @Context
     UriInfo uriInfo;
 
@@ -55,16 +52,11 @@ public class ReservationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createReservation(ReservationRepresentation reservationDto){
+    public Response createReservation(ReservationRepresentation reservationDto) {
         Reservation reservation = reservationMapper.toModel(reservationDto);
-        reservation = em.merge(reservation);
         reservationRepository.persist(reservation);
-        URI location = uriInfo.getAbsolutePathBuilder().path(
-                Integer.toString(reservation.getReservationId())).build();
-        return Response
-                .created(location)
-                .entity(reservationMapper.toRepresentation(reservation))
-                .build();
+        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(reservation.getReservationId())).build();
+        return Response.created(location).entity(reservationMapper.toRepresentation(reservation)).build();
     }
 
     @PUT
@@ -82,7 +74,7 @@ public class ReservationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response deleteReservation(@PathParam("reservationId") Integer id){
+    public Response deleteReservation(@PathParam("reservationId") Integer id) {
         Reservation reservation = reservationRepository.find("reservationId", id).firstResult();
         if (reservation == null) return Response.status(404).build();
         reservationRepository.deleteReservation(id);

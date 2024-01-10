@@ -19,14 +19,14 @@ public class Passenger extends AccountManagement {
     @Column(name = "passport_id", length = 20, unique = true)
     private String passport_id;
 
-    @OneToMany(mappedBy ="passenger", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy ="passenger", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
 
     public Passenger(){
         super();
     }
 
-    public Passenger(String email, String phoneNum, String passport_id, String username, String password){
+    public Passenger(String email, String phoneNum, String passport_id, String username, String password) {
         super(username, password);
         this.setEmail(email);
         this.phoneNum = phoneNum;
@@ -38,7 +38,7 @@ public class Passenger extends AccountManagement {
         return email;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         if (isValidEmail(email))
             this.email = email;
         else
@@ -69,17 +69,17 @@ public class Passenger extends AccountManagement {
         this.passport_id = passport_id;
     }
 
-    public void addReservation(Reservation reservation){
+    public void addReservation(Reservation reservation) {
             if (reservation == null)
                 return;
-            if (reservation.getPassenger()!=this)
+            if (reservation.getPassenger() != this)
                 throw new RuntimeException("This reservation is not for this passenger");
             if (reservations.contains(reservation))
                 throw new RuntimeException("Reservation already exists.");
             reservations.add(reservation);
         }
 
-    public void removeReservation(Reservation reservation){
+    public void removeReservation(Reservation reservation) {
         if (reservation == null)
             return;
         if (!reservations.contains(reservation))
@@ -87,13 +87,15 @@ public class Passenger extends AccountManagement {
         reservations.remove(reservation);
     }
 
-    public boolean isValidEmail(String Email){
+    public boolean isValidEmail(String Email) {
         String emailRegex = "^.{3,20}@(unipi\\.gr|outlook\\.com|aueb\\.gr|gmail\\.com)$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(Email);
         return matcher.matches();
     }
 
-    public void clearReservations() { this.reservations.clear();}
+    public void clearReservations() {
+        this.reservations.clear();
+    }
 
 }

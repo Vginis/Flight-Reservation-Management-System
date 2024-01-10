@@ -21,12 +21,12 @@ public class AirlineRepository implements PanacheRepositoryBase<Airline, Integer
     }
 
     @Transactional
-    public void deleteAirline(Integer id){
+    public void deleteAirline(Integer id) {
         Airline airline = findById(id);
         delete(airline);
     }
 
-    public String getMostPopularAirportByAirline(Integer id){
+    public String getMostPopularAirportByAirline(Integer id) {
         Airline airline = findById(id);
         String popularAirport;
         popularAirport = airline.mostPopularAirport();

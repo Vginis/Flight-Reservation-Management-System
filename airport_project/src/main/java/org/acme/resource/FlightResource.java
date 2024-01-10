@@ -60,9 +60,9 @@ public class FlightResource {
     @Path("Completeness/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getCompletenessByFlightId(@PathParam("id") Integer id){
+    public Response getCompletenessByFlightId(@PathParam("id") Integer id) {
         Double stat = flightRepository.getCompletenessByFlight(id);
-        if (stat==null) return Response.status(Response.Status.NOT_FOUND).build();
+        if (stat == null) return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok(stat, MediaType.APPLICATION_JSON).build();
     }
 
@@ -141,7 +141,7 @@ public class FlightResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response deleteFlight(@PathParam("id") Integer id){
+    public Response deleteFlight(@PathParam("id") Integer id) {
         Flight flight = flightRepository.find("id", id).firstResult();
         if (flight == null) return Response.status(404).build();
         flightRepository.deleteFlight(id);
