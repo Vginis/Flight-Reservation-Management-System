@@ -1,21 +1,22 @@
 package org.acme.representation;
 
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
 
-public class AirlineRepresentation{
-    private Integer id;
+public class AirlineCreateRepresentation {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotBlank
     private String airlineName;
+    @NotBlank
     private String u2digitCode;
-    private List<FlightRepresentation> flights;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public AirlineCreateRepresentation(String username, String password, String airlineName, String u2digitCode) {
+        this.username = username;
+        this.password = password;
+        this.airlineName = airlineName;
+        this.u2digitCode = u2digitCode;
     }
 
     public String getUsername() {
@@ -48,13 +49,5 @@ public class AirlineRepresentation{
 
     public void setU2digitCode(String u2digitCode) {
         this.u2digitCode = u2digitCode;
-    }
-
-    public List<FlightRepresentation> getFlights() {
-        return flights;
-    }
-
-    public void setFlights(List<FlightRepresentation> flights) {
-        this.flights = flights;
     }
 }

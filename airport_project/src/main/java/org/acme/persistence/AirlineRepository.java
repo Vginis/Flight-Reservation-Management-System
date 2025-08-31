@@ -12,18 +12,9 @@ import java.util.List;
 public class AirlineRepository implements PanacheRepositoryBase<Airline, Integer> {
 
     public List<Airline> findAirlineByAirlineName(String name) {
-            if (name == null) {
-                return listAll();
-            }
             return find("select a from Airline a where a.airlineName like :airlineName",
                     Parameters.with("airlineName", name + "%").map())
                     .list();
-    }
-
-    @Transactional
-    public void deleteAirline(Integer id) {
-        Airline airline = findById(id);
-        delete(airline);
     }
 
     public String getMostPopularAirportByAirline(Integer id) {

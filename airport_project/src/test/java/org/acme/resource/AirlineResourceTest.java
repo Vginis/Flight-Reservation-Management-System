@@ -1,7 +1,5 @@
 package org.acme.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
@@ -18,7 +16,8 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 public class AirlineResourceTest extends JPATest {
@@ -50,7 +49,7 @@ public class AirlineResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
 
-        assertEquals("FR", a1.u2digitCode);
+        assertEquals("FR", a1.getU2digitCode());
     }
 
     @Test
@@ -82,7 +81,7 @@ public class AirlineResourceTest extends JPATest {
                                             .post(Fixture.API_ROOT + AirportProjectURIs.AIRLINES).then().statusCode(201).extract().as(AirlineRepresentation.class);
 
         assertNotNull(savedAirline);
-        assertEquals("British Airways", savedAirline.airlineName);
+        assertEquals("British Airways", savedAirline.getAirlineName());
     }
 
     @Test
@@ -91,9 +90,9 @@ public class AirlineResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
-        airline.airlineName = "Pao Airlines";
-        airline.flights = new ArrayList<>();
-        airline.u2digitCode = "TT";
+        airline.setAirlineName("Pao Airlines");
+        airline.setFlights(new ArrayList<>());
+        airline.setU2digitCode("TT");
 
         given()
                 .contentType(ContentType.JSON)
@@ -106,7 +105,7 @@ public class AirlineResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
 
-        assertEquals("Pao Airlines", updated.airlineName);
+        assertEquals("Pao Airlines", updated.getAirlineName());
     }
 
     @Test
@@ -115,8 +114,7 @@ public class AirlineResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
-        airline.id = 10;
-
+        airline.setId(10);
         given().contentType(ContentType.JSON).body(airline)
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then().statusCode(400);

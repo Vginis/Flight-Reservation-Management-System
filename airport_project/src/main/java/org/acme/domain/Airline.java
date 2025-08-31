@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.representation.AirlineCreateRepresentation;
+import org.acme.representation.AirlineUpdateRepresentation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,14 @@ public class Airline extends AccountManagement {
 
     public Airline() {
         super();
+    }
+
+    public Airline(AirlineCreateRepresentation airlineCreateRepresentation) {
+        setUsername(airlineCreateRepresentation.getUsername());
+        setPassword(airlineCreateRepresentation.getPassword());
+        this.airlineName = airlineCreateRepresentation.getAirlineName();
+        this.u2digitCode = airlineCreateRepresentation.getU2digitCode();
+        this.flights = new ArrayList<>();
     }
 
     public Airline(String airlineName, String u2digitCode, String username, String password) {
@@ -105,4 +115,8 @@ public class Airline extends AccountManagement {
         return average;
     }
 
+    public void updateAirlineDetails(AirlineUpdateRepresentation representation){
+        this.airlineName = representation.getAirlineName();
+        this.u2digitCode = representation.getU2digitCode();
+    }
 }

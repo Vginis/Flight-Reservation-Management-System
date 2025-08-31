@@ -43,12 +43,12 @@ public class Fixture {
 
     public static AirlineRepresentation getAirlineRepresentation(){
         AirlineRepresentation dto = new AirlineRepresentation();
-        dto.id = 12;
-        dto.airlineName = "British Airways";
-        dto.u2digitCode = "BR";
-        dto.username="british";
-        dto.password="JeandDig1@";
-        dto.flights = new ArrayList<>();
+        dto.setId(12);
+        dto.setAirlineName("British Airways");
+        dto.setU2digitCode("BR");
+        dto.setUsername("british");
+        dto.setPassword("JeandDig1@");
+        dto.setFlights(new ArrayList<>());
         return dto;
     }
 

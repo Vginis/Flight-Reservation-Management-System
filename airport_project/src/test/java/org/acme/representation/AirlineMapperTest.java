@@ -32,12 +32,12 @@ public class AirlineMapperTest {
         AirlineRepresentation airlineRepresentation = Fixture.getAirlineRepresentation();
         Airline entity = airlineMapper.toModel(airlineRepresentation);
 
-        assertEquals(entity.getAirlineName(), airlineRepresentation.airlineName);
-        assertEquals(entity.getU2digitCode(), airlineRepresentation.u2digitCode);
-        assertEquals(entity.getFlights().size(), airlineRepresentation.flights.size());
-        assertEquals(entity.getUsername(), airlineRepresentation.username);
-        assertEquals(entity.getId(),airlineRepresentation.id);
-        assertEquals(entity.getPassword(),airlineRepresentation.password);
+        assertEquals(entity.getAirlineName(), airlineRepresentation.getAirlineName());
+        assertEquals(entity.getU2digitCode(), airlineRepresentation.getU2digitCode());
+        assertEquals(entity.getFlights().size(), airlineRepresentation.getFlights().size());
+        assertEquals(entity.getUsername(), airlineRepresentation.getUsername());
+        assertEquals(entity.getId(),airlineRepresentation.getId());
+        assertEquals(entity.getPassword(),airlineRepresentation.getPassword());
 
     }
 
@@ -47,16 +47,16 @@ public class AirlineMapperTest {
         Airline airline = airlineRepository.findById(5);
 
         AirlineRepresentation airlineRepresentation = airlineMapper.toRepresentation(airline);
-        assertEquals(airline.getId(), airlineRepresentation.id);
-        assertEquals(airline.getPassword(),airlineRepresentation.password);
-        assertEquals(airline.getAirlineName(),airlineRepresentation.airlineName);
-        assertEquals(airline.getFlights().get(0).getFlightNo(),airlineRepresentation.flights.get(0).flightNo);
-        assertEquals(airline.getUsername(),airlineRepresentation.username);
-        assertEquals(airline.getU2digitCode(),airlineRepresentation.u2digitCode);
+        assertEquals(airline.getId(), airlineRepresentation.getId());
+        assertEquals(airline.getPassword(),airlineRepresentation.getPassword());
+        assertEquals(airline.getAirlineName(),airlineRepresentation.getAirlineName());
+        assertEquals(airline.getFlights().get(0).getFlightNo(),airlineRepresentation.getFlights().get(0).flightNo);
+        assertEquals(airline.getUsername(),airlineRepresentation.getUsername());
+        assertEquals(airline.getU2digitCode(),airlineRepresentation.getU2digitCode());
 
         List<Flight> flightList = airline.getFlights();
-        assertEquals(1,airlineRepresentation.flights.size());
-        for (FlightRepresentation r : airlineRepresentation.flights){
+        assertEquals(1,airlineRepresentation.getFlights().size());
+        for (FlightRepresentation r : airlineRepresentation.getFlights()){
             Flight f = findFlight(flightList, r.flightNo);
             assertEquals(f.getFlightNo(), r.flightNo);
             assertEquals(f.getId(), r.id);
