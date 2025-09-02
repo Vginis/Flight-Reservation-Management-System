@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Reservation;
 import org.acme.domain.Ticket;
+import org.acme.mapper.ReservationMapper;
 import org.acme.persistence.ReservationRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;

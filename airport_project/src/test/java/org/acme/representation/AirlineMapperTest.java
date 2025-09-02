@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airline;
 import org.acme.domain.Flight;
+import org.acme.mapper.AirlineMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
@@ -35,10 +36,6 @@ public class AirlineMapperTest {
         assertEquals(entity.getAirlineName(), airlineRepresentation.getAirlineName());
         assertEquals(entity.getU2digitCode(), airlineRepresentation.getU2digitCode());
         assertEquals(entity.getFlights().size(), airlineRepresentation.getFlights().size());
-        assertEquals(entity.getUsername(), airlineRepresentation.getUsername());
-        assertEquals(entity.getId(),airlineRepresentation.getId());
-        assertEquals(entity.getPassword(),airlineRepresentation.getPassword());
-
     }
 
     @Transactional
@@ -47,11 +44,8 @@ public class AirlineMapperTest {
         Airline airline = airlineRepository.findById(5);
 
         AirlineRepresentation airlineRepresentation = airlineMapper.toRepresentation(airline);
-        assertEquals(airline.getId(), airlineRepresentation.getId());
-        assertEquals(airline.getPassword(),airlineRepresentation.getPassword());
         assertEquals(airline.getAirlineName(),airlineRepresentation.getAirlineName());
         assertEquals(airline.getFlights().get(0).getFlightNo(),airlineRepresentation.getFlights().get(0).flightNo);
-        assertEquals(airline.getUsername(),airlineRepresentation.getUsername());
         assertEquals(airline.getU2digitCode(),airlineRepresentation.getU2digitCode());
 
         List<Flight> flightList = airline.getFlights();

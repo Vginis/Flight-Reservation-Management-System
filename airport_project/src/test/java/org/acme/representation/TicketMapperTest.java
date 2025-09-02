@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Ticket;
+import org.acme.mapper.TicketMapper;
 import org.acme.persistence.TicketRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;

@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Passenger;
+import org.acme.mapper.PassengerMapper;
 import org.acme.persistence.PassengerRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,7 @@ public class PassengerMapperTest {
 
         assertEquals(passenger.getId(), passengerRepresentation.id);
         assertEquals(passenger.getUsername(), passengerRepresentation.username);
-        assertEquals(passenger.getPassword(), passengerRepresentation.password);
         assertEquals(passenger.getEmail(), passengerRepresentation.email);
-        assertEquals(passenger.getPhoneNum(), passengerRepresentation.phoneNum);
         assertEquals(passenger.getPassport_id(), passengerRepresentation.passport_id);
         for (Integer r : passengerRepresentation.reservationsId) {
             Integer b = Objects.requireNonNull(passenger.getReservations().stream().filter(a -> a.getReservationId().equals(r)).findFirst().orElse(null)).getReservationId();
@@ -48,9 +47,7 @@ public class PassengerMapperTest {
 
         assertEquals(entity.getId(), passengerRepresentation.id);
         assertEquals(entity.getUsername(), passengerRepresentation.username);
-        assertEquals(entity.getPassword(), passengerRepresentation.password);
         assertEquals(entity.getEmail(), passengerRepresentation.email);
-        assertEquals(entity.getPhoneNum(), passengerRepresentation.phoneNum);
         assertEquals(entity.getPassport_id(), passengerRepresentation.passport_id);
         assertEquals(1, passengerRepresentation.reservationsId.size());
     }

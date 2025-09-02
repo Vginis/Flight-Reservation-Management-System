@@ -18,7 +18,7 @@ public class FlightTest {
 
     @BeforeEach
     public void setup() {
-        airline = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
+        airline = new Airline("Aegean Airlines", "A3");//, "aegean", "JeandDig1@");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
         flight = new Flight("A3651", airline, airport1, "202307192100", airport2, "202307192100", 178, "Airbus-A320", 80L);
@@ -40,7 +40,7 @@ public class FlightTest {
 
     @Test
     public void AirlineDoesNotMatchFlightNo() {
-        Airline airline2 = new Airline("Ryanair Ltd.", "FR", "ryanair", "JeandDig1@");
+        Airline airline2 = new Airline("Ryanair Ltd.", "FR");//, "ryanair", "JeandDig1@");
         assertThrows(RuntimeException.class, () -> flight.setAirline(airline2));
     }
 

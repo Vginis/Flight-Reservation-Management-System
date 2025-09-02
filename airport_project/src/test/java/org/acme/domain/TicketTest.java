@@ -12,7 +12,7 @@ public class TicketTest {
     @BeforeEach
     public void setup() {
         Reservation reservation = new Reservation();
-        Airline airline = new Airline("Aegean Airlines", "A3", "aegean", "JeandDig1@");
+        Airline airline = new Airline("Aegean Airlines", "A3");//, "aegean", "JeandDig1@");
         Airport airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         Airport airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
         Flight flight = new Flight("A3651", airline, airport1, "202307192100", airport2, "202307192100", 178, "Airbus-A320", 80L);

@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airport;
+import org.acme.mapper.AirportMapper;
 import org.acme.persistence.AirportRepository;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
