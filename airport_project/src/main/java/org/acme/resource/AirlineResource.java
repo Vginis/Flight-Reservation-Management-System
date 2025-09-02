@@ -2,57 +2,22 @@ package org.acme.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
-import org.acme.domain.Airline;
-import org.acme.domain.Airport;
-import org.acme.domain.Flight;
-import org.acme.domain.Reservation;
-import org.acme.persistence.AirlineRepository;
-import org.acme.persistence.AirportRepository;
-import org.acme.persistence.FlightRepository;
 import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.representation.AirlineMapper;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirlineUpdateRepresentation;
 import org.acme.service.AirlineService;
 
-
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.acme.resource.AirportProjectURIs.AIRLINES;
 
 @Path(AIRLINES)
 @RequestScoped
 public class AirlineResource {
-
-    @Inject
-    EntityManager em;
-
-    @Context
-    UriInfo uriInfo;
-
-    @Inject
-    AirlineRepository airlineRepository;
-
-    @Inject
-    AirlineMapper airlineMapper;
-
-    @Inject
-    FlightRepository flightRepository;
-
-    @Inject
-    AirportRepository airportRepository;
 
     @Inject
     AirlineService airlineService;

@@ -1,4 +1,4 @@
-package org.acme.representation;
+package org.acme.mapper;
 
 import org.acme.domain.Flight;
 import jakarta.inject.Inject;
@@ -6,6 +6,7 @@ import org.acme.domain.Reservation;
 import org.acme.domain.Ticket;
 import org.acme.persistence.FlightRepository;
 import org.acme.persistence.ReservationRepository;
+import org.acme.representation.TicketRepresentation;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "jakarta",

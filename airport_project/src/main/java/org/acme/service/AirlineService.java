@@ -3,10 +3,12 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.acme.constant.ErrorMessages;
 import org.acme.domain.Airline;
+import org.acme.exception.ResourceNotFoundException;
 import org.acme.persistence.AirlineRepository;
 import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.representation.AirlineMapper;
+import org.acme.mapper.AirlineMapper;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirlineUpdateRepresentation;
 
@@ -28,28 +30,31 @@ public class AirlineService {
     public AirlineRepresentation searchAirlineById(Integer id){
         Optional<Airline> airline = airlineRepository.findByIdOptional(id);
         if(airline.isEmpty()){
-            //TODO throw exception here
-            return new AirlineRepresentation();
+           throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         return airlineMapper.toRepresentation(airline.get());
     }
 
     public String getMostPopularAirport(Integer id){
-        String stat = airlineRepository.getMostPopularAirportByAirline(id);
-        //TODO Handle null value here differently
-        return (stat!=null) ? stat : "";
+        Optional<Airline> airline = airlineRepository.findByIdOptional(id);
+        if(airline.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+        return airline.get().mostPopularAirport();
     }
 
     public String getAirlineCompleteness(Integer id){
-        Double stat = airlineRepository.getCompletenessByAirline(id);
-        //TODO handle null values here differently
-        return (stat!=null) ? stat.toString() : "";
+        Optional<Airline> airline = airlineRepository.findByIdOptional(id);
+        if(airline.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+        return airline.get().completeness().toString();
     }
 
     @Transactional
     public void createAirline(AirlineCreateRepresentation airlineCreateRepresentation){
-        //Validate here if the airline already exists: airlineRepository.checkIfCreatedAirlineExists();
+        //Validate here if the airline already exists with annotation validator
         Airline airline = new Airline(airlineCreateRepresentation);
         airlineRepository.persist(airline);
     }
@@ -57,8 +62,9 @@ public class AirlineService {
     @Transactional
     public void updateAirlineDetails(AirlineUpdateRepresentation airlineUpdateRepresentation){
         Optional<Airline> airlineToUpdate = airlineRepository.findByIdOptional(airlineUpdateRepresentation.getId());
+        //Validate here if the airline already exists with annotation validator
         if(airlineToUpdate.isEmpty()){
-            return;//ToDO handle Not foundException
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         airlineToUpdate.get().updateAirlineDetails(airlineUpdateRepresentation);
@@ -66,10 +72,10 @@ public class AirlineService {
     }
 
     @Transactional
-    public void deleteAirline(Integer id){
+    public void deleteAirline(Integer id){//Doesn't work. To be reviewed after the model layer restructuring
         Optional<Airline> airlineToDelete = airlineRepository.findByIdOptional(id);
         if(airlineToDelete.isEmpty()){
-            return;//ToDO handle Not foundException
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         airlineRepository.delete(airlineToDelete.get());
