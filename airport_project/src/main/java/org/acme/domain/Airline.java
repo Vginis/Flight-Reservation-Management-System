@@ -10,8 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@DiscriminatorValue("AIRLINE")
-public class Airline extends AccountManagement {
+@Table(name = "airline")
+public class Airline {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer id;
 
     @Column(name = "name", length = 30, unique = true)
     private String airlineName;
@@ -22,20 +27,21 @@ public class Airline extends AccountManagement {
     @OneToMany(mappedBy = "airline", cascade = CascadeType.REMOVE)
     private List<Flight> flights = new ArrayList<>();
 
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL)
+    private List<AirlineAdministrator> administrators = new ArrayList<>();
+
     public Airline() {
         super();
     }
 
     public Airline(AirlineCreateRepresentation airlineCreateRepresentation) {
-        setUsername(airlineCreateRepresentation.getUsername());
-        setPassword(airlineCreateRepresentation.getPassword());
         this.airlineName = airlineCreateRepresentation.getAirlineName();
         this.u2digitCode = airlineCreateRepresentation.getU2digitCode();
         this.flights = new ArrayList<>();
+        this.administrators = new ArrayList<>();
     }
 
-    public Airline(String airlineName, String u2digitCode, String username, String password) {
-        super(username, password);
+    public Airline(String airlineName, String u2digitCode) {
         this.airlineName = airlineName;
         this.u2digitCode = u2digitCode;
         this.flights = new ArrayList<>();
@@ -63,6 +69,10 @@ public class Airline extends AccountManagement {
 
     public void setU2digitCode(String u2digitCode) {
         this.u2digitCode = u2digitCode;
+    }
+
+    public List<AirlineAdministrator> getAdministrators() {
+        return administrators;
     }
 
     public void addFlight(Flight flight) {
@@ -103,7 +113,7 @@ public class Airline extends AccountManagement {
         return (mostVisitedAirport != null) ? mostVisitedAirport.getAirportName() : null;
     }
 
-    public double completeness() {
+    public Double completeness() {
         double sum = 0;
         int count = 0;
         double average;
