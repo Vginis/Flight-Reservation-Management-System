@@ -3,7 +3,6 @@ package org.acme.resource;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -12,8 +11,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.acme.domain.*;
 import org.acme.persistence.*;
-import org.acme.representation.FlightMapper;
-import org.acme.representation.PassengerMapper;
+import org.acme.mapper.FlightMapper;
+import org.acme.mapper.PassengerMapper;
 import org.acme.representation.PassengerRepresentation;
 
 import java.net.URI;

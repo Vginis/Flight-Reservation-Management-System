@@ -1,6 +1,7 @@
-package org.acme.representation;
+package org.acme.mapper;
 
 import org.acme.domain.Airline;
+import org.acme.representation.AirlineRepresentation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

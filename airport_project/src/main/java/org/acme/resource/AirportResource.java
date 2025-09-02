@@ -7,9 +7,8 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.domain.Airport;
-import org.acme.domain.Flight;
 import org.acme.persistence.AirportRepository;
-import org.acme.representation.AirportMapper;
+import org.acme.mapper.AirportMapper;
 import org.acme.representation.AirportRepresentation;
 
 import java.net.URI;

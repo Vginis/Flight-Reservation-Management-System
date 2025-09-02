@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.acme.domain.Flight;
 import org.acme.persistence.FlightRepository;
-import org.acme.representation.FlightMapper;
+import org.acme.mapper.FlightMapper;
 import org.acme.representation.FlightRepresentation;
 
 import java.net.URI;

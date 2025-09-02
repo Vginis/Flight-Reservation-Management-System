@@ -1,4 +1,4 @@
-package org.acme.representation;
+package org.acme.mapper;
 
 import jakarta.inject.Inject;
 import org.acme.domain.Flight;
@@ -6,6 +6,7 @@ import org.acme.domain.Passenger;
 import org.acme.domain.Reservation;
 import org.acme.persistence.FlightRepository;
 import org.acme.persistence.PassengerRepository;
+import org.acme.representation.ReservationRepresentation;
 import org.mapstruct.*;
 
 import java.util.ArrayList;

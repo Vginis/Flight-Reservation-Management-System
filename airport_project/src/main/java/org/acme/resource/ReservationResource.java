@@ -2,12 +2,11 @@ package org.acme.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.domain.Reservation;
-import org.acme.representation.ReservationMapper;
+import org.acme.mapper.ReservationMapper;
 import org.acme.persistence.ReservationRepository;
 import org.acme.representation.ReservationRepresentation;
 
