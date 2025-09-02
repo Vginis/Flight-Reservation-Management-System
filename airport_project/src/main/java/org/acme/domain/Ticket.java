@@ -2,27 +2,31 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Entity
-@Table(name = "Tickets")
+@Table(name = "tickets")
 public class Ticket {
 
     @Id
-    @Column(name = "ticketId")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Integer ticketId;
+    protected Integer id;
+
+    @Column(name = "ticket_id", nullable = false)
+    private UUID ticketId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservationId", nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<Luggage> luggages = new ArrayList<>();
+
     @Embedded
-    private Luggage luggage = new Luggage();
-
-    @Column(name = "ticketPrice", nullable = false)
-    private Long ticketPrice = 0L;
-
-    @Column(name = "seatNo", nullable = false)
-    private String seatNo;
+    private FlightInformation flightInformation;
 
     @Embedded
     private PassengerInfo passengerInfo = new PassengerInfo();
@@ -34,76 +38,12 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(Reservation reservation, Flight flight, String seatNo, String firstName, String lastName, String passportId) {
-        this.reservation = reservation;
-        this.flight = flight;
-        this.seatNo = seatNo;
-        this.passengerInfo = new PassengerInfo(firstName, lastName, passportId);
-        this.ticketPrice = flight.getTicketPrice();
-        luggage = new Luggage();
-    }
-
-    public Integer getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Integer ticketId) {
-        this.ticketId = ticketId;
-    }
-
     public Reservation getReservation() {
         return reservation;
     }
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
-    }
-
-    public Boolean isLuggageIncluded() {
-        return luggage.isLuggageIncluded();
-    }
-
-    public void setLuggageIncluded(boolean luggageIncluded) {
-        this.luggage.setLuggageIncluded(luggageIncluded);
-        calculateTicketPrice();
-    }
-
-    public Integer getWeight() {
-        return luggage.getWeight();
-    }
-
-    public void setWeight(int weight) {
-        this.luggage.setWeight(weight);
-    }
-
-    public Integer getAmount() {
-        return luggage.getAmount();
-    }
-
-    public void setAmount(int amount) {
-        this.luggage.setAmount(amount);
-    }
-
-    public Long getTicketPrice() {
-        return ticketPrice;
-    }
-
-    public void setTicketPrice(Long ticketPrice) {
-        this.ticketPrice = ticketPrice;
-    }
-
-    private void calculateTicketPrice() {
-        this.ticketPrice = flight.getTicketPrice();
-        if (isLuggageIncluded()) this.ticketPrice += 30;
-
-    }
-
-    public String getSeatNo() {
-        return seatNo;
-    }
-
-    public void setSeatNo(String seatNo) {
-        this.seatNo = seatNo;
     }
 
     public String getFirstName() {

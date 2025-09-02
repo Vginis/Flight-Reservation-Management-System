@@ -2,10 +2,14 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
-@Embeddable
+@Entity
+@Table(name = "luggages")
 public class Luggage {
 
-    private Boolean luggageIncluded = false;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Integer id;
 
     @Column(name = "weight", nullable = false, length = 2)
     private Integer weight = 0;
@@ -16,12 +20,9 @@ public class Luggage {
     public Luggage() {
     }
 
-    public Boolean isLuggageIncluded() {
-        return luggageIncluded;
-    }
-
-    public void setLuggageIncluded(boolean luggageIncluded) {
-        if (luggageIncluded) this.luggageIncluded = true;
+    public Luggage(Integer weight, Integer amount) {
+        this.weight = weight;
+        this.amount = amount;
     }
 
     public Integer getWeight() {
@@ -29,7 +30,7 @@ public class Luggage {
     }
 
     public void setWeight(Integer weight) {
-        if (this.luggageIncluded) this.weight = weight;
+        this.weight = weight;
     }
 
     public Integer getAmount() {
@@ -37,7 +38,6 @@ public class Luggage {
     }
 
     public void setAmount(Integer amount) {
-        if (this.luggageIncluded) this.amount = amount;
+        this.amount = amount;
     }
-
 }

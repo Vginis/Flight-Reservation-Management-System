@@ -10,7 +10,7 @@ import java.util.regex.*;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Passenger extends User {
     @Column(name = "passport_id", length = 20, unique = true)
-    private String passport_id;
+    private String passportId;
 
     @OneToMany(mappedBy ="passenger", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
@@ -27,12 +27,9 @@ public class Passenger extends User {
         return reservations;
     }
 
-    public String getPassport_id() {
-        return passport_id;
-    }
 
-    public void setPassport_id(String passport_id) {
-        this.passport_id = passport_id;
+    public String getPassportId() {
+        return passportId;
     }
 
     public void addReservation(Reservation reservation) {

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Airports")
+@Table(name = "airports")
 public class Airport {
 
     @Id
@@ -47,40 +47,20 @@ public class Airport {
         return airportId;
     }
 
-    public void setAirportId(Integer airportId) {
-        this.airportId = airportId;
-    }
-
     public String getAirportName() {
         return airportName;
-    }
-
-    public void setAirportName(String name) {
-        this.airportName = name;
     }
 
     public String getU3digitCode() {
         return u3digitCode;
     }
 
-    public void setU3digitCode(String u3digitCode) {
-        this.u3digitCode = u3digitCode;
-    }
-
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public List<Flight> getDepFlights() {

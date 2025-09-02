@@ -119,7 +119,7 @@ public class Airline {
         double average;
         for (Flight flight : flights){
             count += 1;
-            sum += (double)flight.getAvailableSeats()/flight.getAircraftCapacity();
+            //ToDO Fix sum += (double)flight.getAvailableSeats()/flight.getAircraftCapacity();
         }
         average = 100-(sum/count)*100;
         return average;
