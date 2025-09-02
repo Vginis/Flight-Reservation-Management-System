@@ -2,14 +2,18 @@ package org.acme.resource;
 
 public class AirportProjectURIs {
 
-	public static final String AIRPORTS = "/Airports";
+	private AirportProjectURIs(){
+		//Intentionally left blank
+	}
 
-	public static final String AIRLINES = "/Airlines";
+	public static final String AIRPORTS = "/airports";
 
-	public static final String RESERVATIONS = "/Reservations";
+	public static final String AIRLINES = "/airlines";
 
-	public static final String PASSENGERS = "/Passengers";
+	public static final String RESERVATIONS = "/reservations";
 
-	public static final String FLIGHTS = "/Flights";
+	public static final String PASSENGERS = "/passengers";
+
+	public static final String FLIGHTS = "/flights";
 
 }
