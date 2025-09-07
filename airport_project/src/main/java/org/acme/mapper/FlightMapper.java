@@ -30,58 +30,14 @@ public abstract class FlightMapper {
     @Mapping(target = "airlineName", source = "airline.airlineName")
     @Mapping(target = "departureAirport", source = "departureAirport.airportName")
     @Mapping(target = "arrivalAirport", source = "arrivalAirport.airportName")
-    @Mapping(target = "ticketList", expression = "java(flight.getTicketList().stream().map(org.acme.domain.Ticket::getTicketId).collect(Collectors.toList()))")
     public abstract FlightRepresentation toRepresentation(Flight flight);
 
     public abstract List<FlightRepresentation> toRepresentationList(List<Flight> flights);
 
-    @Mapping(target = "airline", ignore = true)
-    @Mapping(target = "departureAirport", ignore = true)
-    @Mapping(target = "arrivalAirport", ignore = true)
-    @Mapping(target = "ticketList", ignore = true)
-    public abstract Flight toModel(FlightRepresentation representation);
-
-    @AfterMapping
-    public void resolveAirlineByName(FlightRepresentation dto, @MappingTarget Flight flight) {
-        Airline airline = null;
-        if (dto.airlineName != null){
-            airline = airlineRepository.find("airlineName", dto.airlineName)
-                    .firstResultOptional().orElse(null);
-        }
-        flight.setAirline(airline);
-    }
-
-    @AfterMapping
-    public void resolveAirportByDepartureAirport(FlightRepresentation dto, @MappingTarget Flight flight) {
-        Airport airport = null;
-        if (dto.departureAirport != null){
-            airport = airportRepository.find("airportName", dto.departureAirport)
-                    .firstResultOptional().orElse(null);
-        }
-        flight.setDepartureAirport(airport);
-    }
-
-    @AfterMapping
-    public void resolveAirportByArrivalAirport(FlightRepresentation dto, @MappingTarget Flight flight) {
-        Airport airport = null;
-        if (dto.arrivalAirport != null){
-            airport = airportRepository.find("airportName", dto.arrivalAirport)
-                    .firstResultOptional().orElse(null);
-        }
-        flight.setArrivalAirport(airport);
-    }
-
-    @AfterMapping
-    public void resolveTicketListById(FlightRepresentation dto, @MappingTarget Flight flight) {
-        List<Ticket> ticket_list = new ArrayList<>(dto.ticketList.size());
-        Ticket ticket = null;
-        for (Integer i : dto.ticketList) {
-            if (i != null) {
-                ticket = ticketRepository.find("ticketId", i).firstResultOptional().orElse(null);
-            }
-            ticket_list.add(ticket);
-        }
-        flight.setTicketList(ticket_list);
-    }
+//    @Mapping(target = "airline", ignore = true)
+//    @Mapping(target = "departureAirport", ignore = true)
+//    @Mapping(target = "arrivalAirport", ignore = true)
+//    @Mapping(target = "ticketList", ignore = true)
+//    public abstract Flight toModel(FlightRepresentation representation);
 
 }

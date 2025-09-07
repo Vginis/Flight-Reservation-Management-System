@@ -18,7 +18,8 @@ public abstract class AirlineMapper {
 
     public abstract List<AirlineRepresentation> toRepresentationList(List<Airline> airline);
 
-    @Mapping(target = "flights", dateFormat = "yyyyMMddHHmmss")
+    @Mapping(target = "flights", ignore = true)
+    @Mapping(target = "administrators", ignore = true)
     public abstract Airline toModel(AirlineRepresentation representation);
 
 }
