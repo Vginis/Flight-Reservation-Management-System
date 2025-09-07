@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
 import org.acme.representation.AirportRepresentation;
 import org.acme.util.Fixture;

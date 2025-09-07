@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.AirportProjectURIs;
 import org.acme.domain.Flight;
 import org.acme.persistence.JPATest;
 import org.acme.representation.FlightRepresentation;
@@ -26,7 +27,7 @@ public class PassengerResourceTest extends JPATest {
 
     @Test
     public void findAllPassengers() {
-        List<PassengerRepresentation> passengers = when().get(Fixture.API_ROOT+AirportProjectURIs.PASSENGERS)
+        List<PassengerRepresentation> passengers = when().get(Fixture.API_ROOT+ AirportProjectURIs.PASSENGERS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<PassengerRepresentation>>() {});
