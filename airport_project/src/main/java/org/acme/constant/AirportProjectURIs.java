@@ -1,4 +1,4 @@
-package org.acme.resource;
+package org.acme.constant;
 
 public class AirportProjectURIs {
 

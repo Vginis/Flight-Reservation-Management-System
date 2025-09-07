@@ -1,5 +1,13 @@
 package org.acme.constant;
 
 public class ErrorMessages {
+
+    private ErrorMessages(){
+        //intentionally left blank
+    }
     public static final String ENTITY_NOT_FOUND = "entity_not_found";
+
+    public static final String AIRPORT_EXISTS = "airport_already_exists";
+
+    public static final String AIRLINE_EXISTS = "airline_already_exists";
 }
