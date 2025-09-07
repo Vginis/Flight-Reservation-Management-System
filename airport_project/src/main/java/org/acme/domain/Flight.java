@@ -112,8 +112,8 @@ public class Flight {
 //            throw new RuntimeException("This Ticket is not on the list.");
 //    }
 //
-    public double flightCompleteness(){
-        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
-    }
+//    public double flightCompleteness(){
+//        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
+//    }
 
 }

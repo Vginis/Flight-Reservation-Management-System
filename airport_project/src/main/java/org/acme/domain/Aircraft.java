@@ -53,7 +53,8 @@ public class Aircraft {
         return flight;
     }
 
-    public double flightCompleteness(){
-        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
-    }
+//    public double flightCompleteness(){
+//TODO Fix flight completeness
+//        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
+//    }
 }

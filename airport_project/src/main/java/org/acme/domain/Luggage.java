@@ -17,6 +17,10 @@ public class Luggage {
     @Column(name = "pieces", nullable = false)
     private Integer amount = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
     public Luggage() {
     }
 

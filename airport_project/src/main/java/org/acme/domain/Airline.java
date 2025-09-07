@@ -21,7 +21,7 @@ public class Airline {
     @Column(name = "name", length = 30, unique = true)
     private String airlineName;
 
-    @Column(name = "u2digitCode", length = 2, unique = true)
+    @Column(name = "u2digitCode", length = 3, unique = true)
     private String u2digitCode;
 
     @OneToMany(mappedBy = "airline", cascade = CascadeType.REMOVE)

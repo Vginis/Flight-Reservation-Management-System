@@ -1,6 +1,7 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.representation.AirportCreateRepresentation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class Airport {
         this.city = city;
         this.country = country;
         this.u3digitCode = u3digitCode;
+        this.arrFlights = new ArrayList<>();
+        this.depFlights = new ArrayList<>();
     }
 
     public Integer getAirportId() {
@@ -87,4 +90,9 @@ public class Airport {
         return Objects.equals(airportId, airport.airportId) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city) && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
     }
 
+    public void update(AirportCreateRepresentation representation){
+        this.airportName = representation.getAirportName();
+        this.city = representation.getCity();
+        this.country = representation.getCountry();
+    }
 }

@@ -32,31 +32,6 @@ public class Passenger extends User {
         return passportId;
     }
 
-    public void addReservation(Reservation reservation) {
-            if (reservation == null)
-                return;
-            if (reservation.getPassenger() != this)
-                throw new RuntimeException("This reservation is not for this passenger");
-            if (reservations.contains(reservation))
-                throw new RuntimeException("Reservation already exists.");
-            reservations.add(reservation);
-        }
-
-    public void removeReservation(Reservation reservation) {
-        if (reservation == null)
-            return;
-        if (!reservations.contains(reservation))
-            throw new RuntimeException("Reservation does not exist.");
-        reservations.remove(reservation);
-    }
-
-    public boolean isValidEmail(String Email) {
-        String emailRegex = "^.{3,20}@(unipi\\.gr|outlook\\.com|aueb\\.gr|gmail\\.com)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(Email);
-        return matcher.matches();
-    }
-
     public void clearReservations() {
         this.reservations.clear();
     }
