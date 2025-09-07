@@ -7,9 +7,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.SuccessMessages;
-import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.representation.AirlineRepresentation;
-import org.acme.representation.AirlineUpdateRepresentation;
+import org.acme.representation.airline.AirlineCreateRepresentation;
+import org.acme.representation.airline.AirlineRepresentation;
+import org.acme.representation.airline.AirlineUpdateRepresentation;
 import org.acme.service.AirlineService;
 
 import static org.acme.constant.AirportProjectURIs.AIRLINES;

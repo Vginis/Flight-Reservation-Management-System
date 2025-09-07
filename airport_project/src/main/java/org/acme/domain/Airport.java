@@ -1,7 +1,7 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import org.acme.representation.AirportCreateRepresentation;
+import org.acme.representation.airport.AirportCreateRepresentation;
 
 import java.util.ArrayList;
 import java.util.List;

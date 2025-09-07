@@ -9,9 +9,9 @@ import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirlineMapper;
 import org.acme.persistence.AirlineRepository;
-import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.representation.AirlineRepresentation;
-import org.acme.representation.AirlineUpdateRepresentation;
+import org.acme.representation.airline.AirlineCreateRepresentation;
+import org.acme.representation.airline.AirlineRepresentation;
+import org.acme.representation.airline.AirlineUpdateRepresentation;
 
 import java.util.Objects;
 import java.util.Optional;

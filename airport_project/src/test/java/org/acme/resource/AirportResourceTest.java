@@ -7,7 +7,7 @@ import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
-import org.acme.representation.AirportRepresentation;
+import org.acme.representation.airport.AirportRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.acme.representation;
+package org.acme.representation.airport;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

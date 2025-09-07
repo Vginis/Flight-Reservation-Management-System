@@ -1,6 +1,8 @@
 package org.acme.util;
 
 import org.acme.representation.*;
+import org.acme.representation.airline.AirlineRepresentation;
+import org.acme.representation.airport.AirportRepresentation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

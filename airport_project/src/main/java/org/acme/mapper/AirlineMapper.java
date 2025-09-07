@@ -2,7 +2,7 @@ package org.acme.mapper;
 
 import jakarta.enterprise.context.RequestScoped;
 import org.acme.domain.Airline;
-import org.acme.representation.AirlineRepresentation;
+import org.acme.representation.airline.AirlineRepresentation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

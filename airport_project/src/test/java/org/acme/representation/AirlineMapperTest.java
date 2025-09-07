@@ -4,13 +4,11 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Airline;
-import org.acme.domain.Flight;
 import org.acme.mapper.AirlineMapper;
 import org.acme.persistence.AirlineRepository;
+import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @QuarkusTest

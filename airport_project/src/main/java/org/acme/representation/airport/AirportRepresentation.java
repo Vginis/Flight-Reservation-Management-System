@@ -1,4 +1,4 @@
-package org.acme.representation;
+package org.acme.representation.airport;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 

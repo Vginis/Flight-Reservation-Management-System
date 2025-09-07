@@ -6,7 +6,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.SuccessMessages;
-import org.acme.representation.AirportCreateRepresentation;
+import org.acme.representation.airport.AirportCreateRepresentation;
+import org.acme.representation.airport.AirportUpdateRepresentation;
 import org.acme.service.AirportService;
 
 import static org.acme.constant.AirportProjectURIs.AIRPORTS;
@@ -39,7 +40,7 @@ public class AirportResource {
     }
 
     @PUT
-    public Response updateAirport(@Valid AirportCreateRepresentation representation) {
+    public Response updateAirport(@Valid AirportUpdateRepresentation representation) {
         airportService.updateAirport(representation);
         return Response.ok(SuccessMessages.AIRPORT_UPDATE_SUCCESS).build();
     }

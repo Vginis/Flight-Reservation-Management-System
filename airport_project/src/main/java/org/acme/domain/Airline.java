@@ -1,8 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.representation.AirlineUpdateRepresentation;
+import org.acme.representation.airline.AirlineCreateRepresentation;
+import org.acme.representation.airline.AirlineUpdateRepresentation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

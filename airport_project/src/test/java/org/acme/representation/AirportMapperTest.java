@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.acme.domain.Airport;
 import org.acme.mapper.AirportMapper;
 import org.acme.persistence.AirportRepository;
+import org.acme.representation.airport.AirportRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 

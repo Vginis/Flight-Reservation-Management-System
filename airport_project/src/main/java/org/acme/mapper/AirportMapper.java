@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import org.acme.domain.Airport;
 import org.acme.domain.Flight;
 import org.acme.persistence.FlightRepository;
-import org.acme.representation.AirportRepresentation;
+import org.acme.representation.airport.AirportRepresentation;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
