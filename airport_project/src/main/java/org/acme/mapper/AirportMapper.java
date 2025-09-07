@@ -1,5 +1,6 @@
 package org.acme.mapper;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import org.acme.domain.Airport;
 import org.acme.domain.Flight;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "jakarta",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = {Collectors.class})
+@RequestScoped
 public abstract class AirportMapper {
 
     @Inject

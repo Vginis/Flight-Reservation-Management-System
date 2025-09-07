@@ -13,10 +13,12 @@ import org.acme.representation.AirlineCreateRepresentation;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirlineUpdateRepresentation;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
 public class AirlineService {
+
     @Inject
     AirlineMapper airlineMapper;
 
@@ -71,6 +73,19 @@ public class AirlineService {
         }
     }
 
+    private void validateIfAirlineAlreadyExistsForUpdate(AirlineUpdateRepresentation airlineUpdateRepresentation){
+        Optional<Airline> airlineByName = airlineRepository.findOptionalAirlineByName(airlineUpdateRepresentation.getAirlineName());
+        Optional<Airline> airlineByCode = airlineRepository.findOptionalAirlineByU2DigitCode(airlineUpdateRepresentation.getU2digitCode());
+        if((airlineByName.isPresent() && checkIfIsSameAirline(airlineByName.get(), airlineUpdateRepresentation))
+                || (airlineByCode.isPresent() && checkIfIsSameAirline(airlineByCode.get(), airlineUpdateRepresentation))){
+            throw new InvalidRequestException(ErrorMessages.AIRLINE_EXISTS);
+        }
+    }
+
+    private boolean checkIfIsSameAirline(Airline airline, AirlineUpdateRepresentation airlineUpdateRepresentation){
+        return !Objects.equals(airline.getId(), airlineUpdateRepresentation.getId());
+    }
+
     @Transactional
     public void updateAirlineDetails(AirlineUpdateRepresentation airlineUpdateRepresentation){
         Optional<Airline> airlineToUpdate = airlineRepository.findByIdOptional(airlineUpdateRepresentation.getId());
@@ -78,10 +93,10 @@ public class AirlineService {
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
-        validateIfAirlineAlreadyExists(airlineUpdateRepresentation);
-
-        airlineToUpdate.get().updateAirlineDetails(airlineUpdateRepresentation);
-        airlineRepository.getEntityManager().merge(airlineToUpdate);
+        validateIfAirlineAlreadyExistsForUpdate(airlineUpdateRepresentation);
+        Airline airline = airlineToUpdate.get();
+        airline.updateAirlineDetails(airlineUpdateRepresentation);
+        airlineRepository.getEntityManager().merge(airline);
     }
 
     @Transactional

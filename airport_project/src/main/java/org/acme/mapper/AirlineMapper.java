@@ -1,5 +1,6 @@
 package org.acme.mapper;
 
+import jakarta.enterprise.context.RequestScoped;
 import org.acme.domain.Airline;
 import org.acme.representation.AirlineRepresentation;
 import org.mapstruct.InjectionStrategy;
@@ -12,6 +13,7 @@ import java.util.List;
 @Mapper(componentModel = "jakarta",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {FlightMapper.class})
+@RequestScoped
 public abstract class AirlineMapper {
 
     public abstract AirlineRepresentation toRepresentation(Airline airline);

@@ -1,6 +1,5 @@
 package org.acme.resource;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -9,22 +8,23 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import org.acme.domain.*;
-import org.acme.persistence.*;
+import org.acme.domain.Airline;
+import org.acme.domain.Flight;
+import org.acme.domain.Passenger;
+import org.acme.domain.Reservation;
 import org.acme.mapper.FlightMapper;
-import org.acme.mapper.PassengerMapper;
-import org.acme.representation.PassengerRepresentation;
+import org.acme.persistence.AirlineRepository;
+import org.acme.persistence.FlightRepository;
+import org.acme.persistence.PassengerRepository;
+import org.acme.persistence.ReservationRepository;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 import static org.acme.constant.AirportProjectURIs.PASSENGERS;
 
 @Path(PASSENGERS)
-@RequestScoped
 public class PassengerResource {
 
     @Context
@@ -32,9 +32,6 @@ public class PassengerResource {
 
     @Inject
     PassengerRepository passengerRepository;
-
-    @Inject
-    PassengerMapper passengerMapper;
 
     @Inject
     FlightRepository flightRepository;

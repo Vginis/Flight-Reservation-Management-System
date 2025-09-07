@@ -47,6 +47,10 @@ public class Airline {
         this.flights = new ArrayList<>();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public List<Flight> getFlights() {
         return flights;
     }

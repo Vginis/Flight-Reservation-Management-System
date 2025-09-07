@@ -1,24 +1,20 @@
 package org.acme.resource;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.acme.domain.Reservation;
-import org.acme.mapper.ReservationMapper;
 import org.acme.persistence.ReservationRepository;
-import org.acme.representation.ReservationRepresentation;
-
-import java.net.URI;
-import java.util.List;
 
 import static org.acme.constant.AirportProjectURIs.RESERVATIONS;
 
 @Path(RESERVATIONS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestScoped
 public class ReservationResource {
 
     @Context
@@ -26,10 +22,6 @@ public class ReservationResource {
 
     @Inject
     ReservationRepository reservationRepository;
-
-    @Inject
-    ReservationMapper reservationMapper;
-
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)
 //    @Transactional

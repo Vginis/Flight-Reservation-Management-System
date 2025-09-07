@@ -61,7 +61,7 @@ public class AirlineResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAirline(AirlineUpdateRepresentation representation) {
+    public Response updateAirline(@Valid AirlineUpdateRepresentation representation) {
         airlineService.updateAirlineDetails(representation);
         return Response.ok(SuccessMessages.AIRLINE_UPDATE_SUCCESS).build();
     }
