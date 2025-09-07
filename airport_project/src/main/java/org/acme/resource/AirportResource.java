@@ -1,83 +1,53 @@
 package org.acme.resource;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
-import org.acme.domain.Airport;
-import org.acme.persistence.AirportRepository;
-import org.acme.mapper.AirportMapper;
-import org.acme.representation.AirportRepresentation;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.acme.constant.SuccessMessages;
+import org.acme.representation.AirportCreateRepresentation;
+import org.acme.service.AirportService;
 
-import java.net.URI;
-import java.util.List;
-
-import static org.acme.resource.AirportProjectURIs.AIRPORTS;
+import static org.acme.constant.AirportProjectURIs.AIRPORTS;
 
 @Path(AIRPORTS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestScoped
 public class AirportResource {
 
     @Inject
-    EntityManager em;
-
-    @Context
-    UriInfo uriInfo;
-
-    @Inject
-    AirportRepository airportRepository;
-
-    @Inject
-    AirportMapper airportMapper;
+    AirportService airportService;
 
     @GET
-    @Transactional
-    public List<AirportRepresentation> findBy3DCode(@QueryParam("code") String code) {
-        return airportMapper.toRepresentationList(airportRepository.findAirportBy3DCode(code));
+    public Response findBy3DCode(@QueryParam("code") String code) {
+        return Response.ok().entity(airportService.findAirportBy3DCode(code)).build();
     }
 
     @GET
     @Path("/{airportId}")
-    @Transactional
     public Response findByPathParamId(@PathParam("airportId") Integer airportId) {
-        Airport airport = airportRepository.findById(airportId);
-        if (airport == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok().entity(airportMapper.toRepresentation(airport)).build();
+        return Response.ok().entity(airportService.findAirportById(airportId)).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createAirport(AirportRepresentation airportDto) {
-        Airport airport = airportMapper.toModel(airportDto);
-        airport = em.merge(airport);
-        airportRepository.persist(airport);
-        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(airport.getAirportId())).build();
-        return Response.created(location).entity(airportMapper.toRepresentation(airport)).build();
+    public Response createAirport(@Valid AirportCreateRepresentation airportDto) {
+        airportService.createAirport(airportDto);
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
-    @Path("/{id}")
-    @Transactional
-    public Response updateAirport(@PathParam("id") Integer id, AirportRepresentation representation) {
-        if (!(id.equals(representation.airportId))) return Response.status(400).build();
-        Airport airport = airportMapper.toModel(representation);
-        airportRepository.getEntityManager().merge(airport);
-        return Response.noContent().build();
+    public Response updateAirport(@Valid AirportCreateRepresentation representation) {
+        airportService.updateAirport(representation);
+        return Response.ok(SuccessMessages.AIRPORT_UPDATE_SUCCESS).build();
     }
 
     @DELETE
     @Path("/{id}")
-    @Transactional
     public Response removedAirport(@PathParam("id") Integer id) {
-        Airport airport = airportRepository.find("id", id).firstResult();
-        if (airport == null) return Response.status(404).build();
-        airportRepository.deleteAirport(id);
-        return Response.noContent().build();
+        airportService.deleteAirport(id);
+        return Response.ok(SuccessMessages.AIRPORT_DELETION_SUCCESS).build();
     }
 }

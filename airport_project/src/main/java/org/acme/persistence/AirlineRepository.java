@@ -5,14 +5,18 @@ import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
 import org.acme.domain.Airline;
 
-import java.util.List;
+import java.util.Optional;
 
 @RequestScoped
 public class AirlineRepository implements PanacheRepositoryBase<Airline, Integer> {
 
-    public List<Airline> findAirlineByAirlineName(String name) {
-            return find("select a from Airline a where a.airlineName like :airlineName",
-                    Parameters.with("airlineName", name + "%").map())
-                    .list();
+    public Optional<Airline> findOptionalAirlineByName(String name) {
+        return find("airlineName = :name", Parameters.with("name", name))
+                .firstResultOptional();
+    }
+
+    public Optional<Airline> findOptionalAirlineByU2DigitCode(String code) {
+        return find("u2digitCode = :code", Parameters.with("code", code))
+                .firstResultOptional();
     }
 }

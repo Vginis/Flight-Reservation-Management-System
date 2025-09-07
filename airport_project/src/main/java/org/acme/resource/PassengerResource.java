@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-import static org.acme.resource.AirportProjectURIs.PASSENGERS;
+import static org.acme.constant.AirportProjectURIs.PASSENGERS;
 
 @Path(PASSENGERS)
 @RequestScoped
@@ -50,22 +50,22 @@ public class PassengerResource {
     @Inject
     ReservationRepository reservationRepository;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public List<PassengerRepresentation> findByEmail(@QueryParam("email") String email) {
-        return passengerMapper.toRepresentationList(passengerRepository.findPassengerByEmail(email));
-    }
-
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response findByPathParamId(@PathParam("id") Integer id) {
-        Passenger passenger = passengerRepository.findById(id);
-        if (passenger == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok().entity(passengerMapper.toRepresentation(passenger)).build();
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Transactional
+//    public List<PassengerRepresentation> findByEmail(@QueryParam("email") String email) {
+//        return passengerMapper.toRepresentationList(passengerRepository.findPassengerByEmail(email));
+//    }
+//
+//    @GET
+//    @Path("/{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Transactional
+//    public Response findByPathParamId(@PathParam("id") Integer id) {
+//        Passenger passenger = passengerRepository.findById(id);
+//        if (passenger == null) return Response.status(Response.Status.NOT_FOUND).build();
+//        return Response.ok().entity(passengerMapper.toRepresentation(passenger)).build();
+//    }
 
     @GET
     @Path("/searchForFlights/{airlineId}/{destAirport}")
@@ -83,26 +83,26 @@ public class PassengerResource {
         return Response.ok().entity(flightMapper.toRepresentationList(flightList)).build();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createPassenger(PassengerRepresentation passengerDto) {
-        Passenger passenger = passengerMapper.toModel(passengerDto);
-        passenger = em.merge(passenger);
-        passengerRepository.persist(passenger);
-        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(passenger.getId())).build();
-        return Response.created(location).entity(passengerMapper.toRepresentation(passenger)).build();
-    }
-
-    @PUT
-    @Path("/{id}")
-    @Transactional
-    public Response updatePassenger(@PathParam("id") Integer passengerId, PassengerRepresentation representation) {
-        if (!(passengerId.equals(representation.id))) return Response.status(400).build();
-        Passenger passenger = passengerMapper.toModel(representation);
-        passengerRepository.getEntityManager().merge(passenger);
-        return Response.noContent().build();
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Transactional
+//    public Response createPassenger(PassengerRepresentation passengerDto) {
+//        Passenger passenger = passengerMapper.toModel(passengerDto);
+//        passenger = em.merge(passenger);
+//        passengerRepository.persist(passenger);
+//        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(passenger.getId())).build();
+//        return Response.created(location).entity(passengerMapper.toRepresentation(passenger)).build();
+//    }
+//
+//    @PUT
+//    @Path("/{id}")
+//    @Transactional
+//    public Response updatePassenger(@PathParam("id") Integer passengerId, PassengerRepresentation representation) {
+//        if (!(passengerId.equals(representation.id))) return Response.status(400).build();
+//        Passenger passenger = passengerMapper.toModel(representation);
+//        passengerRepository.getEntityManager().merge(passenger);
+//        return Response.noContent().build();
+//    }
 
     @DELETE
     @Path("/{id}")
@@ -115,26 +115,26 @@ public class PassengerResource {
         passengerRepository.deletePassenger(id);
         return Response.noContent().build();
     }
-
-    @POST
-    @Path("/{id}/makeReservation/{lastName}/{firstName}/{passport}/{flightNo}/{lugWeight}/{lugAmount}/{seatNo}")
-    @Transactional
-    public Response makeReservation(@PathParam("id") Integer id,
-                                    @PathParam("flightNo") String flightNo,
-                                    @PathParam("lugWeight") Integer lugWeight,
-                                    @PathParam("lugAmount") Integer lugAmount,
-                                    @PathParam("firstName") String firstName,
-                                    @PathParam("lastName") String lastName,
-                                    @PathParam("seatNo") String seatNo,
-                                    @PathParam("passport") String passport) {
-        Reservation reservation = createReservation(id, flightNo, lugAmount, lugWeight, firstName, lastName, seatNo, passport);
-        if (reservation == null) return Response.status(404).build();
-        if (reservation.getOutgoingFlights().isEmpty()) return Response.status(406).build();
-        reservation = em.merge(reservation);
-        reservationRepository.persist(reservation);
-        URI makingReservationURI = uriInfo.getBaseUriBuilder().path("Reservations").path(Integer.toString(reservation.getReservationId())).build();
-        return Response.created(makingReservationURI).build();
-    }
+//
+//    @POST
+//    @Path("/{id}/makeReservation/{lastName}/{firstName}/{passport}/{flightNo}/{lugWeight}/{lugAmount}/{seatNo}")
+//    @Transactional
+//    public Response makeReservation(@PathParam("id") Integer id,
+//                                    @PathParam("flightNo") String flightNo,
+//                                    @PathParam("lugWeight") Integer lugWeight,
+//                                    @PathParam("lugAmount") Integer lugAmount,
+//                                    @PathParam("firstName") String firstName,
+//                                    @PathParam("lastName") String lastName,
+//                                    @PathParam("seatNo") String seatNo,
+//                                    @PathParam("passport") String passport) {
+//        Reservation reservation = createReservation(id, flightNo, lugAmount, lugWeight, firstName, lastName, seatNo, passport);
+//        if (reservation == null) return Response.status(404).build();
+//        if (reservation.getOutgoingFlights().isEmpty()) return Response.status(406).build();
+//        reservation = em.merge(reservation);
+//        reservationRepository.persist(reservation);
+//        URI makingReservationURI = uriInfo.getBaseUriBuilder().path("Reservations").path(Integer.toString(reservation.getReservationId())).build();
+//        return Response.created(makingReservationURI).build();
+//    }
 
     @DELETE
     @Path("/{id}/deleteReservation/{reservationId}")
@@ -150,28 +150,28 @@ public class PassengerResource {
         return Response.status(404).build();
     }
 
-    @Transactional
-    protected Reservation createReservation(Integer id, String flightNo, Integer lugAmount, Integer lugWeight, String firstName, String lastName, String seatNo, String passport) {
-        Passenger passenger = passengerRepository.findById(id);
-        if (passenger == null) return null;
-        Flight flight = flightRepository.find("flightNo",flightNo).firstResult();
-        if (flight == null) return null;
-        Reservation reservation = new Reservation();
-        Ticket ticket = new Ticket();
-        ticket.setReservation(reservation);
-        ticket.setFlight(flight);
-        ticket.setTicketPrice(flight.getTicketPrice());
-        ticket.setAmount(lugAmount);
-        ticket.setWeight(lugWeight);
-        ticket.setLuggageIncluded(true);
-        ticket.setFirstName(firstName);
-        ticket.setLastName(lastName);
-        ticket.setSeatNo(seatNo);
-        ticket.setPassportId(passport);
-        reservation.addTicket(ticket);
-        reservation.setPassenger(passenger);
-        reservation.addOutgoingFlight(flight);
-        return reservation;
-    }
+//    @Transactional
+//    protected Reservation createReservation(Integer id, String flightNo, Integer lugAmount, Integer lugWeight, String firstName, String lastName, String seatNo, String passport) {
+//        Passenger passenger = passengerRepository.findById(id);
+//        if (passenger == null) return null;
+//        Flight flight = flightRepository.find("flightNo",flightNo).firstResult();
+//        if (flight == null) return null;
+//        Reservation reservation = new Reservation();
+//        Ticket ticket = new Ticket();
+//        ticket.setReservation(reservation);
+//        ticket.setFlight(flight);
+//        ticket.setTicketPrice(flight.getTicketPrice());
+//        ticket.setAmount(lugAmount);
+//        ticket.setWeight(lugWeight);
+//        ticket.setLuggageIncluded(true);
+//        ticket.setFirstName(firstName);
+//        ticket.setLastName(lastName);
+//        ticket.setSeatNo(seatNo);
+//        ticket.setPassportId(passport);
+//        reservation.addTicket(ticket);
+//        reservation.setPassenger(passenger);
+//        reservation.addOutgoingFlight(flight);
+//        return reservation;
+//    }
 
 }

@@ -1,38 +1,24 @@
 package org.acme.representation;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public class AirlineCreateRepresentation {
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
+
     @NotBlank
     private String airlineName;
-    @NotBlank
+    @Pattern(
+            regexp = "^[A-Z]{2,3}$",
+            message = "Airline code must have only uppercase letters (e.g. AG, ACA)"
+    )
     private String u2digitCode;
 
-    public AirlineCreateRepresentation(String username, String password, String airlineName, String u2digitCode) {
-        this.username = username;
-        this.password = password;
+    public AirlineCreateRepresentation() {
+    }
+
+    public AirlineCreateRepresentation(String airlineName, String u2digitCode) {
         this.airlineName = airlineName;
         this.u2digitCode = u2digitCode;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getAirlineName() {

@@ -6,14 +6,13 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.SuccessMessages;
 import org.acme.representation.AirlineCreateRepresentation;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirlineUpdateRepresentation;
 import org.acme.service.AirlineService;
 
-import java.util.List;
-
-import static org.acme.resource.AirportProjectURIs.AIRLINES;
+import static org.acme.constant.AirportProjectURIs.AIRLINES;
 
 @Path(AIRLINES)
 @RequestScoped
@@ -24,7 +23,7 @@ public class AirlineResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AirlineRepresentation> searchByName(@QueryParam("name") String name) {
+    public AirlineRepresentation searchByName(@QueryParam("name") String name) {
         return airlineService.searchAirlineByName(name);
     }
 
@@ -56,8 +55,7 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAirline(@Valid AirlineCreateRepresentation airlineDto) {
         airlineService.createAirline(airlineDto);
-        //TODO Change response Message to created
-        return Response.ok().build();
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
@@ -65,8 +63,7 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAirline(AirlineUpdateRepresentation representation) {
         airlineService.updateAirlineDetails(representation);
-        //TODO Add update success message
-        return Response.noContent().build();
+        return Response.ok(SuccessMessages.AIRLINE_UPDATE_SUCCESS).build();
     }
 
     @DELETE
@@ -75,7 +72,6 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteAirline(@PathParam("id") Integer id) {
         airlineService.deleteAirline(id);
-        //TODO Add delete success message
         return Response.noContent().build();
     }
 }

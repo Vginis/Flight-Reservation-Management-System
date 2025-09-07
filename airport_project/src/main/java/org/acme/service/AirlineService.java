@@ -5,14 +5,14 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.domain.Airline;
+import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
+import org.acme.mapper.AirlineMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.representation.AirlineCreateRepresentation;
-import org.acme.mapper.AirlineMapper;
 import org.acme.representation.AirlineRepresentation;
 import org.acme.representation.AirlineUpdateRepresentation;
 
-import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -23,8 +23,12 @@ public class AirlineService {
     @Inject
     AirlineRepository airlineRepository;
 
-    public List<AirlineRepresentation> searchAirlineByName(String name){
-        return airlineMapper.toRepresentationList(airlineRepository.findAirlineByAirlineName(name));
+    public AirlineRepresentation searchAirlineByName(String name){
+        Optional<Airline> airline = airlineRepository.findOptionalAirlineByName(name);
+        if(airline.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+        return airlineMapper.toRepresentation(airline.get());
     }
 
     public AirlineRepresentation searchAirlineById(Integer id){
@@ -54,18 +58,27 @@ public class AirlineService {
 
     @Transactional
     public void createAirline(AirlineCreateRepresentation airlineCreateRepresentation){
-        //Validate here if the airline already exists with annotation validator
+        validateIfAirlineAlreadyExists(airlineCreateRepresentation);
         Airline airline = new Airline(airlineCreateRepresentation);
         airlineRepository.persist(airline);
+    }
+
+    private void validateIfAirlineAlreadyExists(AirlineCreateRepresentation airlineCreateRepresentation){
+        Optional<Airline> airlineByName = airlineRepository.findOptionalAirlineByName(airlineCreateRepresentation.getAirlineName());
+        Optional<Airline> airlineByCode = airlineRepository.findOptionalAirlineByU2DigitCode(airlineCreateRepresentation.getU2digitCode());
+        if(airlineByName.isPresent() || airlineByCode.isPresent()){
+            throw new InvalidRequestException(ErrorMessages.AIRLINE_EXISTS);
+        }
     }
 
     @Transactional
     public void updateAirlineDetails(AirlineUpdateRepresentation airlineUpdateRepresentation){
         Optional<Airline> airlineToUpdate = airlineRepository.findByIdOptional(airlineUpdateRepresentation.getId());
-        //Validate here if the airline already exists with annotation validator
         if(airlineToUpdate.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
+
+        validateIfAirlineAlreadyExists(airlineUpdateRepresentation);
 
         airlineToUpdate.get().updateAirlineDetails(airlineUpdateRepresentation);
         airlineRepository.getEntityManager().merge(airlineToUpdate);
