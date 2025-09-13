@@ -79,6 +79,10 @@ public class Airline {
         return administrators;
     }
 
+    public void setAdministrators(List<AirlineAdministrator> administrators) {
+        this.administrators = administrators;
+    }
+
     public void addFlight(Flight flight) {
         if (flight == null)
             return;

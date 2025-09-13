@@ -12,9 +12,9 @@ import java.util.Objects;
 public class Airport {
 
     @Id
-    @Column(name = "airportId")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Integer airportId;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer id;
 
     @Column(name = "name", nullable = false, length = 30, unique = true)
     private String airportName;
@@ -46,8 +46,8 @@ public class Airport {
         this.depFlights = new ArrayList<>();
     }
 
-    public Integer getAirportId() {
-        return airportId;
+    public Integer getId() {
+        return id;
     }
 
     public String getAirportName() {
@@ -87,7 +87,7 @@ public class Airport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Airport airport = (Airport) o;
-        return Objects.equals(airportId, airport.airportId) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city) && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
+        return Objects.equals(id, airport.id) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city) && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
     }
 
     public void update(AirportCreateRepresentation representation){

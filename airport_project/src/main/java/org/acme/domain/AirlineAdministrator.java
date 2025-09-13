@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.constant.Role;
+import org.acme.representation.user.UserCreateRepresentation;
 
 @Entity
 @Table(name = "airline_administrator")
@@ -13,7 +15,8 @@ public class AirlineAdministrator extends User {
     public AirlineAdministrator() {
     }
 
-    public AirlineAdministrator(Airline airline) {
+    public AirlineAdministrator(UserCreateRepresentation userCreateRepresentation, Airline airline) {
+        super(userCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
         this.airline = airline;
     }
 
