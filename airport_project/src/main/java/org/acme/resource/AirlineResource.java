@@ -72,6 +72,6 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteAirline(@PathParam("id") Integer id) {
         airlineService.deleteAirline(id);
-        return Response.noContent().build();
+        return Response.ok(SuccessMessages.AIRLINE_DELETION_SUCCESS).build();
     }
 }

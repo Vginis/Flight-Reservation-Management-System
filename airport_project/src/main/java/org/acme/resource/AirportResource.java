@@ -6,9 +6,14 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.SuccessMessages;
+import org.acme.constant.ValueEnum;
+import org.acme.constant.search.AirportSortAndFilterBy;
+import org.acme.constant.search.SortDirection;
 import org.acme.representation.airport.AirportCreateRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
+import org.acme.search.PageQuery;
 import org.acme.service.AirportService;
+import org.acme.validation.EnumerationValue;
 
 import static org.acme.constant.AirportProjectURIs.AIRPORTS;
 
@@ -21,14 +26,16 @@ public class AirportResource {
     AirportService airportService;
 
     @GET
-    public Response findBy3DCode(@QueryParam("code") String code) {
-        return Response.ok().entity(airportService.findAirportBy3DCode(code)).build();
-    }
-
-    @GET
-    @Path("/{airportId}")
-    public Response findByPathParamId(@PathParam("airportId") Integer airportId) {
-        return Response.ok().entity(airportService.findAirportById(airportId)).build();
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchByParams(@QueryParam("searchField") @EnumerationValue(acceptedEnum = AirportSortAndFilterBy.class) String searchField,
+                                   @QueryParam("searchValue") String searchValue,
+                                   @QueryParam("size") @DefaultValue("10") Integer size,
+                                   @QueryParam("index") @DefaultValue("0") Integer index,
+                                   @QueryParam("sortBy") @EnumerationValue(acceptedEnum = AirportSortAndFilterBy.class) String sortBy,
+                                   @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
+        PageQuery<AirportSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AirportSortAndFilterBy.class), searchValue, size, index
+                , ValueEnum.fromValue(sortBy, AirportSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
+        return Response.ok(airportService.searchUsersByParams(query)).build();
     }
 
     @POST
@@ -47,7 +54,7 @@ public class AirportResource {
 
     @DELETE
     @Path("/{id}")
-    public Response removedAirport(@PathParam("id") Integer id) {
+    public Response removeAirport(@PathParam("id") Integer id) {
         airportService.deleteAirport(id);
         return Response.ok(SuccessMessages.AIRPORT_DELETION_SUCCESS).build();
     }

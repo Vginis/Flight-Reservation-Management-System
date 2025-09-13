@@ -10,9 +10,13 @@ public class AirportProjectURIs {
 
 	public static final String AIRLINES = "/airlines";
 
+    public static final String AIRLINE_ADMINISTRATORS = "/airline-admins";
+
 	public static final String RESERVATIONS = "/reservations";
 
 	public static final String PASSENGERS = "/passengers";
+
+    public static final String USERS = "/users";
 
 	public static final String FLIGHTS = "/flights";
 
