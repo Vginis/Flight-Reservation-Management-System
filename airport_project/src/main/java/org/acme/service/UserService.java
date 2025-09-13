@@ -1,0 +1,89 @@
+package org.acme.service;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import org.acme.constant.ErrorMessages;
+import org.acme.constant.Role;
+import org.acme.constant.search.UserSortAndFilterBy;
+import org.acme.domain.Address;
+import org.acme.domain.Airline;
+import org.acme.domain.AirlineAdministrator;
+import org.acme.domain.User;
+import org.acme.exception.InvalidRequestException;
+import org.acme.exception.ResourceNotFoundException;
+import org.acme.mapper.AddressMapper;
+import org.acme.mapper.UserMapper;
+import org.acme.persistence.AirlineRepository;
+import org.acme.persistence.UserRepository;
+import org.acme.representation.PassengerUpdateRepresentation;
+import org.acme.representation.user.UserRepresentation;
+import org.acme.representation.user.UserUpdateRepresentation;
+import org.acme.search.PageQuery;
+import org.acme.search.PageResult;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+@ApplicationScoped
+public class UserService {
+    @Inject
+    UserRepository userRepository;
+    @Inject
+    AddressMapper addressMapper;
+    @Inject
+    UserMapper userMapper;
+    @Inject
+    AirlineRepository airlineRepository;
+
+    public PageResult<UserRepresentation> searchUsersByParams(PageQuery<UserSortAndFilterBy> query){
+        return userMapper.map(userRepository.searchUsersByParams(query));
+    }
+
+    @Transactional
+    public void updateUser(UserUpdateRepresentation userUpdateRepresentation, String username){
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
+        if(userOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        User user = userOptional.get();
+        user.updateDetails(userUpdateRepresentation);
+
+        user.getAddresses().clear();
+        user.getAddresses().addAll(userUpdateRepresentation.getAddresses().stream()
+                .map(a -> {
+                    Address address = addressMapper.mapToEntity(a);
+                    address.setUser(user);
+                    return address;
+                }).toList());
+        userRepository.getEntityManager().merge(user);
+    }
+
+    @Transactional
+    public void deleteUser(Integer id){
+        Optional<User> userOptional = userRepository.findByIdOptional(id);
+        if(userOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        User user = userOptional.get();
+        if (user.getRole().equals(Role.AIRLINE_ADMINISTRATOR)){
+            handleAirlineAdministratorDeletion(user);
+        }
+        userRepository.getEntityManager().remove(user);
+    }
+
+    private void handleAirlineAdministratorDeletion(User user){
+        AirlineAdministrator airlineAdministrator = (AirlineAdministrator) user;
+        Airline airline = airlineAdministrator.getAirline();
+
+        if(airline.getAdministrators().size() == 1){
+            throw new InvalidRequestException(ErrorMessages.AIRLINE_HAS_SOLE_ADMIN);
+        }
+
+        airline.setAdministrators(new ArrayList<>(airline.getAdministrators().stream().filter(admin ->
+                !admin.getUsername().equals(user.getUsername())).toList()));
+        airlineRepository.getEntityManager().merge(airline);
+    }
+}
