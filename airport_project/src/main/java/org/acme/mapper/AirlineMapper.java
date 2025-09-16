@@ -15,7 +15,7 @@ import java.util.List;
         uses = {FlightMapper.class})
 @RequestScoped
 public abstract class AirlineMapper {
-
+    @Mapping(target = "flights", ignore = true)
     public abstract AirlineRepresentation toRepresentation(Airline airline);
 
     public abstract List<AirlineRepresentation> toRepresentationList(List<Airline> airline);

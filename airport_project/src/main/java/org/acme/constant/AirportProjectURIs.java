@@ -6,6 +6,8 @@ public class AirportProjectURIs {
 		//Intentionally left blank
 	}
 
+    public static final String AIRCRAFTS = "/aircrafts";
+
 	public static final String AIRPORTS = "/airports";
 
 	public static final String AIRLINES = "/airlines";

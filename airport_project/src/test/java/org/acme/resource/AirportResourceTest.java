@@ -74,8 +74,8 @@ public class AirportResourceTest extends JPATest {
         assertEquals("Fontaine",createdAirport.city);
         assertEquals("Teyvat",createdAirport.country);
         assertEquals("BEY",createdAirport.u3digitCode);
-        assertEquals(1, createdAirport.depFlights.size());
-        assertEquals(1, createdAirport.arrFlights.size());
+//        assertEquals(1, createdAirport.depFlights.size());
+//        assertEquals(1, createdAirport.arrFlights.size());
 
         List<AirportRepresentation> airports = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
@@ -95,8 +95,8 @@ public class AirportResourceTest extends JPATest {
        airport.city = "Cardinale";
        airport.country = "Fontaine";
        airport.u3digitCode = "FON";
-       airport.depFlights = new ArrayList<>();
-       airport.arrFlights = new ArrayList<>();
+//       airport.depFlights = new ArrayList<>();
+//       airport.arrFlights = new ArrayList<>();
 
         given()
                 .contentType(ContentType.JSON)

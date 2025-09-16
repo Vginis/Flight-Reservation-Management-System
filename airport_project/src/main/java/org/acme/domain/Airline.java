@@ -30,6 +30,9 @@ public class Airline {
     @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL)
     private List<AirlineAdministrator> administrators = new ArrayList<>();
 
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL)
+    private List<Aircraft> aircrafts = new ArrayList<>();
+
     public Airline() {
         super();
     }
@@ -39,6 +42,7 @@ public class Airline {
         this.u2digitCode = airlineCreateRepresentation.getU2digitCode();
         this.flights = new ArrayList<>();
         this.administrators = new ArrayList<>();
+        this.aircrafts = new ArrayList<>();
     }
 
     public Airline(String airlineName, String u2digitCode) {
@@ -81,6 +85,14 @@ public class Airline {
 
     public void setAdministrators(List<AirlineAdministrator> administrators) {
         this.administrators = administrators;
+    }
+
+    public List<Aircraft> getAircrafts() {
+        return aircrafts;
+    }
+
+    public void setAircrafts(List<Aircraft> aircrafts) {
+        this.aircrafts = aircrafts;
     }
 
     public void addFlight(Flight flight) {

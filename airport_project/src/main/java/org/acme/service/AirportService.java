@@ -26,8 +26,8 @@ public class AirportService {
     @Inject
     AirportMapper airportMapper;
 
-    public PageResult<AirportRepresentation> searchUsersByParams(PageQuery<AirportSortAndFilterBy> query){
-        return airportMapper.map(airportRepository.searchUsersByParams(query));
+    public PageResult<AirportRepresentation> searchAirportsByParams(PageQuery<AirportSortAndFilterBy> query){
+        return airportMapper.map(airportRepository.searchAirportsByParams(query));
     }
 
     @Transactional

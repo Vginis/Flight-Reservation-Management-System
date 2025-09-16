@@ -1,6 +1,6 @@
 package org.acme.representation.airline;
 
-import org.acme.representation.FlightRepresentation;
+import org.acme.representation.flight.FlightRepresentation;
 
 import java.util.List;
 

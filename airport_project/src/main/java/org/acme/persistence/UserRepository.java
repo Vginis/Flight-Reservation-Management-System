@@ -30,13 +30,6 @@ public class UserRepository extends AbstractSearchRepository<User> {
         });
     }
 
-    private void appendQueryBuildAndParamsForField(String field, String sqlQuery, PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters){
-        if(query.getSearchField().value().equals(field)){
-            queryBuilder.append(sqlQuery);
-            parameters.and(field, query.getSearchValue());
-        }
-    }
-
     public Optional<User> findUserByUsername(String username) {
         return find("username = :username", Parameters.with("username", username))
                 .firstResultOptional();

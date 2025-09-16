@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequestScoped
 public class AirportRepository extends AbstractSearchRepository<Airport> {
 
-    public PageResult<Airport> searchUsersByParams(PageQuery<AirportSortAndFilterBy> query){
+    public PageResult<Airport> searchAirportsByParams(PageQuery<AirportSortAndFilterBy> query){
         return searchPage(query, new SearchQueryCallback() {
             @Override
             public void defaultSort(Sort sort) {
@@ -29,13 +29,6 @@ public class AirportRepository extends AbstractSearchRepository<Airport> {
                 appendQueryBuildAndParamsForField("u3digitCode"," and u3digitCode like '%'||:u3digitCode||'%'", query, queryBuilder, parameters);
             }
         });
-    }
-
-    private void appendQueryBuildAndParamsForField(String field, String sqlQuery, PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters){
-        if(query.getSearchField().value().equals(field)){
-            queryBuilder.append(sqlQuery);
-            parameters.and(field, query.getSearchValue());
-        }
     }
 
     public Optional<Airport> findAirportBy3DCode(String code) {

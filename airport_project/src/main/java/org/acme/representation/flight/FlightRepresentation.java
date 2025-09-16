@@ -1,12 +1,15 @@
-package org.acme.representation;
+package org.acme.representation.flight;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class FlightCreateRepresentation {
+public class FlightRepresentation {
+
+    private Integer id;
     private String flightNumber;
-    private String airline;
+    private String flightUUID;
+    private String airlineU2DigitCode;
     private String departureAirport;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime departureTime;
@@ -15,17 +18,12 @@ public class FlightCreateRepresentation {
     private LocalDateTime arrivalTime;
     private Integer aircraftId;
 
-    public FlightCreateRepresentation() {
+    public Integer getId() {
+        return id;
     }
 
-    public FlightCreateRepresentation(String flightNumber, String airline, String departureAirport, LocalDateTime departureTime, String arrivalAirport, LocalDateTime arrivalTime, Integer aircraftId) {
-        this.flightNumber = flightNumber;
-        this.airline = airline;
-        this.departureAirport = departureAirport;
-        this.departureTime = departureTime;
-        this.arrivalAirport = arrivalAirport;
-        this.arrivalTime = arrivalTime;
-        this.aircraftId = aircraftId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFlightNumber() {
@@ -36,12 +34,20 @@ public class FlightCreateRepresentation {
         this.flightNumber = flightNumber;
     }
 
-    public String getAirline() {
-        return airline;
+    public String getFlightUUID() {
+        return flightUUID;
     }
 
-    public void setAirline(String airline) {
-        this.airline = airline;
+    public void setFlightUUID(String flightUUID) {
+        this.flightUUID = flightUUID;
+    }
+
+    public String getAirlineU2DigitCode() {
+        return airlineU2DigitCode;
+    }
+
+    public void setAirlineU2DigitCode(String airlineU2DigitCode) {
+        this.airlineU2DigitCode = airlineU2DigitCode;
     }
 
     public String getDepartureAirport() {
@@ -84,4 +90,3 @@ public class FlightCreateRepresentation {
         this.aircraftId = aircraftId;
     }
 }
-

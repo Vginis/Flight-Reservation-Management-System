@@ -35,7 +35,7 @@ public class AirportResource {
                                    @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
         PageQuery<AirportSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AirportSortAndFilterBy.class), searchValue, size, index
                 , ValueEnum.fromValue(sortBy, AirportSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
-        return Response.ok(airportService.searchUsersByParams(query)).build();
+        return Response.ok(airportService.searchAirportsByParams(query)).build();
     }
 
     @POST
