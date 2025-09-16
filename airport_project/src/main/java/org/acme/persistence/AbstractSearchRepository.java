@@ -11,7 +11,7 @@ import org.acme.search.SearchQueryCallback;
 import java.util.Optional;
 
 public class AbstractSearchRepository<S> implements PanacheRepositoryBase<S, Integer> {
-    public PageResult<S> searchPage(PageQuery query, SearchQueryCallback searchQueryCallback){
+    public PageResult<S> searchPage(PageQuery<?> query, SearchQueryCallback searchQueryCallback){
         StringBuilder queryBuilder = new StringBuilder("1 = 1");
         Parameters parameters = new Parameters();
         searchQueryCallback.search(query, queryBuilder, parameters);
@@ -25,6 +25,13 @@ public class AbstractSearchRepository<S> implements PanacheRepositoryBase<S, Int
         PanacheQuery<S> querySearch = this.find(queryBuilder.toString(), sort, parameters).page(query.getIndex(), query.getSize());
         long total = this.find(queryBuilder.toString(), parameters).count();
         return new PageResult<>(total, querySearch.list());
+    }
+
+    public void appendQueryBuildAndParamsForField(String field, String sqlQuery, PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters){
+        if(query.getSearchField().value().equals(field)){
+            queryBuilder.append(sqlQuery);
+            parameters.and(field, query.getSearchValue());
+        }
     }
 
     public Optional<Sort> toSort(String sortBy, String sortDirection) {

@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.representation.aircraft.AircraftCreateRepresentation;
+import org.acme.representation.aircraft.AircraftUpdateRepresentation;
 
 @Entity
 @Table(name = "aircrafts")
@@ -8,29 +10,26 @@ public class Aircraft {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @Column(name = "aircraftName", nullable = false)
+    @Column(name = "aircraft_name", nullable = false)
     private String aircraftName;
 
-    @Column(name = "aircraftCapacity", nullable = false)
+    @Column(name = "aircraft_capacity", nullable = false)
     private Integer aircraftCapacity;
 
-    @Column(name = "aircraftType", nullable = false)
-    private String aircraftType;
-
-    @OneToOne(mappedBy = "aircraft")
-    private Flight flight;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "airline_id")
+    private Airline airline;
 
     public Aircraft() {
     }
 
-    public Aircraft(String aircraftName, Integer aircraftCapacity, String aircraftType, Flight flight) {
-        this.aircraftName = aircraftName;
-        this.aircraftCapacity = aircraftCapacity;
-        this.aircraftType = aircraftType;
-        this.flight = flight;
+    public Aircraft(AircraftCreateRepresentation aircraftCreateRepresentation, Airline airline) {
+        this.aircraftName = aircraftCreateRepresentation.getAircraftName();
+        this.aircraftCapacity = aircraftCreateRepresentation.getAircraftCapacity();
+        this.airline = airline;
     }
 
     public Integer getId() {
@@ -45,15 +44,16 @@ public class Aircraft {
         return aircraftCapacity;
     }
 
-    public String getAircraftType() {
-        return aircraftType;
+    public Airline getAirline() {
+        return airline;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public void edit(AircraftUpdateRepresentation aircraftUpdateRepresentation){
+        this.aircraftName = aircraftUpdateRepresentation.getAircraftName();
+        this.aircraftCapacity = aircraftUpdateRepresentation.getAircraftCapacity();
     }
 
-//    public double flightCompleteness(){
+    //    public double flightCompleteness(){
 //TODO Fix flight completeness
 //        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
 //    }
