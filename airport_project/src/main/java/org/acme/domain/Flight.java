@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.representation.flight.FlightCreateRepresentation;
+import org.acme.representation.flight.FlightDateUpdateRepresentation;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,14 +13,14 @@ public class Flight {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @Column(name = "flight_number", length = 20)
     private String flightNumber;
 
-    @Column(name = "flight_uuid", length = 20)
-    private UUID flightUUID;
+    @Column(name = "flight_uuid", columnDefinition = "CHAR(36)", length = 40, unique = true)
+    private String flightUUID;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn (name = "airlineId")
@@ -38,21 +40,20 @@ public class Flight {
     @Column(name = "arrTime")
     private LocalDateTime arrivalTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "aircraft_id", referencedColumnName = "id")
-    private Aircraft aircraft;
+    private Integer aircraftId;
 
     public Flight() {
     }
 
-    public Flight(String flightNumber, UUID flightUUID, Airline airline, Airport departureAirport, LocalDateTime departureTime, Airport arrivalAirport, LocalDateTime arrivalTime) {
-        this.flightNumber = flightNumber;
-        this.flightUUID = flightUUID;
+    public Flight(FlightCreateRepresentation flightCreateRepresentation, Airline airline, Airport departureAirport, Airport arrivalAirport) {
+        this.flightNumber = flightCreateRepresentation.getFlightNumber();
+        this.flightUUID = UUID.randomUUID().toString();
         this.airline = airline;
         this.departureAirport = departureAirport;
-        this.departureTime = departureTime;
+        this.departureTime = flightCreateRepresentation.getDepartureTime();
         this.arrivalAirport = arrivalAirport;
-        this.arrivalTime = arrivalTime;
+        this.arrivalTime = flightCreateRepresentation.getArrivalTime();
+        this.aircraftId = flightCreateRepresentation.getAircraftId();
     }
 
     public Integer getId() {
@@ -63,8 +64,12 @@ public class Flight {
         return flightNumber;
     }
 
-    public UUID getFlightUUID() {
+    public String getFlightUUID() {
         return flightUUID;
+    }
+
+    public Integer getAircraftId() {
+        return aircraftId;
     }
 
     public Airline getAirline() {
@@ -116,4 +121,8 @@ public class Flight {
 //        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
 //    }
 
+    public void editDates(FlightDateUpdateRepresentation flightDateUpdateRepresentation){
+        this.departureTime = flightDateUpdateRepresentation.getDepartureTime();
+        this.arrivalTime = flightDateUpdateRepresentation.getArrivalTime();
+    }
 }

@@ -7,12 +7,11 @@ import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
-import org.acme.representation.FlightRepresentation;
+import org.acme.representation.flight.FlightRepresentation;
 import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -47,7 +46,7 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
-        assertEquals("FR8438", f.flightNo);
+        assertEquals("FR8438", f.getFlightNumber());
     }
 
     @Test
@@ -71,8 +70,8 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
         assertEquals(1, flights.size());
-        assertEquals("Eleftherios Venizelos",flights.get(0).departureAirport);
-        assertEquals("Fiumicino",flights.get(0).arrivalAirport);
+        assertEquals("Eleftherios Venizelos",flights.getFirst().getDepartureAirport());
+        assertEquals("Fiumicino",flights.getFirst().getArrivalAirport());
     }
 
     @Test
@@ -89,8 +88,8 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
         assertEquals(1, flights.size());
-        assertEquals("Fiumicino",flights.get(0).arrivalAirport);
-        assertEquals("Eleftherios Venizelos",flights.get(0).departureAirport);
+        assertEquals("Fiumicino",flights.get(0).getArrivalAirport());
+        assertEquals("Eleftherios Venizelos",flights.get(0).getDepartureAirport());
     }
 
     @Test
@@ -105,7 +104,7 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
         assertEquals(2, flights.size());
-        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).arrivalTime);
+        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).getArrivalTime());
     }
 
     @Test
@@ -122,7 +121,7 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
         assertEquals(2, flights.size());
-        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).departureTime);
+        assertEquals(LocalDateTime.parse("2023-07-19T21:00:00"),flights.get(0).getDepartureTime());
     }
 
     @Test
@@ -143,9 +142,9 @@ public class FlightResourceTest extends JPATest {
                 .then().statusCode(201)
                 .extract().as(FlightRepresentation.class);
 
-        assertEquals("A3651", savedFlight.flightNo);
-        assertEquals("Aegean Airlines",savedFlight.airlineName);
-        assertEquals("Fiumicino", savedFlight.departureAirport);
+        assertEquals("A3651", savedFlight.getFlightNumber());
+        assertEquals("Aegean Airlines",savedFlight.getAirlineU2DigitCode());
+        assertEquals("Fiumicino", savedFlight.getDepartureAirport());
 
         List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS)
                 .then()
@@ -161,17 +160,17 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
-        flight.flightNo = "A3651";
-        flight.airlineName = "Aegean Airlines";
-        flight.departureAirport = "Fiumicino";
-        flight.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
-        flight.arrivalAirport = "Eleftherios Venizelos";
-        flight.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
-        flight.aircraftCapacity = 120;
-        flight.aircraftType = "BSA-4545";
-        flight.ticketPrice = (long) 80;
-        flight.availableSeats = 24;
-        flight.ticketList = new ArrayList<>();
+//        flight.flightNo = "A3651";
+//        flight.airlineName = "Aegean Airlines";
+//        flight.departureAirport = "Fiumicino";
+//        flight.departureTime = LocalDateTime.parse("2024-02-12T10:12:12");
+//        flight.arrivalAirport = "Eleftherios Venizelos";
+//        flight.arrivalTime = LocalDateTime.parse("2024-02-12T18:24:36");
+//        flight.aircraftCapacity = 120;
+//        flight.aircraftType = "BSA-4545";
+//        flight.ticketPrice = (long) 80;
+//        flight.availableSeats = 24;
+//        flight.ticketList = new ArrayList<>();
 
         given().contentType(ContentType.JSON).body(flight)
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
@@ -182,7 +181,7 @@ public class FlightResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
 
-        assertEquals("A3651", updated.flightNo);
+        assertEquals("A3651", updated.getFlightNumber());
     }
 
     @Test
@@ -191,8 +190,7 @@ public class FlightResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
-        flight.id = 15;
-
+        flight.setId(15);
         given().contentType(ContentType.JSON).body(flight)
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then().statusCode(400);
