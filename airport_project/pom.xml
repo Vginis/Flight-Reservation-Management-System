@@ -7,13 +7,13 @@
   <version>2.0.0-SNAPSHOT</version>
   <name>Airport</name>
   <properties>
-    <compiler-plugin.version>3.20.0</compiler-plugin.version>
+    <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.6.3</quarkus.platform.version>
+    <quarkus.platform.version>3.20.0</quarkus.platform.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <jacoco.version>0.8.8</jacoco.version>
     <skipITs>true</skipITs>
@@ -35,17 +35,21 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-mysql</artifactId>
     </dependency>
-     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jsonb</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm-panache</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-links</artifactId>
+      <artifactId>quarkus-rest-client-oidc-token-propagation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-security</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -53,8 +57,12 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
+      <artifactId>quarkus-rest</artifactId>
     </dependency>
+      <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-rest-jackson</artifactId>
+      </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -123,7 +131,6 @@
             <arg>-parameters</arg>
             <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
             <arg>-Amapstruct.suppressGeneratorVersionInfoComment=true</arg>
-            <arg>-Amapstruct.verbose=true</arg>
             <arg>-Amapstruct.defaultComponentModel=cdi</arg>
           </compilerArgs>
         </configuration>

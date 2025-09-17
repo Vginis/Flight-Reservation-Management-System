@@ -26,8 +26,8 @@ public class ReservationTest {
         airline = new Airline("Aegean Airlines", "A3");//, "aegean", "JeandDig1@");
         airport1 = new Airport("Eleftherios Venizelos","Athens","Greece","ATH");
         airport2 = new Airport("Fiumicino","Rome","Italy","FCO");
-        flightO = new Flight("A3651", UUID.randomUUID(), airline, airport1, LocalDateTime.now(), airport2, LocalDateTime.now());
-        flightI = new Flight("A3650",UUID.randomUUID(), airline, airport2, LocalDateTime.now(), airport1, LocalDateTime.now());
+//        flightO = new Flight("A3651", UUID.randomUUID().toString(), airline, airport1, LocalDateTime.now(), airport2, LocalDateTime.now());
+//        flightI = new Flight("A3650",UUID.randomUUID().toString(), airline, airport2, LocalDateTime.now(), airport1, LocalDateTime.now());
         reservation = new Reservation();
 
     }
