@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
+import org.acme.constant.search.AirlineSortAndFilterBy;
 import org.acme.domain.Airline;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
@@ -12,6 +13,8 @@ import org.acme.persistence.AirlineRepository;
 import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.representation.airline.AirlineUpdateRepresentation;
+import org.acme.search.PageQuery;
+import org.acme.search.PageResult;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,21 +28,8 @@ public class AirlineService {
     @Inject
     AirlineRepository airlineRepository;
 
-    public AirlineRepresentation searchAirlineByName(String name){
-        Optional<Airline> airline = airlineRepository.findOptionalAirlineByName(name);
-        if(airline.isEmpty()){
-            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
-        }
-        return airlineMapper.toRepresentation(airline.get());
-    }
-
-    public AirlineRepresentation searchAirlineById(Integer id){
-        Optional<Airline> airline = airlineRepository.findByIdOptional(id);
-        if(airline.isEmpty()){
-           throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
-        }
-
-        return airlineMapper.toRepresentation(airline.get());
+    public PageResult<AirlineRepresentation> searchAirlinesByParams(PageQuery<AirlineSortAndFilterBy> query){
+        return airlineMapper.map(airlineRepository.searchAirlinesByParams(query));
     }
 
     public String getMostPopularAirport(Integer id){

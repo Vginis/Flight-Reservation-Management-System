@@ -14,14 +14,5 @@ import java.util.List;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {FlightMapper.class})
 @RequestScoped
-public abstract class AirlineMapper {
-    @Mapping(target = "flights", ignore = true)
-    public abstract AirlineRepresentation toRepresentation(Airline airline);
-
-    public abstract List<AirlineRepresentation> toRepresentationList(List<Airline> airline);
-
-    @Mapping(target = "flights", ignore = true)
-    @Mapping(target = "administrators", ignore = true)
-    public abstract Airline toModel(AirlineRepresentation representation);
-
+public interface AirlineMapper extends OneWayMapper<AirlineRepresentation, Airline>{
 }

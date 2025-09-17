@@ -1,11 +1,11 @@
 package org.acme.util;
 
-import org.acme.representation.*;
+import org.acme.representation.ReservationRepresentation;
+import org.acme.representation.TicketRepresentation;
 import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.representation.airport.AirportRepresentation;
 import org.acme.representation.flight.FlightRepresentation;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Fixture {
@@ -49,9 +49,6 @@ public class Fixture {
         dto.setId(12);
         dto.setAirlineName("British Airways");
         dto.setU2digitCode("BR");
-        dto.setUsername("british");
-        dto.setPassword("JeandDig1@");
-        dto.setFlights(new ArrayList<>());
         return dto;
     }
 

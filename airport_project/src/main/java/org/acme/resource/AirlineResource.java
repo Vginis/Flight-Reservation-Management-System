@@ -10,10 +10,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
+import org.acme.constant.ValueEnum;
+import org.acme.constant.search.AirlineSortAndFilterBy;
+import org.acme.constant.search.SortDirection;
 import org.acme.representation.airline.AirlineCreateRepresentation;
-import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.representation.airline.AirlineUpdateRepresentation;
+import org.acme.search.PageQuery;
 import org.acme.service.AirlineService;
+import org.acme.validation.EnumerationValue;
 
 import static org.acme.constant.AirportProjectURIs.AIRLINES;
 
@@ -27,15 +31,15 @@ public class AirlineResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public AirlineRepresentation searchByName(@QueryParam("name") String name) {
-        return airlineService.searchAirlineByName(name);
-    }
-
-    @GET
-    @Path("{id:[0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response findByPathParamId(@PathParam("id") Integer id) {
-        return Response.ok().entity(airlineService.searchAirlineById(id)).build();
+    public Response searchAirlinesByParams(@QueryParam("searchField") @EnumerationValue(acceptedEnum = AirlineSortAndFilterBy.class) String searchField,
+                                           @QueryParam("searchValue") String searchValue,
+                                           @QueryParam("size") @DefaultValue("10") Integer size,
+                                           @QueryParam("index") @DefaultValue("0") Integer index,
+                                           @QueryParam("sortBy") @EnumerationValue(acceptedEnum = AirlineSortAndFilterBy.class) String sortBy,
+                                           @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
+        PageQuery<AirlineSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AirlineSortAndFilterBy.class), searchValue, size, index
+                , ValueEnum.fromValue(sortBy, AirlineSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
+        return Response.ok(airlineService.searchAirlinesByParams(query)).build();
     }
 
     @GET
