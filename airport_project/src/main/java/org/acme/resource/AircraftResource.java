@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import io.quarkus.security.Authenticated;
 import org.acme.constant.AirportProjectURIs;
+import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.AircraftSortAndFilterBy;
@@ -17,13 +19,17 @@ import org.acme.search.PageQuery;
 import org.acme.service.AircraftService;
 import org.acme.validation.EnumerationValue;
 
+import jakarta.annotation.security.RolesAllowed;
+
 @Path(AirportProjectURIs.AIRCRAFTS)
+@Authenticated
 public class AircraftResource {
 
     @Inject
     AircraftService aircraftService;
 
     @GET
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByParams(@QueryParam("searchField") @EnumerationValue(acceptedEnum = AircraftSortAndFilterBy.class) String searchField,
                                    @QueryParam("searchValue") String searchValue,
@@ -37,6 +43,7 @@ public class AircraftResource {
     }
 
     @POST
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAircraft(@Valid AircraftCreateRepresentation aircraftCreateRepresentation){
@@ -45,6 +52,7 @@ public class AircraftResource {
     }
 
     @PUT
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -55,6 +63,7 @@ public class AircraftResource {
     }
 
     @DELETE
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAircraft(@NotNull @PathParam("id") Integer id){

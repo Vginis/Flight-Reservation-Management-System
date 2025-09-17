@@ -1,11 +1,14 @@
 package org.acme.resource;
 
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.airline.AirlineRepresentation;
@@ -15,6 +18,7 @@ import org.acme.service.AirlineService;
 import static org.acme.constant.AirportProjectURIs.AIRLINES;
 
 @Path(AIRLINES)
+@Authenticated
 @RequestScoped
 public class AirlineResource {
 
@@ -51,6 +55,7 @@ public class AirlineResource {
     }
 
     @POST
+    @RolesAllowed(Role.SYSTEM_ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAirline(@Valid AirlineCreateRepresentation airlineDto) {
@@ -59,6 +64,7 @@ public class AirlineResource {
     }
 
     @PUT
+    @RolesAllowed(Role.SYSTEM_ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAirline(@Valid AirlineUpdateRepresentation representation) {
@@ -67,6 +73,7 @@ public class AirlineResource {
     }
 
     @DELETE
+    @RolesAllowed(Role.SYSTEM_ADMIN)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

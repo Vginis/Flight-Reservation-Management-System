@@ -1,5 +1,6 @@
 package org.acme.resource;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -16,6 +17,7 @@ import org.acme.service.UserService;
 import org.acme.validation.EnumerationValue;
 
 @Path(AirportProjectURIs.USERS)
+@Authenticated
 public class UserResource {
     @Inject
     UserService userService;

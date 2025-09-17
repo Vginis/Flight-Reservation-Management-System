@@ -1,11 +1,14 @@
 package org.acme.resource;
 
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.FlightSortAndFilterBy;
@@ -19,8 +22,7 @@ import org.acme.validation.EnumerationValue;
 import static org.acme.constant.AirportProjectURIs.FLIGHTS;
 
 @Path(FLIGHTS)
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Authenticated
 @RequestScoped
 public class FlightResource {
 
@@ -41,6 +43,7 @@ public class FlightResource {
     }
 
     @POST
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createFLight(@Valid FlightCreateRepresentation flightCreateRepresentation) {
@@ -49,6 +52,7 @@ public class FlightResource {
     }
 
     @PUT
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{flightId}")
@@ -58,6 +62,7 @@ public class FlightResource {
     }
 
     @DELETE
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Path("{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

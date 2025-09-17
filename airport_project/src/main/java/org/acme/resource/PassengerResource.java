@@ -1,5 +1,6 @@
 package org.acme.resource;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import org.acme.service.PassengerService;
 import static org.acme.constant.AirportProjectURIs.PASSENGERS;
 
 @Path(PASSENGERS)
+@Authenticated
 public class PassengerResource {
 
     @Inject

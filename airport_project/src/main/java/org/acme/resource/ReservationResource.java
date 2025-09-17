@@ -1,14 +1,9 @@
 package org.acme.resource;
 
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
-import org.acme.domain.Reservation;
-import org.acme.persistence.ReservationRepository;
 
 import static org.acme.constant.AirportProjectURIs.RESERVATIONS;
 
@@ -17,11 +12,7 @@ import static org.acme.constant.AirportProjectURIs.RESERVATIONS;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ReservationResource {
 
-    @Context
-    UriInfo uriInfo;
 
-    @Inject
-    ReservationRepository reservationRepository;
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)
 //    @Transactional
@@ -66,9 +57,6 @@ public class ReservationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response deleteReservation(@PathParam("reservationId") Integer id) {
-        Reservation reservation = reservationRepository.find("reservationId", id).firstResult();
-        if (reservation == null) return Response.status(404).build();
-        reservationRepository.deleteReservation(id);
         return Response.noContent().build();
     }
 
