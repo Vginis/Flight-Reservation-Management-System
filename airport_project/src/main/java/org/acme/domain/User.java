@@ -30,8 +30,7 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "role", nullable = false, length = 30)
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
+    private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
@@ -39,7 +38,7 @@ public class User {
     public User() {
     }
 
-    public User(UserCreateRepresentation userCreateRepresentation, Role role) {
+    public User(UserCreateRepresentation userCreateRepresentation, String role) {
         this.username = userCreateRepresentation.getUsername();
         this.email = userCreateRepresentation.getEmail();
         this.phoneNumber = userCreateRepresentation.getEmail();
@@ -62,7 +61,7 @@ public class User {
         return phoneNumber;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
