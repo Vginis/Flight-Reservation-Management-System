@@ -92,7 +92,6 @@ public class AirlineResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirlineRepresentation.class);
         airline.setAirlineName("Pao Airlines");
-        airline.setFlights(new ArrayList<>());
         airline.setU2digitCode("TT");
 
         given()
