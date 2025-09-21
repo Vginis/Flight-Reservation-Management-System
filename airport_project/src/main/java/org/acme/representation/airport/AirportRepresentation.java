@@ -11,4 +11,5 @@ public class AirportRepresentation {
     public String country;
     public String u3digitCode;
     //TODO Add representation of flights
+    //TODO make the fields of the class private
 }
