@@ -1,0 +1,14 @@
+.profileButton {
+    margin-left: auto;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 30px;
+  margin-left: 2%;
+}
+
+.toolbar {
+    background-color: rgb(55, 55, 228);
+    height: 12%;
+}

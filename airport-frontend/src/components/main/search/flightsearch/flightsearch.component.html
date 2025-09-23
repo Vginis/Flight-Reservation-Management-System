@@ -1,0 +1,45 @@
+<div>
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="search-form-container">
+        <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Flying from</mat-label>
+            <mat-select formControlName="from">
+                <mat-option *ngFor="let city of cities" [value]="city">
+                    {{ city.city }} ({{ city.code }})
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Flying to</mat-label>
+            <mat-select formControlName="to">
+                <mat-option *ngFor="let city of cities" [value]="city">
+                    {{ city.city }} ({{ city.code }})
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Choose departure date</mat-label>
+            <input matInput [matDatepickerFilter]="disablePastDates" [matDatepicker]="departurePicker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="departurePicker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #departurePicker formControlName="departing"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Choose arrival date</mat-label>
+            <input matInput [matDatepickerFilter]="disablePastDates" [matDatepicker]="arrivalPicker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="arrivalPicker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #arrivalPicker formControlName="returning"></mat-datepicker>
+        </mat-form-field>
+    </form>
+    <mat-divider/>
+    <div class="example-button-row">
+        <button matButton>Basic</button>
+    </div>
+</div>
