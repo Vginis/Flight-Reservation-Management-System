@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {provideNativeDateAdapter} from '@angular/material/core';
-import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-flightsearch',
@@ -25,8 +24,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatNativeDateModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatIconModule,
-    MatDividerModule
+    MatIconModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './flightsearch.component.html',
@@ -59,4 +57,27 @@ export class FlightsearchComponent {
     today.setHours(0,0,0,0);
     return date >= today;
   };
+
+  validateArrivalDates = (date: Date | null): boolean => {
+    if(!date) return false;
+    const { departing } = this.searchForm.value;
+    if(departing !== ''){
+      return date >= departing
+    }
+
+    return this.disablePastDates(date);
+  }
+
+  onDepartingSelected = (e: any): void => {
+    const { returning } = this.searchForm.value;
+    const selectedDate= e.value;
+    if(returning!== '' && returning < selectedDate){
+      this.searchForm.patchValue({ returning: '' });
+    }
+  }
+
+  atLeastOneSelected = (): boolean => {
+    const { from, to, departing, returning } = this.searchForm.value;
+    return !!(from || to || departing || returning);
+  }
 }
