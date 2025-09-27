@@ -7,6 +7,9 @@
                     {{ city.city }} ({{ city.code }})
                 </mat-option>
             </mat-select>
+            <mat-error *ngIf="searchForm.get('from')?.hasError('required')">
+                Departure is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="search-field">
@@ -16,6 +19,12 @@
                     {{ city.city }} ({{ city.code }})
                 </mat-option>
             </mat-select>
+            <mat-error *ngIf="searchForm.get('to')?.hasError('required')">
+                Destination is required
+            </mat-error>
+            <mat-error *ngIf="searchForm.hasError('sameRoute')">
+                Departure and destination cannot be the same!
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="search-field">
@@ -44,6 +53,6 @@
     </form>
     <div class="search-button-container">
         <button class="search-button" color="primary" 
-         [disabled]="!atLeastOneSelected()" mat-raised-button (click)="onSubmit()">Search</button>
+         [disabled]="formIsNotValid()" mat-raised-button (click)="onSubmit()">Search</button>
     </div>
 </div>

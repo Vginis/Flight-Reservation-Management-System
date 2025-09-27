@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -44,11 +44,12 @@ export class FlightsearchComponent {
       to: [''],
       departing: [''],
       returning: ['']
-    });
+    }, 
+    { validators: [this.routeValidator]});
   }
 
   onSubmit() {
-    console.log(this.searchForm.value);
+      console.log('Form submitted', this.searchForm.value);
   }
 
   disablePastDates = (date: Date | null): boolean => {
@@ -57,6 +58,16 @@ export class FlightsearchComponent {
     today.setHours(0,0,0,0);
     return date >= today;
   };
+
+  routeValidator(control: AbstractControl): ValidationErrors | null {
+    const from = control.get('from')?.value;
+    const to = control.get('to')?.value;
+
+    if (from && to && from.code === to.code) {
+      return { sameRoute: true };
+    }
+    return null;
+  }
 
   validateArrivalDates = (date: Date | null): boolean => {
     if(!date) return false;
@@ -79,5 +90,9 @@ export class FlightsearchComponent {
   atLeastOneSelected = (): boolean => {
     const { from, to, departing, returning } = this.searchForm.value;
     return !!(from || to || departing || returning);
+  }
+
+  formIsNotValid = (): boolean => {
+    return !this.atLeastOneSelected() || this.searchForm.invalid;
   }
 }
