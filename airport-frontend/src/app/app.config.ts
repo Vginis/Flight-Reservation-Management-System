@@ -1,27 +1,27 @@
-import { ApplicationConfig } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, PLATFORM_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideKeycloak } from 'keycloak-angular';
-import { environment } from '../environment';
-
+import { KeycloakAngularModule } from 'keycloak-angular';
 import { routes } from './app.routes';
-import { KeycloakOnLoad } from 'keycloak-js';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { KeycloakInitService } from '../services/keycloak/keycloak-init.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
     provideClientHydration(), 
-    provideAnimations(), 
-    provideKeycloak({
-      config: {
-        url: environment.keycloak.config.url,
-        realm: environment.keycloak.config.realm,
-        clientId: environment.keycloak.config.clientId
-      },
-      initOptions: {
-        onLoad: environment.keycloak.initOptions.onLoad as KeycloakOnLoad,
-        checkLoginIframe: environment.keycloak.initOptions.checkLoginIframe
-      }
-    })]
+    provideAnimations(),
+    importProvidersFrom(KeycloakAngularModule), 
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [KeycloakInitService, PLATFORM_ID],
+      multi: true
+    }  
+  ]
 };
+
+
+function initializeApp(keycloakInitService: KeycloakInitService) {
+  return () => keycloakInitService.initKeycloak();
+}

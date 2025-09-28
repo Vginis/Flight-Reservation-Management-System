@@ -3,10 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from '../components/main/home/home.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, HomeComponent],
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    imports: [RouterOutlet, HomeComponent],
+    templateUrl: './app.component.html'
 })
 export class AppComponent {
 }

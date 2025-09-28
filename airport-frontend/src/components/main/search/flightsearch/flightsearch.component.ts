@@ -11,24 +11,23 @@ import {MatIconModule} from '@angular/material/icon';
 import {provideNativeDateAdapter} from '@angular/material/core';
 
 @Component({
-  selector: 'app-flightsearch',
-  standalone: true,
-  providers: [provideNativeDateAdapter()],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatIconModule
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './flightsearch.component.html',
-  styleUrls: ['./flightsearch.component.css']
+    selector: 'app-flightsearch',
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatIconModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './flightsearch.component.html',
+    styleUrls: ['./flightsearch.component.css']
 })
 export class FlightsearchComponent {
   searchForm: FormGroup;
