@@ -17,6 +17,7 @@ import org.acme.persistence.AirportRepository;
 import org.acme.persistence.FlightRepository;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
+import org.acme.representation.flight.FlightMultipleParamsSearchDTO;
 import org.acme.representation.flight.FlightRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
@@ -42,6 +43,12 @@ public class FlightService {
 
     public PageResult<FlightRepresentation> searchFlightsByParams(PageQuery<FlightSortAndFilterBy> query){
         PageResult<Flight> flightPageResult = flightRepository.searchFlightsByParams(query);
+        return flightMapper.map(flightPageResult);
+    }
+
+    public PageResult<FlightRepresentation> searchFlightsByMultipleParams(FlightMultipleParamsSearchDTO flightMultipleParamsSearchDTO, Integer size, Integer index){
+        flightValidator.validateSearchByMultipleParams(flightMultipleParamsSearchDTO);
+        PageResult<Flight> flightPageResult = flightRepository.searchFlightsByMultipleParams(flightMultipleParamsSearchDTO, size, index);
         return flightMapper.map(flightPageResult);
     }
 

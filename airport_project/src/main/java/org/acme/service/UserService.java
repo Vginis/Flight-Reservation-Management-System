@@ -16,7 +16,6 @@ import org.acme.mapper.AddressMapper;
 import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
-import org.acme.representation.PassengerUpdateRepresentation;
 import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
