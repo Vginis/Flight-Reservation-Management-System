@@ -24,6 +24,17 @@ export class AccessGuard extends KeycloakAuthGuard {
             });
         }
 
-        return this.canActivate(route, state);
+        return this.canActivate();
     }
+
+
+    public override async canActivate(): Promise<boolean> {
+        const loggedIn = this.keycloakService.isLoggedIn();
+        if (!loggedIn) {
+            await this.keycloakService.login();
+            return false;
+        }
+        return true;
+    }
+
 }
