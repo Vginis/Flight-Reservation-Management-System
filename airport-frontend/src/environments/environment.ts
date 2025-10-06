@@ -6,5 +6,11 @@ export const environment = {
             realm: 'airport',
             clientId: 'frontend'
         }
+    },
+    backend: {
+        url:  'http://localhost:8010'
+    },
+    frontend: {
+        url: 'http://localhost:4200'
     }
 };
