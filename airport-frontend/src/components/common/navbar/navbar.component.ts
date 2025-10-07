@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewProfileModalComponent } from '../viewprofile/view.profile.modal.component';
 
 @Component({
     selector: 'app-navbar',
@@ -24,7 +26,10 @@ import { MatButtonModule } from '@angular/material/button';
 export class NavbarComponent implements OnInit{
   loggedIn = false;
 
-  constructor(private readonly keycloakService: KeycloakService){}
+  constructor(
+    private readonly keycloakService: KeycloakService,
+    private dialog: MatDialog
+  ){}
 
   ngOnInit(): void {
     this.checkLoginStatus();
@@ -47,7 +52,7 @@ export class NavbarComponent implements OnInit{
   }
 
   async viewProfile() {
-    console.log("View Profile triggered");
+    this.dialog.open(ViewProfileModalComponent);
   }
 
   async changePassword() {

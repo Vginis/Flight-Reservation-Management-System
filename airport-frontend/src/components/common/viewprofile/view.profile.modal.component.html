@@ -1,0 +1,18 @@
+<div class="view-profile-container">
+    <h2 mat-dialog-title>User Profile</h2>
+
+    <div mat-dialog-content *ngIf="userProfile; else loading">
+    <p><strong>Username:</strong> {{ userProfile.username }}</p>
+    <p><strong>First Name:</strong> {{ userProfile.firstName }}</p>
+    <p><strong>Last Name:</strong> {{ userProfile.lastName }}</p>
+    <p><strong>Email:</strong> {{ userProfile.email }}</p>
+    </div>
+
+    <ng-template #loading>
+    <p>Loading user info...</p>
+    </ng-template>
+
+    <div mat-dialog-actions>
+    <button mat-button color="primary" (click)="close()">Close</button>
+    </div>
+</div>

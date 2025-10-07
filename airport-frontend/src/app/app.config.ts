@@ -5,13 +5,14 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { KeycloakInitService } from '../services/keycloak/keycloak-init.service';
+import { HttpClientModule } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
     provideClientHydration(), 
     provideAnimations(),
-    importProvidersFrom(KeycloakAngularModule), 
+    importProvidersFrom(KeycloakAngularModule, HttpClientModule), 
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
