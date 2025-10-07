@@ -1,7 +1,6 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import org.acme.constant.Role;
 import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@DiscriminatorValue("not null")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
 public class User {

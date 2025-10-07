@@ -16,7 +16,6 @@ import org.acme.mapper.AddressMapper;
 import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
-import org.acme.representation.PassengerUpdateRepresentation;
 import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -35,9 +34,21 @@ public class UserService {
     UserMapper userMapper;
     @Inject
     AirlineRepository airlineRepository;
+    @Inject
+    UserContext userContext;
 
     public PageResult<UserRepresentation> searchUsersByParams(PageQuery<UserSortAndFilterBy> query){
         return userMapper.map(userRepository.searchUsersByParams(query));
+    }
+
+    public UserRepresentation getUserProfile(){
+        String username = userContext.extractUsername();
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
+        if(userOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        return userMapper.map(userOptional.get());
     }
 
     @Transactional
