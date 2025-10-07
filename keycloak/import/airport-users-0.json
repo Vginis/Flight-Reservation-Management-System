@@ -1,0 +1,67 @@
+{
+  "realm" : "airport",
+  "users" : [ {
+    "id" : "9556ff5e-5773-42b5-a3c0-f51359db13a4",
+    "username" : "flight_admin",
+    "firstName" : "ea",
+    "lastName" : "aa",
+    "email" : "email@emai1l.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1758039968825,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "1a0dc3ff-c4cd-4f61-93d0-c0077becde00",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1758040432432,
+      "secretData" : "{\"value\":\"RHkAbxsqQ08syHg1OxthHMfEove77eumsEVquup1s9kSGduxoM+P5cNuEQuV/F2fKpPYmxUwTiBWsVEfZ+H2Hg==\",\"salt\":\"EjIbnz9zxrUF9T7FcSLfcg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-airport", "airline_admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "55f3fdda-46f9-41b5-959e-3364970f8bf5",
+    "username" : "my-user",
+    "firstName" : "aa",
+    "lastName" : "dd",
+    "email" : "email@email.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1758111575191,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "93108e97-0bd6-4a35-a9ae-3db0819e1d4a",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1758111597987,
+      "secretData" : "{\"value\":\"HxCTUL6k7vt3xno3pySgAAMjryNThNt157VvmPUiLYDe33E48gwBCa0OMmpVEaQwQK4tbqCMRcuge5QAwEdcCQ==\",\"salt\":\"nWRJptQjH4Lbj5sgXxplsA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-airport" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "f05ded06-3fbf-4815-a533-163d0702d00d",
+    "username" : "service-account-backend",
+    "emailVerified" : false,
+    "createdTimestamp" : 1758039913123,
+    "enabled" : true,
+    "totp" : false,
+    "serviceAccountClientId" : "backend",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-airport" ],
+    "clientRoles" : {
+      "backend" : [ "uma_protection" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

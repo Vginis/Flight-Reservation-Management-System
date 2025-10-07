@@ -16,3 +16,9 @@ services:
       start-dev
       --hostname=localhost
       --import-realm
+
+#To apply new configuration changes from keycloak admin page
+# sudo docker exec -it keycloak-airport \
+# /opt/keycloak/bin/kc.sh export \
+# --dir /opt/keycloak/data/import \
+# --realm airport
