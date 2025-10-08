@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@DiscriminatorValue("not null")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
 public class User {

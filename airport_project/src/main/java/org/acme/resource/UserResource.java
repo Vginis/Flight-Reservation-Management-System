@@ -35,6 +35,13 @@ public class UserResource {
         return Response.ok(userService.searchUsersByParams(query)).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("user-profile")
+    public Response getUserProfile(){
+        return Response.ok(userService.getUserProfile()).build();
+    }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
