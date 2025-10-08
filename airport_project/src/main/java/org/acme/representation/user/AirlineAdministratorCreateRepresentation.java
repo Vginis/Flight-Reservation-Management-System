@@ -15,8 +15,8 @@ public class AirlineAdministratorCreateRepresentation extends UserCreateRepresen
     public AirlineAdministratorCreateRepresentation() {
     }
 
-    public AirlineAdministratorCreateRepresentation(String username, String email, String phoneNumber, List<AddressCreateRepresentation> addresses, String airlineU2digitCode) {
-        super(username, email, phoneNumber, addresses);
+    public AirlineAdministratorCreateRepresentation(String username, String firstName, String lastName, String email, String phoneNumber, List<AddressCreateRepresentation> addresses, String airlineU2digitCode) {
+        super(username, firstName, lastName, email, phoneNumber, addresses);
         this.airlineU2digitCode = airlineU2digitCode;
     }
 

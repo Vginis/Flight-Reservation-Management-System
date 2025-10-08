@@ -11,8 +11,8 @@ public class PassengerCreateRepresentation extends UserCreateRepresentation{
     public PassengerCreateRepresentation() {
     }
 
-    public PassengerCreateRepresentation(String username, String email, String phoneNumber, List<AddressCreateRepresentation> addresses, String passport) {
-        super(username, email, phoneNumber, addresses);
+    public PassengerCreateRepresentation(String username, String firstName, String lastName, String email, String phoneNumber, List<AddressCreateRepresentation> addresses, String passport) {
+        super(username, firstName, lastName, email, phoneNumber, addresses);
         this.passport = passport;
     }
 

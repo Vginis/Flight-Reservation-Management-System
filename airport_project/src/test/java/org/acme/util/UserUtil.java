@@ -7,7 +7,7 @@ import java.util.List;
 
 public class UserUtil {
     public static AirlineAdministratorCreateRepresentation createAirlineAdministratorCreateRepresentation(){
-        return new AirlineAdministratorCreateRepresentation("user-1","email@email.com","1234557890",
+        return new AirlineAdministratorCreateRepresentation("user-1","Kendrick", "Nunn","email@email.com","1234557890",
                 new ArrayList<>(List.of(AddressUtil.createAddressCreateRepresentation())),"AA");
     }
 }

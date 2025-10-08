@@ -7,6 +7,8 @@ import java.util.List;
 public class UserRepresentation {
     private Integer id;
     private String username;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phoneNumber;
     private String role;
@@ -15,9 +17,11 @@ public class UserRepresentation {
     public UserRepresentation() {
     }
 
-    public UserRepresentation(Integer id, String username, String email, String phoneNumber, String role, List<AddressRepresentation> addresses) {
+    public UserRepresentation(Integer id, String username, String firstName, String lastName, String email, String phoneNumber, String role, List<AddressRepresentation> addresses) {
         this.id = id;
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
@@ -38,6 +42,22 @@ public class UserRepresentation {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

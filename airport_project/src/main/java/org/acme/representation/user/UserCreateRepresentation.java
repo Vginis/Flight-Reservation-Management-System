@@ -11,6 +11,10 @@ import java.util.List;
 public class UserCreateRepresentation{
     @NotBlank
     private String username;
+    @NotBlank
+    private String firstName;
+    @NotBlank
+    private String lastName;
     @Email(message = "Email should be a valid email address.")
     private String email;
     @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits")
@@ -21,8 +25,10 @@ public class UserCreateRepresentation{
     public UserCreateRepresentation() {
     }
 
-    public UserCreateRepresentation(String username, String email, String phoneNumber, List<AddressCreateRepresentation> addresses) {
+    public UserCreateRepresentation(String username, String firstName, String lastName, String email, String phoneNumber, List<AddressCreateRepresentation> addresses) {
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.addresses = addresses;
@@ -34,6 +40,22 @@ public class UserCreateRepresentation{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

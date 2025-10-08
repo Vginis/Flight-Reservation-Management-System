@@ -1,6 +1,7 @@
 package org.acme.representation.user;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.acme.representation.AddressCreateRepresentation;
@@ -8,12 +9,32 @@ import org.acme.representation.AddressCreateRepresentation;
 import java.util.List;
 
 public class UserUpdateRepresentation {
+    @NotBlank
+    private String firstName;
+    @NotBlank
+    private String lastName;
     @Email(message = "Email should be a valid email address.")
     private String email;
     @Pattern(regexp = "\\d{10}", message = "Phone number must be exactly 10 digits")
     private String phoneNumber;
     @NotNull
     private List<AddressCreateRepresentation> addresses;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getEmail() {
         return email;
