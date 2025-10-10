@@ -5,6 +5,7 @@ import org.acme.domain.Airport;
 import org.acme.representation.airport.AirportRepresentation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.stream.Collectors;
 
@@ -13,4 +14,7 @@ import java.util.stream.Collectors;
         imports = {Collectors.class})
 @RequestScoped
 public interface AirportMapper extends OneWayMapper<AirportRepresentation, Airport> {
+    @Override
+    @Mapping(target = "airportId", source = "id")
+    AirportRepresentation map(Airport e);
 }

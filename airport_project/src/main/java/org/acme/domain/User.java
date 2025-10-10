@@ -1,6 +1,7 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import org.acme.constant.Role;
 import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@DiscriminatorValue("not null")
+@DiscriminatorValue("not_null")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type" , discriminatorType = DiscriminatorType.STRING)
 public class User {
@@ -23,10 +24,10 @@ public class User {
     @Column(name = "username", nullable = false, length = 30, unique = true)
     private String username;
 
-    @Column(name = "first_name", nullable = false, length = 50, unique = true)
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50, unique = true)
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
     @Column(name = "email", nullable = false, length = 30)
@@ -51,6 +52,16 @@ public class User {
         this.email = userCreateRepresentation.getEmail();
         this.phoneNumber = userCreateRepresentation.getEmail();
         this.role = role;
+        this.addresses = new ArrayList<>();
+    }
+
+    public User(String username, String firstName, String lastName, String email){
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = "";
+        this.role = Role.SYSTEM_ADMIN;
         this.addresses = new ArrayList<>();
     }
 

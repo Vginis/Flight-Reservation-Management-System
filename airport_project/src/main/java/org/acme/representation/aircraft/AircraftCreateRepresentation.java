@@ -9,6 +9,10 @@ public class AircraftCreateRepresentation {
     private String aircraftName;
     @Positive
     private Integer aircraftCapacity;
+    @Positive
+    private Integer aircraftRows;
+    @Positive
+    private Integer aircraftColumns;
     @NotNull
     private Integer airlineId;
 
@@ -26,6 +30,22 @@ public class AircraftCreateRepresentation {
 
     public void setAircraftCapacity(Integer aircraftCapacity) {
         this.aircraftCapacity = aircraftCapacity;
+    }
+
+    public Integer getAircraftRows() {
+        return aircraftRows;
+    }
+
+    public void setAircraftRows(Integer aircraftRows) {
+        this.aircraftRows = aircraftRows;
+    }
+
+    public Integer getAircraftColumns() {
+        return aircraftColumns;
+    }
+
+    public void setAircraftColumns(Integer aircraftColumns) {
+        this.aircraftColumns = aircraftColumns;
     }
 
     public Integer getAirlineId() {

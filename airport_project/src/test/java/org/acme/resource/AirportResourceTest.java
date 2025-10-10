@@ -49,7 +49,7 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals(3, a1.airportId);
+        assertEquals(3, a1.getAirportId());
     }
 
     @Test
@@ -70,10 +70,10 @@ public class AirportResourceTest extends JPATest {
                 .then().statusCode(201)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals("Furina", createdAirport.airportName);
-        assertEquals("Fontaine",createdAirport.city);
-        assertEquals("Teyvat",createdAirport.country);
-        assertEquals("BEY",createdAirport.u3digitCode);
+        assertEquals("Furina", createdAirport.getAirportName());
+        assertEquals("Fontaine",createdAirport.getCity());
+        assertEquals("Teyvat",createdAirport.getCountry());
+        assertEquals("BEY",createdAirport.getU3digitCode());
 //        assertEquals(1, createdAirport.depFlights.size());
 //        assertEquals(1, createdAirport.arrFlights.size());
 
@@ -91,10 +91,10 @@ public class AirportResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
-        airport.airportName = "Furina_De_Chateau";
-       airport.city = "Cardinale";
-       airport.country = "Fontaine";
-       airport.u3digitCode = "FON";
+        airport.setAirportName("Furina_De_Chateau");
+       airport.setCity("Cardinale");
+       airport.setCountry("Fontaine");
+       airport.setU3digitCode("FON");
 //       airport.depFlights = new ArrayList<>();
 //       airport.arrFlights = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class AirportResourceTest extends JPATest {
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
 
-        assertEquals("Furina_De_Chateau", updated.airportName);
+        assertEquals("Furina_De_Chateau", updated.getAirportName());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class AirportResourceTest extends JPATest {
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
-        airport.airportId = 10;
+        airport.setAirportId(10);
 
         given().contentType(ContentType.JSON).body(airport)
                 .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)

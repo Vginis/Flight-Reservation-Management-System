@@ -8,6 +8,10 @@ public class InvalidRequestException extends RuntimeException {
         this.response = new ErrorResponse(404, message);
     }
 
+    public InvalidRequestException(ErrorResponse response){
+        this.response = response;
+    }
+
     public ErrorResponse getErrorResponse(){
         return this.response;
     }

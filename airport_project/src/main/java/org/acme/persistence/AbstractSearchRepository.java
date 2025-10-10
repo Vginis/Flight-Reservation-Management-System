@@ -28,7 +28,7 @@ public class AbstractSearchRepository<S> implements PanacheRepositoryBase<S, Int
     }
 
     public void appendQueryBuildAndParamsForField(String field, String sqlQuery, PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters){
-        if(query.getSearchField().value().equals(field)){
+        if(query.getSearchField()!=null && query.getSearchField().value().equals(field)){
             queryBuilder.append(sqlQuery);
             parameters.and(field, query.getSearchValue());
         }

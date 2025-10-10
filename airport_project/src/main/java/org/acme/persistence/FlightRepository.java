@@ -12,6 +12,7 @@ import org.acme.search.PageResult;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -128,15 +129,25 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
         if(flightMultipleParamsSearchDTO.getDepartureDate()!=null){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
             LocalDate depDate = LocalDate.parse(flightMultipleParamsSearchDTO.getDepartureDate(), formatter);
-            queryBuilder.append(" AND f.departureTime = :departureTime");
-            params.put(DEPARTURE_TIME_LABEL, depDate.atStartOfDay());
+
+            LocalDateTime depStartOfDay = depDate.atStartOfDay();
+            LocalDateTime depEndOfDay = depDate.atTime(LocalTime.MAX);
+
+            queryBuilder.append(" AND f.departureTime BETWEEN :depStartOfDay AND :depEndOfDay");
+            params.put("depStartOfDay", depStartOfDay);
+            params.put("depEndOfDay", depEndOfDay);
         }
 
         if(flightMultipleParamsSearchDTO.getArrivalDate()!=null){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
             LocalDate arrDate = LocalDate.parse(flightMultipleParamsSearchDTO.getArrivalDate(), formatter);
-            queryBuilder.append(" AND f.arrivalTime = :arrivalTime");
-            params.put(ARRIVAL_TIME_LABEL, arrDate.atStartOfDay());
+
+            LocalDateTime arrStartOfDay = arrDate.atStartOfDay();
+            LocalDateTime arrEndOfDay = arrDate.atTime(LocalTime.MAX);
+
+            queryBuilder.append(" AND f.arrivalTime BETWEEN :arrStartOfDay AND :arrEndOfDay");
+            params.put("arrStartOfDay", arrStartOfDay);
+            params.put("arrEndOfDay", arrEndOfDay);
         }
     }
 }

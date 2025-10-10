@@ -14,11 +14,11 @@ public class Fixture {
 
     public static AirportRepresentation getAirportRepresentation(){
         AirportRepresentation dto = new AirportRepresentation();
-        dto.airportId = 1;
-        dto.airportName = "Furina";
-        dto.city = "Fontaine";
-        dto.country = "Teyvat";
-        dto.u3digitCode = "BEY";
+        dto.setAirportId(1);
+        dto.setAirportName("Furina");
+        dto.setCity("Fontaine");
+        dto.setCountry("Teyvat");
+        dto.setU3digitCode("BEY");
 //        dto.depFlights = new ArrayList<>();
 //        dto.depFlights.add(7);
 //        dto.arrFlights = new ArrayList<>();

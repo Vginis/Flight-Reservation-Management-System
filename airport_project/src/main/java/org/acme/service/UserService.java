@@ -20,9 +20,11 @@ import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
+import org.acme.util.UserContext;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 @ApplicationScoped
 public class UserService {
@@ -41,14 +43,29 @@ public class UserService {
         return userMapper.map(userRepository.searchUsersByParams(query));
     }
 
+    @Transactional
     public UserRepresentation getUserProfile(){
         String username = userContext.extractUsername();
         Optional<User> userOptional = userRepository.findUserByUsername(username);
+        Set<String> roles = userContext.extractRoles();
+
         if(userOptional.isEmpty()){
-            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+            if(!roles.contains("system_admin")){
+                throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+            }
+            return persistSystemAdminUser(username);
         }
 
         return userMapper.map(userOptional.get());
+    }
+
+    private UserRepresentation persistSystemAdminUser(String username){
+        String firstName = userContext.extractFirstName();
+        String lastName = userContext.extractLastName();
+        String email = userContext.extractEmail();
+        User systemAdmin = new User(username, firstName, lastName, email);
+        userRepository.persist(systemAdmin);
+        return userMapper.map(systemAdmin);
     }
 
     @Transactional

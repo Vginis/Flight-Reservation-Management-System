@@ -8,11 +8,11 @@ import org.acme.representation.airport.AirportUpdateRepresentation;
 public class AirportUtil {
     public static AirportRepresentation createAirportRepresentation(){
         AirportRepresentation airportRepresentation = new AirportRepresentation();
-        airportRepresentation.airportName = "airportName";
-        airportRepresentation.airportId = 1;
-        airportRepresentation.city = "Athens";
-        airportRepresentation.country = "Greece";
-        airportRepresentation.u3digitCode = "ATH";
+        airportRepresentation.setAirportName("airportName");
+        airportRepresentation.setAirportId(1);
+        airportRepresentation.setCity("Athens");
+        airportRepresentation.setCountry("Greece");
+        airportRepresentation.setU3digitCode("ATH");
         return airportRepresentation;
     }
 

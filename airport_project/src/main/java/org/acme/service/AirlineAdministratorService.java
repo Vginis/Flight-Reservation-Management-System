@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
+import org.acme.constant.Role;
 import org.acme.domain.Address;
 import org.acme.domain.Airline;
 import org.acme.domain.AirlineAdministrator;
@@ -28,6 +29,8 @@ public class AirlineAdministratorService {
     AddressMapper addressMapper;
     @Inject
     AirlineRepository airlineRepository;
+    @Inject
+    KeycloakService keycloakService;
 
     @Transactional
     public void createAirlineAdministrator(AirlineAdministratorCreateRepresentation airlineAdministratorCreateRepresentation){
@@ -47,6 +50,7 @@ public class AirlineAdministratorService {
                 }).toList());
         airline.getAdministrators().add(airlineAdministrator);
 
+        keycloakService.createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
         airlineAdministratorRepository.persist(airlineAdministrator);
     }
 

@@ -1,6 +1,7 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -46,6 +47,7 @@ public class FlightResource {
 
     @GET
     @Path("multiple-params")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByMultipleParams(@QueryParam("departureAirport") String departureAirport,
                                            @QueryParam("departureDate") @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Date must be in yyyy-mm-dd format") String departureDate,

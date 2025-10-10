@@ -1,6 +1,7 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -23,12 +24,15 @@ public class PassengerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response createPassenger(@Valid PassengerCreateRepresentation passengerCreateRepresentation) {
         passengerService.createPassenger(passengerCreateRepresentation);
         return Response.ok(SuccessMessages.PASSENGER_CREATE_SUCCESS).build();
     }
 
     @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePassenger(@QueryParam("username") String username, PassengerUpdateRepresentation representation) {
         passengerService.updatePassenger(representation, username);
         return Response.ok(SuccessMessages.PASSENGER_UPDATE_SUCCESS).build();

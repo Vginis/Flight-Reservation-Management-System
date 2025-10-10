@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 
@@ -40,12 +42,15 @@ public class Flight {
     @Column(name = "arrTime")
     private LocalDateTime arrivalTime;
 
-    private Integer aircraftId;
+    @Valid
+    @NotNull
+    @OneToOne(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    private FlightSeatLayout flightSeatLayout;
 
     public Flight() {
     }
 
-    public Flight(FlightCreateRepresentation flightCreateRepresentation, Airline airline, Airport departureAirport, Airport arrivalAirport) {
+    public Flight(FlightCreateRepresentation flightCreateRepresentation, Airline airline, Airport departureAirport, Airport arrivalAirport, FlightSeatLayout flightSeatLayout) {
         this.flightNumber = flightCreateRepresentation.getFlightNumber();
         this.flightUUID = UUID.randomUUID().toString();
         this.airline = airline;
@@ -53,7 +58,7 @@ public class Flight {
         this.departureTime = flightCreateRepresentation.getDepartureTime();
         this.arrivalAirport = arrivalAirport;
         this.arrivalTime = flightCreateRepresentation.getArrivalTime();
-        this.aircraftId = flightCreateRepresentation.getAircraftId();
+        this.flightSeatLayout = flightSeatLayout;
     }
 
     public Integer getId() {
@@ -66,10 +71,6 @@ public class Flight {
 
     public String getFlightUUID() {
         return flightUUID;
-    }
-
-    public Integer getAircraftId() {
-        return aircraftId;
     }
 
     public Airline getAirline() {
@@ -90,6 +91,10 @@ public class Flight {
 
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
+    }
+
+    public FlightSeatLayout getFlightSeatLayout() {
+        return flightSeatLayout;
     }
 
     private void calculateAvailableSeats() {

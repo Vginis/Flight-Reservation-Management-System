@@ -28,6 +28,8 @@ public class PassengerService {
     UserRepository userRepository;
     @Inject
     AddressMapper addressMapper;
+    @Inject
+    KeycloakService keycloakService;
 
     public void createPassenger(PassengerCreateRepresentation passengerCreateRepresentation){
         Optional<User> userOptional = userRepository.findUserByUsername(passengerCreateRepresentation.getUsername());
@@ -37,6 +39,7 @@ public class PassengerService {
         }
 
         Passenger passenger = new Passenger(passengerCreateRepresentation);
+        keycloakService.createKeycloakUser(passengerCreateRepresentation, Role.PASSENGER);
         passengerRepository.persist(passenger);
     }
 

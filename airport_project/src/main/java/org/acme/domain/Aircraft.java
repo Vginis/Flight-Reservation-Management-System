@@ -19,6 +19,12 @@ public class Aircraft {
     @Column(name = "aircraft_capacity", nullable = false)
     private Integer aircraftCapacity;
 
+    @Column(name = "aircraft_rows", nullable = false)
+    private Integer aircraftRows;
+
+    @Column(name = "aircraft_columns", nullable = false)
+    private Integer aircraftColumns;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "airline_id")
     private Airline airline;
@@ -29,6 +35,8 @@ public class Aircraft {
     public Aircraft(AircraftCreateRepresentation aircraftCreateRepresentation, Airline airline) {
         this.aircraftName = aircraftCreateRepresentation.getAircraftName();
         this.aircraftCapacity = aircraftCreateRepresentation.getAircraftCapacity();
+        this.aircraftRows = aircraftCreateRepresentation.getAircraftRows();
+        this.aircraftColumns = aircraftCreateRepresentation.getAircraftColumns();
         this.airline = airline;
     }
 
@@ -42,6 +50,14 @@ public class Aircraft {
 
     public Integer getAircraftCapacity() {
         return aircraftCapacity;
+    }
+
+    public Integer getAircraftRows() {
+        return aircraftRows;
+    }
+
+    public Integer getAircraftColumns() {
+        return aircraftColumns;
     }
 
     public Airline getAirline() {
