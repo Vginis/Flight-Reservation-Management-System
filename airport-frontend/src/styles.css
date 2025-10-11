@@ -1,3 +1,36 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackbar-success .mdc-snackbar__surface {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.snackbar-success .mat-mdc-snack-bar-label {
+  color: white !important;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.snackbar-error .mat-mdc-snack-bar-label {
+  color: white !important;
+}
+
+.snackbar-info .mdc-snackbar__surface {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+.snackbar-info .mat-mdc-snack-bar-label {
+  color: white !important;
+}
+
+.snackbar-success .mat-mdc-snack-bar-action,
+.snackbar-error .mat-mdc-snack-bar-action,
+.snackbar-info .mat-mdc-snack-bar-action {
+  color: white !important;
+}
