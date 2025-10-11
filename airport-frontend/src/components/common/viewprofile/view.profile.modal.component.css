@@ -1,4 +1,40 @@
 .view-profile-container{
-    height: 400px;
-    width: 400px;
+    height: 50%;
+    width: 65%;
+    padding: 2rem;
+}
+
+.view-profile-input-field{
+    width: 30%;
+    padding: 0.5rem;
+}
+
+.view-profile-form-container{
+    width: 650px;
+}
+
+.view-profile-button{
+    margin-left: 5%;
+}
+
+.address-group {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.addresses-title-container{
+    display: flex;
+}
+
+.addresses-title-container button{
+    margin-top: 5%;
+    height: 16px;
+}
+
+.addresses-title-container mat-icon{
+    font-size: 25px;
+    height: 25px;
+    width: 25px;
 }

@@ -50,7 +50,7 @@ public class User {
         this.firstName = userCreateRepresentation.getFirstName();
         this.lastName = userCreateRepresentation.getLastName();
         this.email = userCreateRepresentation.getEmail();
-        this.phoneNumber = userCreateRepresentation.getEmail();
+        this.phoneNumber = userCreateRepresentation.getPhoneNumber();
         this.role = role;
         this.addresses = new ArrayList<>();
     }

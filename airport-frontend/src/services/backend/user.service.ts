@@ -15,4 +15,8 @@ export class UserService {
     getUserProfile(): Observable<any> {
         return this.httpClient.get<any>(`${this.usersUrl}/user-profile`);
     }
+
+    updateUserProfile(payload: any): Observable<any> {
+        return this.httpClient.put(`${this.usersUrl}`, payload);
+    }
 }

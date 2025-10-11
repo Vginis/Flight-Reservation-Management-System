@@ -11,6 +11,7 @@ import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.SortDirection;
 import org.acme.constant.search.UserSortAndFilterBy;
+import org.acme.representation.MessageRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.service.UserService;
@@ -45,10 +46,9 @@ public class UserResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUserDetails(@Valid UserUpdateRepresentation userUpdateRepresentation,
-                                  @QueryParam("username") String username){
-        userService.updateUser(userUpdateRepresentation, username);
-        return Response.ok(SuccessMessages.USER_UPDATE_SUCCESS).build();
+    public Response updateUserDetails(@Valid UserUpdateRepresentation userUpdateRepresentation){
+        userService.updateUser(userUpdateRepresentation);
+        return Response.ok(new MessageRepresentation(SuccessMessages.USER_UPDATE_SUCCESS)).build();
     }
 
     @DELETE

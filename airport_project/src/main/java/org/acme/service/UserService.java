@@ -69,7 +69,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserUpdateRepresentation userUpdateRepresentation, String username){
+    public void updateUser(UserUpdateRepresentation userUpdateRepresentation){
+        String username = userContext.extractUsername();
         Optional<User> userOptional = userRepository.findUserByUsername(username);
         if(userOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);

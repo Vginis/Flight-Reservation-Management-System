@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewProfileModalComponent } from '../viewprofile/view.profile.modal.component';
+import { LoadingService } from '../../../services/frontend/loading.service';
 
 @Component({
     selector: 'app-navbar',
@@ -18,7 +19,7 @@ import { ViewProfileModalComponent } from '../viewprofile/view.profile.modal.com
         MatIconModule,
         CommonModule,
         MatSelectModule,
-        MatButtonModule
+        MatButtonModule,
     ],
     templateUrl: './navbar.component.html',
     styleUrl: './navbar.component.css'
@@ -28,7 +29,8 @@ export class NavbarComponent implements OnInit{
 
   constructor(
     private readonly keycloakService: KeycloakService,
-    private dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly loadingService: LoadingService
   ){}
 
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class NavbarComponent implements OnInit{
   }
 
   async changePassword() {
+    this.loadingService.show();
     console.log("Change Password triggered");
   }
 
