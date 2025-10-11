@@ -12,6 +12,7 @@ import org.acme.constant.ValueEnum;
 import org.acme.constant.search.SortDirection;
 import org.acme.constant.search.UserSortAndFilterBy;
 import org.acme.representation.MessageRepresentation;
+import org.acme.representation.user.PasswordResetRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.service.UserService;
@@ -34,6 +35,15 @@ public class UserResource {
         PageQuery<UserSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, UserSortAndFilterBy.class), searchValue, size, index
                 , ValueEnum.fromValue(sortBy, UserSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
         return Response.ok(userService.searchUsersByParams(query)).build();
+    }
+
+    @PUT
+    @Path("password-reset")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@Valid PasswordResetRepresentation passwordResetRepresentation){
+        userService.resetPassword(passwordResetRepresentation);
+        return Response.ok(new MessageRepresentation(SuccessMessages.PASSWORD_RESET_SUCCESS)).build();
     }
 
     @GET

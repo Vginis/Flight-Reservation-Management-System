@@ -16,6 +16,7 @@ import org.acme.mapper.AddressMapper;
 import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
+import org.acme.representation.user.PasswordResetRepresentation;
 import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -38,9 +39,21 @@ public class UserService {
     AirlineRepository airlineRepository;
     @Inject
     UserContext userContext;
+    @Inject
+    KeycloakService keycloakService;
 
     public PageResult<UserRepresentation> searchUsersByParams(PageQuery<UserSortAndFilterBy> query){
         return userMapper.map(userRepository.searchUsersByParams(query));
+    }
+
+    public void resetPassword(PasswordResetRepresentation passwordResetRepresentation){
+        String username = userContext.extractUsername();
+        Optional<User> user = userRepository.findUserByUsername(username);
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        keycloakService.updateUserPassword(username, passwordResetRepresentation.getNewPassword());
     }
 
     @Transactional

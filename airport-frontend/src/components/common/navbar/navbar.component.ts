@@ -8,8 +8,9 @@ import { environment } from '../../../environments/environment';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { ViewProfileModalComponent } from '../viewprofile/view.profile.modal.component';
+import { ViewProfileModalComponent } from '../../main/viewprofile/view.profile.modal.component';
 import { LoadingService } from '../../../services/frontend/loading.service';
+import { ChangePasswordModalComponent } from '../../main/changepassword/change.password.modal.component';
 
 @Component({
     selector: 'app-navbar',
@@ -57,9 +58,7 @@ export class NavbarComponent implements OnInit{
     this.dialog.open(ViewProfileModalComponent);
   }
 
-  async changePassword() {
-    this.loadingService.show();
-    console.log("Change Password triggered");
+  async viewResetPasswordModal(){
+    this.dialog.open(ChangePasswordModalComponent);
   }
-
 }

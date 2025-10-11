@@ -9,11 +9,13 @@ import org.acme.constant.ErrorMessages;
 import org.acme.constant.KeycloakConfiguration;
 import org.acme.exception.ErrorResponse;
 import org.acme.exception.InvalidRequestException;
+import org.acme.exception.ResourceNotFoundException;
 import org.acme.representation.user.UserCreateRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -106,5 +108,27 @@ public class KeycloakService {
         } catch (RuntimeException e) {
             log.errorf("Failed to send 'Update your password' email to user with keycloak id :%s", userId);
         }
+    }
+
+    public void updateUserPassword(String username, String newPassword){
+        List<UserRepresentation> userRepresentations = keycloak.realm(keycloakConfiguration.getKeycloakAppRealm())
+                .users().search(username);
+
+        if(userRepresentations.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        UserRepresentation userRepresentation = userRepresentations.getFirst();
+        CredentialRepresentation credentialRepresentation = constructCredentialRepresentation(newPassword);
+        keycloak.realm(keycloakConfiguration.getKeycloakAppRealm()).users().get(userRepresentation.getId())
+                .resetPassword(credentialRepresentation);
+    }
+
+    private CredentialRepresentation constructCredentialRepresentation(String newPassword){
+        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+        credentialRepresentation.setTemporary(false);
+        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
+        credentialRepresentation.setValue(newPassword);
+        return credentialRepresentation;
     }
 }

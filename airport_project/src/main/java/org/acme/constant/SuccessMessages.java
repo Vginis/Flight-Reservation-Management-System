@@ -22,6 +22,8 @@ public class SuccessMessages {
     public static final String PASSENGER_CREATE_SUCCESS = "passenger_created_successfully";
     public static final String PASSENGER_UPDATE_SUCCESS = "passenger_updated_successfully";
 
+    public static final String PASSWORD_RESET_SUCCESS = "password_reset_successfully";
+
     public static final String USER_UPDATE_SUCCESS = "user_updated_successfully";
     public static final String USER_DELETE_SUCCESS = "user_deleted_successfully";
 }

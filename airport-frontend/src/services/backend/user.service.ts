@@ -19,4 +19,8 @@ export class UserService {
     updateUserProfile(payload: any): Observable<any> {
         return this.httpClient.put(`${this.usersUrl}`, payload);
     }
+
+    resetPassword(payload: any): Observable<any> {
+        return this.httpClient.put(`${this.usersUrl}/password-reset`,payload);
+    }
 }
