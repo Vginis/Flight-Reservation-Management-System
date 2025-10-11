@@ -5,21 +5,33 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { KeycloakInitService } from '../services/keycloak/keycloak-init.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { LoadingInterceptor } from '../interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), 
-    provideClientHydration(), 
+    provideRouter(routes),
+    provideClientHydration(),
     provideAnimations(),
-    importProvidersFrom(KeycloakAngularModule, HttpClientModule), 
+    importProvidersFrom(KeycloakAngularModule),
+    provideHttpClient(withInterceptorsFromDi()), 
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
       deps: [KeycloakInitService, PLATFORM_ID],
-      multi: true
-    }  
-  ]
+      multi: true,
+    },
+    {
+      provide: LoadingInterceptor,
+      useClass: LoadingInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true,
+    },
+  ],
 };
 
 

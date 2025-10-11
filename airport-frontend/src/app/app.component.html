@@ -1,1 +1,4 @@
 <app-home></app-home>
+<div [ngClass]="(loading$ | async) ? 'isVisible' : 'isHidden'" class="global-spinner">
+    <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+</div>
