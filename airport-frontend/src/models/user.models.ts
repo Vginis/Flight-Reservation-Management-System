@@ -14,3 +14,12 @@ export interface Address {
     country: string;
     city: string;
 }
+
+export interface KeycloakUserProfile {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roles: string[];
+}
