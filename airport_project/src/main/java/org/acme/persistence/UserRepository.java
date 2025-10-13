@@ -23,9 +23,11 @@ public class UserRepository extends AbstractSearchRepository<User> {
             @Override
             public void search(PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters) {
                 appendQueryBuildAndParamsForField("username"," and username like '%'||:username||'%'", query, queryBuilder, parameters);
+                appendQueryBuildAndParamsForField("firstName"," and firstName like '%'||:firstName||'%'", query, queryBuilder, parameters);
+                appendQueryBuildAndParamsForField("lastName"," and lastName like '%'||:lastName||'%'", query, queryBuilder, parameters);
                 appendQueryBuildAndParamsForField("email"," and email like '%'||:email||'%'", query, queryBuilder, parameters);
                 appendQueryBuildAndParamsForField("phoneNumber"," and phoneNumber like '%'||:phoneNumber||'%'", query, queryBuilder, parameters);
-                appendQueryBuildAndParamsForField("role"," and CAST(role) AS text like '%'||:role||'%'", query, queryBuilder, parameters);
+                appendQueryBuildAndParamsForField("role"," and CAST(role as string) like '%'||:role||'%'", query, queryBuilder, parameters);
             }
         });
     }

@@ -5,6 +5,8 @@ import org.acme.search.SortBy;
 
 public enum UserSortAndFilterBy implements ValueEnum, SortBy {
     USERNAME("username"),
+    FIRST_NAME("firstName"),
+    LAST_NAME("lastName"),
     EMAIL("email"),
     PHONE_NUMBER("phoneNumber"),
     ROLE("role");
