@@ -9,8 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewProfileModalComponent } from '../../main/viewprofile/view.profile.modal.component';
-import { LoadingService } from '../../../services/frontend/loading.service';
 import { ChangePasswordModalComponent } from '../../main/changepassword/change.password.modal.component';
+import { IdentityService } from '../../../services/keycloak/identity.service';
+import { CommonUtils } from '../../../utils/common.util';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-navbar',
@@ -31,7 +33,8 @@ export class NavbarComponent implements OnInit{
   constructor(
     private readonly keycloakService: KeycloakService,
     private readonly dialog: MatDialog,
-    private readonly loadingService: LoadingService
+    private readonly identityService: IdentityService,
+    private readonly router: Router
   ){}
 
   ngOnInit(): void {
@@ -60,5 +63,16 @@ export class NavbarComponent implements OnInit{
 
   async viewResetPasswordModal(){
     this.dialog.open(ChangePasswordModalComponent);
+  }
+
+  navigateToAdministration(){
+    this.router.navigate(['/administration']);
+  }
+
+  isSystemAdmin(): boolean{
+    if(this.loggedIn){
+      return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN);
+    }
+    return false;
   }
 }

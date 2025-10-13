@@ -1,4 +1,5 @@
-<app-home></app-home>
+<app-navbar></app-navbar>
 <div [ngClass]="(loading$ | async) ? 'isVisible' : 'isHidden'" class="global-spinner">
     <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
 </div>
+<router-outlet></router-outlet>

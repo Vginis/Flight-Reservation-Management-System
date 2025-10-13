@@ -4,12 +4,13 @@ import { HomeComponent } from '../components/main/home/home.component';
 import { LoadingService } from '../services/frontend/loading.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../components/common/navbar/navbar.component';
 
 @Component({
     selector: 'app-root',
     imports: [
         RouterOutlet, 
-        HomeComponent,
+        NavbarComponent,
         MatProgressSpinnerModule,
         CommonModule
     ],
