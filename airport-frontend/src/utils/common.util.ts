@@ -8,4 +8,6 @@ export class CommonUtils {
 
         return roleToLabelMapping[role] || role;
     }
+
+    public static readonly SYSTEM_ADMIN = "system_admin";
 }

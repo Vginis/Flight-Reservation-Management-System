@@ -36,7 +36,7 @@ export class FlightsearchComponent {
     { city: 'Thessaloniki', code: 'SKG'}
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private readonly fb: FormBuilder) {
     this.searchForm = this.fb.group({
       from: [''],
       to: [''],
