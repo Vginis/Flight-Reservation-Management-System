@@ -14,5 +14,10 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Int
         return find("passport = :passport", Parameters.with("passport", passport))
                 .firstResultOptional();
     }
+
+    public Optional<Passenger> findPassengerByUsername(String username) {
+        return find("username = :username", Parameters.with("username", username))
+                .firstResultOptional();
+    }
 }
 

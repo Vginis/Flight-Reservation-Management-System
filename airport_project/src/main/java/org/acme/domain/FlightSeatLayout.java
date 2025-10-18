@@ -2,6 +2,7 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "flight_seat_layouts")
@@ -30,12 +31,11 @@ public class FlightSeatLayout {
     public FlightSeatLayout() {
     }
 
-    public FlightSeatLayout(Integer aircraftId, Integer seatRows, Integer seatColumns, Flight flight, List<FlightSeatState> reservedSeats) {
-        this.aircraftId = aircraftId;
-        this.seatRows = seatRows;
-        this.seatColumns = seatColumns;
-        this.flight = flight;
-        this.reservedSeats = reservedSeats;
+    public FlightSeatLayout(Aircraft aircraft) {
+        this.aircraftId = aircraft.getId();
+        this.seatRows = aircraft.getAircraftRows();
+        this.seatColumns = aircraft.getAircraftColumns();
+        this.reservedSeats = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -56,6 +56,10 @@ public class FlightSeatLayout {
 
     public Flight getFlight() {
         return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
     public List<FlightSeatState> getReservedSeats() {

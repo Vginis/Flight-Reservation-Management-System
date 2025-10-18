@@ -68,8 +68,18 @@ public class UserResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUserDetails(@Valid UserUpdateRepresentation userUpdateRepresentation){
-        userService.updateUser(userUpdateRepresentation);
+    @Path("user-profile")
+    public Response updateUserProfile(@Valid UserUpdateRepresentation userUpdateRepresentation){
+        userService.updateUserProfile(userUpdateRepresentation);
+        return Response.ok(new MessageRepresentation(SuccessMessages.USER_UPDATE_SUCCESS)).build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUserDetails(@Valid UserUpdateRepresentation userUpdateRepresentation,
+                                      @QueryParam("username") String username){
+        userService.updateUserDetails(userUpdateRepresentation, username);
         return Response.ok(new MessageRepresentation(SuccessMessages.USER_UPDATE_SUCCESS)).build();
     }
 

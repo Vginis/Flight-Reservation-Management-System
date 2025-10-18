@@ -1,4 +1,4 @@
-package org.acme.representation;
+package org.acme.representation.passenger;
 
 import org.acme.representation.user.UserUpdateRepresentation;
 

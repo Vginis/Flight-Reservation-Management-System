@@ -27,7 +27,7 @@ public class FlightUtil {
         Airline airline = AirlineUtil.createAirline();
         Airport depAirport = AirportUtil.createAirport();
         Airport arrAirport = AirportUtil.createAirport();
-        return new Flight(createFlightCreateRepresentation(), airline, depAirport, arrAirport);
+        return new Flight();
     }
 
     public static FlightCreateRepresentation createFlightCreateRepresentation(){

@@ -13,7 +13,8 @@ import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AddressMapper;
 import org.acme.persistence.PassengerRepository;
 import org.acme.persistence.UserRepository;
-import org.acme.representation.PassengerUpdateRepresentation;
+import org.acme.representation.passenger.PassengerPassportRepresentation;
+import org.acme.representation.passenger.PassengerUpdateRepresentation;
 import org.acme.representation.user.PassengerCreateRepresentation;
 
 import java.util.Optional;
@@ -30,6 +31,17 @@ public class PassengerService {
     AddressMapper addressMapper;
     @Inject
     KeycloakService keycloakService;
+
+    public PassengerPassportRepresentation getPassport(String username){
+        Optional<Passenger> passengerOptional = passengerRepository.findPassengerByUsername(username);
+        if(passengerOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        PassengerPassportRepresentation passengerPassportRepresentation = new PassengerPassportRepresentation();
+        passengerPassportRepresentation.setPassport(passengerOptional.get().getPassport());
+        return passengerPassportRepresentation;
+    }
 
     public void createPassenger(PassengerCreateRepresentation passengerCreateRepresentation){
         Optional<User> userOptional = userRepository.findUserByUsername(passengerCreateRepresentation.getUsername());

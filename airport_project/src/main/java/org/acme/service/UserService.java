@@ -95,8 +95,13 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserUpdateRepresentation userUpdateRepresentation){
+    public void updateUserProfile(UserUpdateRepresentation userUpdateRepresentation){
         String username = userContext.extractUsername();
+        this.updateUserDetails(userUpdateRepresentation, username);
+    }
+
+    @Transactional
+    public void updateUserDetails(UserUpdateRepresentation userUpdateRepresentation, String username){
         Optional<User> userOptional = userRepository.findUserByUsername(username);
         if(userOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
@@ -114,6 +119,7 @@ public class UserService {
                 }).toList());
         userRepository.getEntityManager().merge(user);
     }
+
 
     @Transactional
     public void deleteUser(Integer id){
