@@ -1,5 +1,6 @@
 package org.acme.service;
 
+import org.acme.constant.Role;
 import org.acme.domain.Address;
 import org.acme.domain.Airline;
 import org.acme.domain.AirlineAdministrator;
@@ -38,6 +39,8 @@ class AirlineAdministratorServiceTest {
     AddressMapper addressMapper;
     @Mock
     AirlineAdministratorRepository airlineAdministratorRepository;
+    @Mock
+    KeycloakService keycloakService;
 
     User user;
     Airline airline;
@@ -61,6 +64,9 @@ class AirlineAdministratorServiceTest {
                 .thenReturn(address);
         Mockito.doNothing().when(airlineAdministratorRepository)
                 .persist(Mockito.any(AirlineAdministrator.class));
+        Mockito.doNothing().when(keycloakService)
+                .createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
+
         Assertions.assertDoesNotThrow(() -> airlineAdministratorService
                 .createAirlineAdministrator(airlineAdministratorCreateRepresentation));
     }

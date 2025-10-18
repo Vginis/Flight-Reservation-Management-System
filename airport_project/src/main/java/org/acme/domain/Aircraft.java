@@ -68,9 +68,4 @@ public class Aircraft {
         this.aircraftName = aircraftUpdateRepresentation.getAircraftName();
         this.aircraftCapacity = aircraftUpdateRepresentation.getAircraftCapacity();
     }
-
-    //    public double flightCompleteness(){
-//TODO Fix flight completeness
-//        return 100*(1-(double)this.getAvailableSeats()/this.getAircraftCapacity());
-//    }
 }

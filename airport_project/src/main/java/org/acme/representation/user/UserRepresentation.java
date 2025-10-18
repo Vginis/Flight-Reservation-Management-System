@@ -17,17 +17,6 @@ public class UserRepresentation {
     public UserRepresentation() {
     }
 
-    public UserRepresentation(Integer id, String username, String firstName, String lastName, String email, String phoneNumber, String role, List<AddressRepresentation> addresses) {
-        this.id = id;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
-        this.addresses = addresses;
-    }
-
     public Integer getId() {
         return id;
     }

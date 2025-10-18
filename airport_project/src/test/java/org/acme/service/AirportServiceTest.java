@@ -90,7 +90,7 @@ class AirportServiceTest {
     void testUpdateAirportDetails(){
         Mockito.when(airportRepository.findByIdOptional(1))
                 .thenReturn(Optional.of(airport));
-        Mockito.when(airportRepository.findAirportByName("airport 2"))
+        Mockito.when(airportRepository.findAirportByName("airport 1"))
                 .thenReturn(Optional.empty());
         Mockito.when(airportRepository.findAirportBy3DCode("ATH"))
                 .thenReturn(Optional.empty());
@@ -115,10 +115,11 @@ class AirportServiceTest {
         Airport otherAirport = new Airport("airport 2", "Greece","Athens","BTH");
         Mockito.when(airportRepository.findByIdOptional(1))
                 .thenReturn(Optional.of(airport));
-        Mockito.when(airportRepository.findAirportByName("airport 2"))
+        Mockito.when(airportRepository.findAirportByName("airport 1"))
                 .thenReturn(Optional.of(otherAirport));
         Mockito.when(airportRepository.findAirportBy3DCode("ATH"))
                 .thenReturn(Optional.empty());
+
         Assertions.assertThrows(InvalidRequestException.class,() ->
                 airportService.updateAirport(airportUpdateRepresentation));
     }

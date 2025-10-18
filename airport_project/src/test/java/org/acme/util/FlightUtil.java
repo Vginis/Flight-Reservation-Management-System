@@ -3,6 +3,7 @@ package org.acme.util;
 import org.acme.domain.Airline;
 import org.acme.domain.Airport;
 import org.acme.domain.Flight;
+import org.acme.domain.FlightSeatLayout;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightRepresentation;
@@ -24,9 +25,6 @@ public class FlightUtil {
     }
 
     public static Flight createFlight(){
-        Airline airline = AirlineUtil.createAirline();
-        Airport depAirport = AirportUtil.createAirport();
-        Airport arrAirport = AirportUtil.createAirport();
         return new Flight();
     }
 

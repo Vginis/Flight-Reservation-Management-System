@@ -86,6 +86,7 @@ public class UserResource {
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ Role.SYSTEM_ADMIN})
     public Response deleteUser(@PathParam("id") Integer id){
         userService.deleteUser(id);
         return Response.ok(SuccessMessages.USER_DELETE_SUCCESS).build();

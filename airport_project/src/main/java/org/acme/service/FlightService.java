@@ -61,11 +61,11 @@ public class FlightService {
         }
 
         flightValidator.validateCreatedFlightDates(flightCreateRepresentation.getDepartureTime(),flightCreateRepresentation.getArrivalTime());
-
         Aircraft aircraft = aircraftOptional.get();
         FlightSeatLayout flightSeatLayout = new FlightSeatLayout(aircraft);
         Flight flight = new Flight(flightCreateRepresentation, airlineOptional.get(), departureAirportOptional.get(),arrivalAirportOptional.get(), flightSeatLayout);
         flightSeatLayout.setFlight(flight);
+
         flightRepository.persist(flight);
     }
 

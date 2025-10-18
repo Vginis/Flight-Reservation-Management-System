@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
 import org.acme.representation.ReservationRepresentation;
-import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -19,11 +18,13 @@ import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-public class ReservationResourceTest extends JPATest {
+class ReservationResourceTest extends JPATest {
+
+    static final String API_ROOT  = "http://localhost:8081";
 
     @Test
-    public void findAllReservations() {
-        List<ReservationRepresentation> reservations = when().get(Fixture.API_ROOT+ AirportProjectURIs.RESERVATIONS)
+    void findAllReservations() {
+        List<ReservationRepresentation> reservations = when().get(API_ROOT+ AirportProjectURIs.RESERVATIONS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
@@ -31,17 +32,17 @@ public class ReservationResourceTest extends JPATest {
     }
 
     @Test
-    public void findReservationByPassengerId() {
+    void findReservationByPassengerId() {
         List<ReservationRepresentation> reservations = given().queryParam("passengerId", 6)
-                .when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
+                .when().get(API_ROOT + AirportProjectURIs.RESERVATIONS)
                 .then().statusCode(200)
                 .extract().as(new TypeRef<List<ReservationRepresentation>>() {});
         assertEquals(3, reservations.size());
     }
 
     @Test
-    public void findExistingReservation() {
-        ReservationRepresentation a = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
+    void findExistingReservation() {
+        ReservationRepresentation a = when().get(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(ReservationRepresentation.class);
@@ -49,20 +50,20 @@ public class ReservationResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingReservation() {
-        when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 32)
+    void findNoExistingReservation() {
+        when().get(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 32)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void createReservation() {
-        ReservationRepresentation reservationRepresentation = Fixture.getReservationRepresentation();
+    void createReservation() {
+        ReservationRepresentation reservationRepresentation = new ReservationRepresentation();
         ReservationRepresentation savedReservation = given()
                 .contentType(ContentType.JSON)
                 .body(reservationRepresentation)
                 .when()
-                .post(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS)
+                .post(API_ROOT + AirportProjectURIs.RESERVATIONS)
                 .then().statusCode(201)
                 .extract().as(ReservationRepresentation.class);
         assertEquals(1, savedReservation.outgoingFlights.size());
@@ -73,8 +74,8 @@ public class ReservationResourceTest extends JPATest {
     }
 
     @Test
-    public void updateReservation() {
-        ReservationRepresentation reservation = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
+    void updateReservation() {
+        ReservationRepresentation reservation = when().get(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(ReservationRepresentation.class);
@@ -85,10 +86,10 @@ public class ReservationResourceTest extends JPATest {
         reservation.totalPrice = (long) 240;
 
         given().contentType(ContentType.JSON).body(reservation)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
+                .when().put(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
                 .then().statusCode(204);
 
-        ReservationRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
+        ReservationRepresentation updated = when().get(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(ReservationRepresentation.class);
@@ -98,9 +99,9 @@ public class ReservationResourceTest extends JPATest {
 
     @Test
     @TestTransaction
-    public void removeExistingReservation(){
+    void removeExistingReservation(){
         when()
-                .delete(Fixture.API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 11)
+                .delete(API_ROOT + AirportProjectURIs.RESERVATIONS + "/" + 11)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }

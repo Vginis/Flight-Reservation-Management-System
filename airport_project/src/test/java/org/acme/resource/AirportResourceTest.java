@@ -8,10 +8,8 @@ import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
 import org.acme.representation.airport.AirportRepresentation;
-import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -20,11 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @QuarkusTest
-public class AirportResourceTest extends JPATest {
+class AirportResourceTest extends JPATest {
+
+    public static final String API_ROOT  = "http://localhost:8081";
 
     @Test
-    public void findAllAirports() {
-        List<AirportRepresentation> airports = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+    void findAllAirports() {
+        List<AirportRepresentation> airports = when().get(API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirportRepresentation>>() {});
@@ -33,8 +33,8 @@ public class AirportResourceTest extends JPATest {
     }
 
     @Test
-    public void findAirportBy3DCode() {
-        List<AirportRepresentation> airports = given().queryParam("code", "ATH").when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+    void findAirportBy3DCode() {
+        List<AirportRepresentation> airports = given().queryParam("code", "ATH").when().get(API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirportRepresentation>>() {});
@@ -43,8 +43,8 @@ public class AirportResourceTest extends JPATest {
     }
 
     @Test
-    public void findExistingAirport() {
-        AirportRepresentation a1 = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
+    void findExistingAirport() {
+        AirportRepresentation a1 = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
@@ -53,20 +53,20 @@ public class AirportResourceTest extends JPATest {
     }
 
     @Test
-    public void findNonExistingAirport() {
-        when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4711)
+    void findNonExistingAirport() {
+        when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4711)
                 .then()
                 .statusCode(404);
     }
-    //TODO Κάποια στιγμή αφού έχουμε τελειώσει να δούμε το airportId
+
     @Test
-    public void createAirport() {
-        AirportRepresentation airportRepresentation = Fixture.getAirportRepresentation();
+    void createAirport() {
+        AirportRepresentation airportRepresentation = new AirportRepresentation();
         AirportRepresentation createdAirport = given()
                 .contentType(ContentType.JSON)
                 .body(airportRepresentation)
                 .when()
-                .post(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+                .post(API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then().statusCode(201)
                 .extract().as(AirportRepresentation.class);
 
@@ -77,7 +77,7 @@ public class AirportResourceTest extends JPATest {
 //        assertEquals(1, createdAirport.depFlights.size());
 //        assertEquals(1, createdAirport.arrFlights.size());
 
-        List<AirportRepresentation> airports = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS)
+        List<AirportRepresentation> airports = when().get(API_ROOT + AirportProjectURIs.AIRPORTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<AirportRepresentation>>() {});
@@ -86,8 +86,8 @@ public class AirportResourceTest extends JPATest {
     }
 
    @Test
-    public void updateAirport() {
-        AirportRepresentation airport = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
+    void updateAirport() {
+        AirportRepresentation airport = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
@@ -101,10 +101,10 @@ public class AirportResourceTest extends JPATest {
         given()
                 .contentType(ContentType.JSON)
                 .body(airport)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
+                .when().put(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then().statusCode(204);
 
-        AirportRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
+        AirportRepresentation updated = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
@@ -113,23 +113,23 @@ public class AirportResourceTest extends JPATest {
     }
 
     @Test
-    public void updateAirportWithNotTheSameId() {
-        AirportRepresentation airport = when().get(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
+    void updateAirportWithNotTheSameId() {
+        AirportRepresentation airport = when().get(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 3)
                 .then()
                 .statusCode(200)
                 .extract().as(AirportRepresentation.class);
         airport.setAirportId(10);
 
         given().contentType(ContentType.JSON).body(airport)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
+                .when().put(API_ROOT + AirportProjectURIs.AIRLINES + "/" + 5)
                 .then().statusCode(400);
     }
 
     @Test
     @TestTransaction
-    public void removeExistingAirport() {
+    void removeExistingAirport() {
         when()
-                .delete(Fixture.API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4)
+                .delete(API_ROOT + AirportProjectURIs.AIRPORTS + "/" + 4)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
@@ -138,7 +138,7 @@ public class AirportResourceTest extends JPATest {
     @TestTransaction
     void removeNonExistingAirport(){
         when()
-                .delete(Fixture.API_ROOT +  AirportProjectURIs.AIRPORTS + "/" + 8)
+                .delete(API_ROOT +  AirportProjectURIs.AIRPORTS + "/" + 8)
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }

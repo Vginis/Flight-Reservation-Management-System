@@ -29,11 +29,6 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
-    public Double getCompletenessByFlight() {
-        //TODO Fix
-        return 0.0;
-    }
-
     public PageResult<Flight> searchFlightsByParams(PageQuery<FlightSortAndFilterBy> query){
         StringBuilder queryBuilder = new StringBuilder("SELECT f FROM Flight f ");
         queryBuilder.append("JOIN f.airline al ");
