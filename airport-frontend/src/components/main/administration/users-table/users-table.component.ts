@@ -99,7 +99,7 @@ export class UsersTableComponent implements OnInit,AfterViewInit{
   resetFiltering(): void{
     this.filterBy = '';
     this.filterValue = '';
-    this.loadUsersTable();
+    this.resetSearchParams();
   }
 
   ngAfterViewInit(): void {
