@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-users-delete-modal',
@@ -7,5 +8,4 @@ import { Component } from '@angular/core';
   styleUrl: './users-delete-modal.component.css'
 })
 export class UsersDeleteModalComponent {
-
 }

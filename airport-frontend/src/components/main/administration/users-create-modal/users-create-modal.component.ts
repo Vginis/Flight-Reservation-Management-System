@@ -10,9 +10,8 @@ import { SnackbarService } from '../../../../services/frontend/snackbar.service'
 import { CommonUtils } from '../../../../utils/common.util';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { catchError, debounceTime, distinctUntilChanged, EMPTY, filter, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, EMPTY, filter, switchMap } from 'rxjs';
 import { AirlineService } from '../../../../services/backend/airline.service';
-import { SearchParams } from '../../../../models/common.models';
 
 @Component({
   selector: 'app-users-create-modal',
@@ -117,16 +116,7 @@ export class UsersCreateModalComponent implements OnInit{
           sortDirection: 'asc',
           sortBy: 'airlineName'
         })
-      //   .pipe(
-      //   catchError((err:any) => {
-      //     if (err.status === 404) {
-      //       airlineNameControl.reset();
-      //       airlineNameControl.enable({ emitEvent: false });
-      //     }
-      //     return EMPTY;
-      //   })
-      // )
-    )
+      )
     ).subscribe((airlineData: any) => {
       if(airlineData && airlineData.total > 0) {
         airlineNameControl.setValue(airlineData?.results[0]?.airlineName);
@@ -166,7 +156,7 @@ export class UsersCreateModalComponent implements OnInit{
     this.userService.createUser(requestBody, role).subscribe({
       next: () => {
         this.snackbar.success('User created successfully and will be informed by email.');
-        this.dialogRef.close();
+        this.dialogRef.close("success");
       },
       error: (err: any) => {
         console.error(err);

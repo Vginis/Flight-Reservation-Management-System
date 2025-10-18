@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsersCreateModalComponent } from '../users-create-modal/users-create-modal.component';
 import { UsersEditModalComponent } from '../users-edit-modal/users-edit-modal.component';
 import { UsersDeleteModalComponent } from '../users-delete-modal/users-delete-modal.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
@@ -45,7 +46,7 @@ export class UsersTableComponent implements OnInit,AfterViewInit{
   filterBy: string = '';
   filterValue: string = '';
   params!: SearchParams;
-  pagingOptions = [5,10,20,50];
+  pagingOptions = [10,20,50];
   filterOptions = [{key:'username',label:'Username'}, {key:'firstName',label:'First Name'}, 
     {key:'lastName', label:'Last Name'}, {key:'email', label: 'Email'}, {key:'role', label:'Role'}];
   
@@ -125,17 +126,32 @@ export class UsersTableComponent implements OnInit,AfterViewInit{
   }
 
   async openCreateModal() {
-    this.dialog.open(UsersCreateModalComponent);
+    const dialogRef = this.dialog.open(UsersCreateModalComponent);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
 
   async editUser(user: any) {
-    console.log('Edit user', user);
-    this.dialog.open(UsersEditModalComponent);
+    const dialogRef = this.dialog.open(UsersEditModalComponent, {
+      data: user
+    });
+
+    await this.reloadTableAfterModalAction(dialogRef);
   }
 
   async deleteUser(user: any) {
-    console.log('Delete user', user);
-    this.dialog.open(UsersDeleteModalComponent);
+    const dialogRef = this.dialog.open(UsersDeleteModalComponent, {
+      data: user
+    });
+
+    await this.reloadTableAfterModalAction(dialogRef);
+  }
+
+  async reloadTableAfterModalAction(dialogRef: any){
+    dialogRef.afterClosed().subscribe((result:any) => {
+      if(result==='success'){
+        this.loadUsersTable();
+      }
+    })
   }
 
   mapUserRole(role: string): string{
