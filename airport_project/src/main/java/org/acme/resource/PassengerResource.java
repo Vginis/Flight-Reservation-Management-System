@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.SuccessMessages;
+import org.acme.representation.MessageRepresentation;
 import org.acme.representation.PassengerUpdateRepresentation;
 import org.acme.representation.user.PassengerCreateRepresentation;
 import org.acme.service.PassengerService;
@@ -27,7 +28,7 @@ public class PassengerResource {
     @PermitAll
     public Response createPassenger(@Valid PassengerCreateRepresentation passengerCreateRepresentation) {
         passengerService.createPassenger(passengerCreateRepresentation);
-        return Response.ok(SuccessMessages.PASSENGER_CREATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.PASSENGER_CREATE_SUCCESS)).build();
     }
 
     @PUT
@@ -35,6 +36,6 @@ public class PassengerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePassenger(@QueryParam("username") String username, PassengerUpdateRepresentation representation) {
         passengerService.updatePassenger(representation, username);
-        return Response.ok(SuccessMessages.PASSENGER_UPDATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.PASSENGER_UPDATE_SUCCESS)).build();
     }
 }
