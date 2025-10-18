@@ -105,14 +105,20 @@ public class UserService {
     @Transactional
     public void deleteUser(Integer id){
         Optional<User> userOptional = userRepository.findByIdOptional(id);
+        String username = userContext.extractUsername();
         if(userOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         User user = userOptional.get();
+        if(username.equals(user.getUsername())){
+            throw new InvalidRequestException("The system doesn't allow to delete your account.");
+        }
+
         if (user.getRole().equals(Role.AIRLINE_ADMINISTRATOR)){
             handleAirlineAdministratorDeletion(user);
         }
+
         userRepository.getEntityManager().remove(user);
     }
 

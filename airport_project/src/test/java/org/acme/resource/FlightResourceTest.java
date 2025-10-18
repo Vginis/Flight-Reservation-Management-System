@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
 import org.acme.representation.flight.FlightRepresentation;
-import org.acme.util.Fixture;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -19,11 +18,13 @@ import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-public class FlightResourceTest extends JPATest {
+class FlightResourceTest extends JPATest {
+
+    static final String API_ROOT  = "http://localhost:8081";
 
     @Test
-    public void findAllFlights() {
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS)
+    void findAllFlights() {
+        List<FlightRepresentation> flights = when().get(API_ROOT+ AirportProjectURIs.FLIGHTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -31,8 +32,8 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findFlightByAirlineId() {
-        List<FlightRepresentation> flights = given().queryParam("airlineId", 4).when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS)
+    void findFlightByAirlineId() {
+        List<FlightRepresentation> flights = given().queryParam("airlineId", 4).when().get(API_ROOT + AirportProjectURIs.FLIGHTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {}) ;
@@ -40,8 +41,8 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findExistingFlight() {
-        FlightRepresentation f = when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 7)
+    void findExistingFlight() {
+        FlightRepresentation f = when().get(API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
@@ -50,22 +51,22 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingFlight() {
-        when().get(Fixture.API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 20)
+    void findNoExistingFlight() {
+        when().get(API_ROOT+ AirportProjectURIs.FLIGHTS +"/"+ 20)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void verifyFlightCompleteness(){
-        String flightCompleteness = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/Completeness/10")
+    void verifyFlightCompleteness(){
+        String flightCompleteness = when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/Completeness/10")
                 .then().statusCode(200).extract().asString();
         assertEquals("66.66666666666667",flightCompleteness);
     }
 
     @Test
-    public void findExistingFlightByDepartureAirport(){
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departure/Eleftherios Venizelos")
+    void findExistingFlightByDepartureAirport(){
+        List<FlightRepresentation> flights = when().get(API_ROOT+AirportProjectURIs.FLIGHTS + "/departure/Eleftherios Venizelos")
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -75,15 +76,15 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingFlightByDepartureAirport(){
-        when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departure/Random Airport")
+    void findNoExistingFlightByDepartureAirport(){
+        when().get(API_ROOT+AirportProjectURIs.FLIGHTS + "/departure/Random Airport")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void findExistingFlightByArrivalAirport(){
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/arrival/Fiumicino")
+    void findExistingFlightByArrivalAirport(){
+        List<FlightRepresentation> flights = when().get(API_ROOT+AirportProjectURIs.FLIGHTS + "/arrival/Fiumicino")
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -93,13 +94,13 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingFlightByArrivalAirport() {
-        when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/arrival/Random Airport");
+    void findNoExistingFlightByArrivalAirport() {
+        when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/arrival/Random Airport");
     }
 
     @Test
-    public void findExistingFlightByArrivalTime(){
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/arrivals" + "/" + "2023-07-19T21:00:00")
+    void findExistingFlightByArrivalTime(){
+        List<FlightRepresentation> flights = when().get(API_ROOT+AirportProjectURIs.FLIGHTS + "/arrivals" + "/" + "2023-07-19T21:00:00")
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -108,15 +109,15 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingFlightByArrivalTime(){
-        when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/arrivals/" + "2023-07-19T22:00:00")
+    void findNoExistingFlightByArrivalTime(){
+        when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/arrivals/" + "2023-07-19T22:00:00")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void findExistingFlightByDepartureTime(){
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS + "/departures" + "/" + "2023-07-19T21:00:00")
+    void findExistingFlightByDepartureTime(){
+        List<FlightRepresentation> flights = when().get(API_ROOT+AirportProjectURIs.FLIGHTS + "/departures" + "/" + "2023-07-19T21:00:00")
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -125,20 +126,20 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void findNoExistingFlightByDepartureTime(){
-        when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/departures/" + "2023-07-19T22:10:00")
+    void findNoExistingFlightByDepartureTime(){
+        when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/departures/" + "2023-07-19T22:10:00")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void createFlight() {
-        FlightRepresentation flightRepresentation = Fixture.getFlightRepresentation();
+    void createFlight() {
+        FlightRepresentation flightRepresentation = new FlightRepresentation();
         FlightRepresentation savedFlight = given()
                 .contentType(ContentType.JSON)
                 .body(flightRepresentation)
                 .when()
-                .post(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS)
+                .post(API_ROOT + AirportProjectURIs.FLIGHTS)
                 .then().statusCode(201)
                 .extract().as(FlightRepresentation.class);
 
@@ -146,7 +147,7 @@ public class FlightResourceTest extends JPATest {
         assertEquals("Aegean Airlines",savedFlight.getAirlineU2DigitCode());
         assertEquals("Fiumicino", savedFlight.getDepartureAirport());
 
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT+AirportProjectURIs.FLIGHTS)
+        List<FlightRepresentation> flights = when().get(API_ROOT+AirportProjectURIs.FLIGHTS)
                 .then()
                 .statusCode(200)
                 .extract().as(new TypeRef<List<FlightRepresentation>>() {});
@@ -154,8 +155,8 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void updateFlight() {
-        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
+    void updateFlight() {
+        FlightRepresentation flight = when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
@@ -173,10 +174,10 @@ public class FlightResourceTest extends JPATest {
 //        flight.ticketList = new ArrayList<>();
 
         given().contentType(ContentType.JSON).body(flight)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
+                .when().put(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then().statusCode(204);
 
-        FlightRepresentation updated = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
+        FlightRepresentation updated = when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
@@ -185,29 +186,29 @@ public class FlightResourceTest extends JPATest {
     }
 
     @Test
-    public void updateFlightWithNotTheSameId() {
-        FlightRepresentation flight = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+    void updateFlightWithNotTheSameId() {
+        FlightRepresentation flight = when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then()
                 .statusCode(200)
                 .extract().as(FlightRepresentation.class);
         flight.setId(15);
         given().contentType(ContentType.JSON).body(flight)
-                .when().put(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
+                .when().put(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 7)
                 .then().statusCode(400);
     }
 
     @Test
     @TestTransaction
-    public void removeExistingFlight(){
+    void removeExistingFlight(){
         when()
-                .delete(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
+                .delete(API_ROOT + AirportProjectURIs.FLIGHTS + "/" + 9)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
-    public void findFlightByParams() {
-        List<FlightRepresentation> flights = when().get(Fixture.API_ROOT + AirportProjectURIs.FLIGHTS + "/dep/" + "Eleftherios Venizelos"
+    void findFlightByParams() {
+        List<FlightRepresentation> flights = when().get(API_ROOT + AirportProjectURIs.FLIGHTS + "/dep/" + "Eleftherios Venizelos"
                         + "/arr/" + "Fiumicino" + "/dept/" + "2023-07-19T21:00:00" + "/arrt/" + "2023-07-19T21:00:00" + "/passc/" + 8)
                 .then()
                 .statusCode(200)

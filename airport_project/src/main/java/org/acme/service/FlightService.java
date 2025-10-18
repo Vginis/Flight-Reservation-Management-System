@@ -5,10 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.search.FlightSortAndFilterBy;
-import org.acme.domain.Aircraft;
-import org.acme.domain.Airline;
-import org.acme.domain.Airport;
-import org.acme.domain.Flight;
+import org.acme.domain.*;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.FlightMapper;
 import org.acme.persistence.AircraftRepository;
@@ -65,7 +62,7 @@ public class FlightService {
 
         flightValidator.validateCreatedFlightDates(flightCreateRepresentation.getDepartureTime(),flightCreateRepresentation.getArrivalTime());
 
-        Flight flight = new Flight(flightCreateRepresentation, airlineOptional.get(), departureAirportOptional.get(),arrivalAirportOptional.get());
+        Flight flight = new Flight(flightCreateRepresentation, airlineOptional.get(), departureAirportOptional.get(),arrivalAirportOptional.get(), new FlightSeatLayout());
         flightRepository.persist(flight);
     }
 

@@ -1,12 +1,14 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
+import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.SortDirection;
@@ -64,6 +66,7 @@ public class UserResource {
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ Role.SYSTEM_ADMIN})
     public Response deleteUser(@PathParam("id") Integer id){
         userService.deleteUser(id);
         return Response.ok(SuccessMessages.USER_DELETE_SUCCESS).build();
