@@ -20,8 +20,16 @@ export class UserService {
         return this.httpClient.get<any>(`${this.usersUrl}/user-profile`);
     }
 
+    getPassengerPassport(username: string): Observable<any> {
+        return this.httpClient.get<any>(`${this.passengersUrl}`, { params: {username: username} });
+    }
+
     updateUserProfile(payload: any): Observable<any> {
-        return this.httpClient.put(`${this.usersUrl}`, payload);
+        return this.httpClient.put(`${this.usersUrl}/user-profile`, payload);
+    }
+
+    updateUserDetails(payload: any, username: string): Observable<any> {
+        return this.httpClient.put(`${this.usersUrl}`, payload, { params: {username: username} });
     }
 
     resetPassword(payload: any): Observable<any> {
