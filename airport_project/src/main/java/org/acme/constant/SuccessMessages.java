@@ -24,6 +24,8 @@ public class SuccessMessages {
 
     public static final String PASSWORD_RESET_SUCCESS = "password_reset_successfully";
 
+    public static final String SYSTEM_ADMIN_CREATE_SUCCESS = "system_admin_created_successfully";
+
     public static final String USER_UPDATE_SUCCESS = "user_updated_successfully";
     public static final String USER_DELETE_SUCCESS = "user_deleted_successfully";
 }

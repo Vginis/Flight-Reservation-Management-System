@@ -1,18 +1,21 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
+import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.SortDirection;
 import org.acme.constant.search.UserSortAndFilterBy;
 import org.acme.representation.MessageRepresentation;
 import org.acme.representation.user.PasswordResetRepresentation;
+import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.service.UserService;
@@ -35,6 +38,15 @@ public class UserResource {
         PageQuery<UserSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, UserSortAndFilterBy.class), searchValue, size, index
                 , ValueEnum.fromValue(sortBy, UserSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
         return Response.ok(userService.searchUsersByParams(query)).build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ Role.SYSTEM_ADMIN})
+    public Response createSystemAdministrator(@Valid UserCreateRepresentation userCreateRepresentation){
+        userService.createSystemAdministrator(userCreateRepresentation);
+        return Response.ok(new MessageRepresentation(SuccessMessages.SYSTEM_ADMIN_CREATE_SUCCESS)).build();
     }
 
     @PUT

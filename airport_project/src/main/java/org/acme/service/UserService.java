@@ -17,6 +17,7 @@ import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
 import org.acme.representation.user.PasswordResetRepresentation;
+import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -44,6 +45,18 @@ public class UserService {
 
     public PageResult<UserRepresentation> searchUsersByParams(PageQuery<UserSortAndFilterBy> query){
         return userMapper.map(userRepository.searchUsersByParams(query));
+    }
+
+    @Transactional
+    public void createSystemAdministrator(UserCreateRepresentation userCreateRepresentation){
+        Optional<User> userOptional = userRepository.findUserByUsername(userCreateRepresentation.getUsername());
+        if(userOptional.isPresent()){
+            throw new InvalidRequestException(ErrorMessages.USER_EXISTS);
+        }
+
+        User user = new User(userCreateRepresentation, Role.SYSTEM_ADMIN);
+        keycloakService.createKeycloakUser(userCreateRepresentation, Role.SYSTEM_ADMIN);
+        userRepository.persist(user);
     }
 
     public void resetPassword(PasswordResetRepresentation passwordResetRepresentation){
