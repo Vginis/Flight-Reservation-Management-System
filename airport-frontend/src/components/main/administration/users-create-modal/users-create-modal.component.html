@@ -48,6 +48,25 @@
                 </mat-error>
             </mat-form-field>
 
+            <mat-form-field appearance="outline" *ngIf="isAirlineAdmin()" class="field-input">
+                <mat-label>Airline Code</mat-label>
+                <input matInput formControlName="airlineCode" required/>
+                <mat-error *ngIf="usersCreateForm.get('airlineCode')?.hasError('required')">
+                    Airline code is required for Airline Administrators.
+                </mat-error>
+                <mat-error *ngIf="usersCreateForm.get('airlineCode')?.hasError('pattern')">
+                    Airline code must consist of 2–3 uppercase letters (A–Z).
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" *ngIf="isAirlineAdmin()">
+                <mat-label>Airline Name</mat-label>
+                <input matInput formControlName="airlineName" required/>
+                <mat-error *ngIf="usersCreateForm.get('airlineName')?.hasError('required')">
+                   Airline name is required for Airline Administrators.
+                </mat-error>
+            </mat-form-field>
+
             <div class="role-input">
                 <mat-form-field appearance="fill">
                     <mat-label>Role</mat-label>

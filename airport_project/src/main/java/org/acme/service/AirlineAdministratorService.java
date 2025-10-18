@@ -15,6 +15,7 @@ import org.acme.mapper.AddressMapper;
 import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
+import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.user.AirlineAdministratorCreateRepresentation;
 
 import java.util.Optional;
@@ -39,7 +40,7 @@ public class AirlineAdministratorService {
             throw new InvalidRequestException(ErrorMessages.USER_EXISTS);
         }
 
-        Airline airline = getAirline(airlineAdministratorCreateRepresentation.getAirlineU2digitCode());
+        Airline airline = getAirline(airlineAdministratorCreateRepresentation.getAirlineCreateRepresentation());
 
         AirlineAdministrator airlineAdministrator = new AirlineAdministrator(airlineAdministratorCreateRepresentation, airline);
         airlineAdministrator.getAddresses().addAll(airlineAdministratorCreateRepresentation.getAddresses().stream()
@@ -54,12 +55,19 @@ public class AirlineAdministratorService {
         airlineAdministratorRepository.persist(airlineAdministrator);
     }
 
-    private Airline getAirline(String u2digitCode){
-        Optional<Airline> airlineOptional = airlineRepository.findOptionalAirlineByU2DigitCode(u2digitCode);
-        if(airlineOptional.isEmpty()){
-            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+    private Airline getAirline(AirlineCreateRepresentation airlineCreateRepresentation){
+        Optional<Airline> airlineOptionalByCode = airlineRepository.findOptionalAirlineByU2DigitCode(airlineCreateRepresentation.getU2digitCode());
+        Optional<Airline> airlineOptionalByName = airlineRepository.findOptionalAirlineByName(airlineCreateRepresentation.getAirlineName());
+        if(airlineOptionalByCode.isEmpty() && airlineOptionalByName.isEmpty()){
+            Airline airline = new Airline(airlineCreateRepresentation);
+            airlineRepository.persist(airline);
+            return airline;
         }
 
-        return airlineOptional.get();
+        if(airlineOptionalByCode.isEmpty()){
+            throw new InvalidRequestException(ErrorMessages.AIRLINE_EXISTS);
+        }
+
+        return airlineOptionalByCode.get();
     }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,9 @@ import { SnackbarService } from '../../../../services/frontend/snackbar.service'
 import { CommonUtils } from '../../../../utils/common.util';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { catchError, debounceTime, distinctUntilChanged, EMPTY, filter, switchMap } from 'rxjs';
+import { AirlineService } from '../../../../services/backend/airline.service';
+import { SearchParams } from '../../../../models/common.models';
 
 @Component({
   selector: 'app-users-create-modal',
@@ -34,7 +37,8 @@ export class UsersCreateModalComponent implements OnInit{
     private readonly dialogRef: MatDialogRef<UsersCreateModalComponent>,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
-    private readonly snackbar: SnackbarService
+    private readonly snackbar: SnackbarService,
+    private readonly airlineService: AirlineService
   ) {
     this.usersCreateForm = this.formBuilder.group({
       username: ['',Validators.required],
@@ -44,23 +48,99 @@ export class UsersCreateModalComponent implements OnInit{
       phoneNumber: ['', [Validators.required,Validators.pattern('\\d{10}')]],
       role: ['', Validators.required],
       addresses: this.formBuilder.array([]),
-      passport: ['']
+      passport: [''],
+      airlineCode: [''],
+      airlineName: [{value: '', disabled: true}]
     })
   }
 
   ngOnInit(): void {
     this.usersCreateForm.get('role')?.valueChanges.subscribe(role => {
-      const passportControl = this.usersCreateForm.get('passport');
+      const { passportControl, airlineCodeControl, airlineNameControl } = this.getDynamicFieldsControls();
 
-      if (role?.toLowerCase() === 'passenger') {
-        passportControl?.setValidators([Validators.required]);
+      const normalizedRole = role?.toLowerCase();
+      if (normalizedRole === 'passenger') {
+        this.handleDynamicValidatorsForPassengerForm(passportControl!, airlineNameControl!, airlineCodeControl!);
+      } else if (normalizedRole === 'airline_admin') {
+        this.handleDynamicValidatorsForAirlineAdminForm(passportControl!, airlineNameControl!, airlineCodeControl!);
       } else {
-        passportControl?.clearValidators();
-        passportControl?.setValue('');
+        this.clearDynamicValidatorForDefaultForm(passportControl!, airlineNameControl!, airlineCodeControl!);
       }
 
       passportControl?.updateValueAndValidity();
+      airlineCodeControl?.updateValueAndValidity();
+      airlineNameControl?.updateValueAndValidity();
     });
+  }
+
+  private getDynamicFieldsControls(): any{
+      const passportControl = this.usersCreateForm.get('passport');
+      const airlineCodeControl = this.usersCreateForm.get('airlineCode');
+      const airlineNameControl = this.usersCreateForm.get('airlineName');
+      return { passportControl, airlineCodeControl, airlineNameControl };
+  }
+
+  private handleDynamicValidatorsForPassengerForm(passportControl: AbstractControl, airlineNameControl: AbstractControl, airlineCodeControl: AbstractControl): void {
+    passportControl?.setValidators([Validators.required]);
+
+    this.clearValidatorsForFormControl(airlineCodeControl);
+    this.clearValidatorsForFormControl(airlineNameControl);
+    airlineNameControl?.disable({ emitEvent: false });
+  }
+
+  private handleDynamicValidatorsForAirlineAdminForm(passportControl: AbstractControl, airlineNameControl: AbstractControl, airlineCodeControl: AbstractControl): void {
+    airlineCodeControl?.setValidators([Validators.required, Validators.pattern('^[A-Z]{2,3}$')]);
+    airlineNameControl?.setValidators([Validators.required]);
+    airlineNameControl?.disable({ emitEvent: false });
+
+    this.clearValidatorsForFormControl(passportControl);
+
+    this.setupAirlineCodeWatcher(airlineCodeControl, airlineNameControl);
+  }
+
+  private clearDynamicValidatorForDefaultForm(passportControl: AbstractControl, airlineNameControl: AbstractControl, airlineCodeControl: AbstractControl){
+    this.clearValidatorsForFormControl(passportControl);
+    this.clearValidatorsForFormControl(airlineCodeControl);
+    this.clearValidatorsForFormControl(airlineNameControl);
+  }
+
+  private setupAirlineCodeWatcher(airlineCodeControl: AbstractControl, airlineNameControl: AbstractControl): void {
+    airlineCodeControl.valueChanges.pipe(
+      debounceTime(400),distinctUntilChanged(),
+      filter(() => airlineCodeControl.valid),
+      switchMap((code: string) => 
+        this.airlineService.searchAirlines({
+          searchField: 'u2digitCode',
+          searchValue: code,
+          index: 0,
+          size: 1,
+          sortDirection: 'asc',
+          sortBy: 'airlineName'
+        })
+      //   .pipe(
+      //   catchError((err:any) => {
+      //     if (err.status === 404) {
+      //       airlineNameControl.reset();
+      //       airlineNameControl.enable({ emitEvent: false });
+      //     }
+      //     return EMPTY;
+      //   })
+      // )
+    )
+    ).subscribe((airlineData: any) => {
+      if(airlineData && airlineData.total > 0) {
+        airlineNameControl.setValue(airlineData?.results[0]?.airlineName);
+        airlineNameControl.disable({ emitEvent: false });
+      } else if(airlineData && airlineData.total===0){
+        airlineNameControl.reset();
+        airlineNameControl.enable({ emitEvent: false });
+      }
+    })
+  }
+
+  private clearValidatorsForFormControl(formFieldControl: AbstractControl): void {
+    formFieldControl?.clearValidators();
+    formFieldControl?.setValue('');
   }
 
   addAddress(): void {
@@ -112,7 +192,13 @@ export class UsersCreateModalComponent implements OnInit{
     }
 
     if(role === CommonUtils.AIRLINE_ADMIN){
-      return;
+      const airlineName = formData.airlineName;
+      const u2digitCode = formData.airlineCode;
+      const airlineRepresentation = {
+        airlineName: airlineName,
+        u2digitCode: u2digitCode
+      }
+      requestBody.airlineCreateRepresentation = airlineRepresentation;
     }
         
     return { requestBody, role };
@@ -121,6 +207,11 @@ export class UsersCreateModalComponent implements OnInit{
   isPassenger(): boolean {
     const role = this.usersCreateForm.get("role")?.value as string;
     return role === CommonUtils.PASSENGER;
+  }
+
+  isAirlineAdmin(): boolean {
+    const role = this.usersCreateForm.get("role")?.value as string;
+    return role === CommonUtils.AIRLINE_ADMIN;
   }
 
   get addresses(): FormArray {
