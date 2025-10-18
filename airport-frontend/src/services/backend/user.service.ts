@@ -55,6 +55,10 @@ export class UserService {
         return this.httpClient.post(`${url}`, payload);
     }
 
+    deleteUser(userId: number): Observable<any> {
+        return this.httpClient.delete(`${this.usersUrl}/${userId}`);
+    }
+
     private resolveUrlForUserCreation(role: string): string {
         if(role === CommonUtils.PASSENGER){
             return this.passengersUrl;

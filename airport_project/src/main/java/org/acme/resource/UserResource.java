@@ -89,7 +89,7 @@ public class UserResource {
     @RolesAllowed({ Role.SYSTEM_ADMIN})
     public Response deleteUser(@PathParam("id") Integer id){
         userService.deleteUser(id);
-        return Response.ok(SuccessMessages.USER_DELETE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.USER_DELETE_SUCCESS)).build();
     }
 
 }
