@@ -160,7 +160,6 @@ export class UsersCreateModalComponent implements OnInit{
         this.dialogRef.close("success");
       },
       error: (err: any) => {
-        console.error(err);
         this.snackbar.error(`User was not created successfully! ${err?.error?.key}`);
       }
     });  

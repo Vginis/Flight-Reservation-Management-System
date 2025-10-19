@@ -24,4 +24,16 @@ export class AirportService {
         if (params.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
         return this.httpClient.get<any>(`${this.airportsUrl}`, { params: httpParams });
     }
+
+    createAirport(payload: any): Observable<any> {
+        return this.httpClient.post<any>(`${this.airportsUrl}`, payload);
+    }
+
+    updateAirport(payload: any): Observable<any> {
+        return this.httpClient.put<any>(`${this.airportsUrl}`, payload);
+    }
+
+    deleteAirport(id: number): Observable<any> {
+        return this.httpClient.delete<any>(`${this.airportsUrl}/${id}`);
+    }
 }

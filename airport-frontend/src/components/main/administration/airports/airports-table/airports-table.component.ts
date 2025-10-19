@@ -14,6 +14,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { AirportsCreateModalComponent } from '../airports-create-modal/airports-create-modal.component';
+import { AirportsEditModalComponent } from '../airports-edit-modal/airports-edit-modal.component';
+import { AirportsDeleteModalComponent } from '../airports-delete-modal/airports-delete-modal.component';
 
 @Component({
   selector: 'app-airports-table',
@@ -34,7 +37,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './airports-table.component.css'
 })
 export class AirportsTableComponent implements OnInit, AfterViewInit{
-  displayedColumns: string[] = ['airportName', 'city', 'country', 'code', 'actions'];
+  displayedColumns: string[] = ['airportName', 'city', 'country', 'u3digitCode', 'actions'];
   dataSource = new MatTableDataSource<AirportRepresentation>([]);
   sortBy: string = 'airportName';
   sortDirection: string = 'asc';
@@ -43,7 +46,7 @@ export class AirportsTableComponent implements OnInit, AfterViewInit{
   params!: SearchParams;
   pagingOptions = [10,20,50];
   filterOptions = [{key:'airportName',label:'Airport Name'}, {key:'city',label:'City'}, 
-    {key:'country', label:'Country'}, {key:'code', label: 'Airport Code'}];
+    {key:'country', label:'Country'}, {key:'u3digitCode', label: 'Airport Code'}];
 
   constructor(
     private readonly dialog: MatDialog,
@@ -118,24 +121,24 @@ export class AirportsTableComponent implements OnInit, AfterViewInit{
   }
 
   async openCreateModal() {
-      // const dialogRef = this.dialog.open(UsersCreateModalComponent);
-      // await this.reloadTableAfterModalAction(dialogRef);
+      const dialogRef = this.dialog.open(AirportsCreateModalComponent);
+      await this.reloadTableAfterModalAction(dialogRef);
   }
   
-  async editAirport(user: any) {
-    // const dialogRef = this.dialog.open(UsersEditModalComponent, {
-    //   data: user
-    // });
+  async editAirport(airport: any) {
+    const dialogRef = this.dialog.open(AirportsEditModalComponent, {
+      data: airport
+    });
 
-    // await this.reloadTableAfterModalAction(dialogRef);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
   
-  async deleteAirport(user: any) {
-    // const dialogRef = this.dialog.open(UsersDeleteModalComponent, {
-    //   data: user
-    // });
+  async deleteAirport(airport: any) {
+    const dialogRef = this.dialog.open(AirportsDeleteModalComponent, {
+      data: airport
+    });
 
-    // await this.reloadTableAfterModalAction(dialogRef);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
 
   async reloadTableAfterModalAction(dialogRef: any){

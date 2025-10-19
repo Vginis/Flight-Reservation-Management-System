@@ -1,7 +1,7 @@
 export interface AirportRepresentation {
-    id: number,
+    airportId: number,
     airportName: string,
     city: string,
     country: string,
-    code: string
+    u3digitCode: string
 }

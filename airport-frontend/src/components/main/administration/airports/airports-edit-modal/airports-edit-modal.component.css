@@ -1,0 +1,18 @@
+.airport-update-container {
+    height: 80%;
+    width: 70%;
+}
+
+.airport-update-form-container, .update-buttons-container{
+    padding-top: 2%;
+    padding-left: 5%;
+}
+
+.field-input {
+    margin-right: 2%;
+}
+
+.update-buttons-container button{
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
