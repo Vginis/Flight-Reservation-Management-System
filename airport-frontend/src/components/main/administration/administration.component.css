@@ -1,0 +1,39 @@
+.admin-container {
+  display: flex;
+  height: 100%;
+  min-height: calc(100vh - 64px);
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar mat-list-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar mat-list-item.active {
+  background-color: #e0e0e0;
+  font-weight: 500;
+}
+
+.sidebar mat-icon {
+    margin-top: 4%;
+    margin-right: 5%;
+}
+.sidebar p {
+    margin-top: 5%;
+}
+.sidebar div {
+    display: flex;
+}
+
+.content {
+  flex: 1;
+  background-color: #ffffff;
+}

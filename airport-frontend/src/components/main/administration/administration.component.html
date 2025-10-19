@@ -1,1 +1,23 @@
-<p><app-users-table></app-users-table></p>
+<div class="admin-container">
+    <aside class="sidebar">
+        <mat-nav-list>
+        <mat-list-item
+            onKeyPress
+            *ngFor="let option of menuOptions"
+            (click)="selectSection(option)"
+            [class.active]="selectedSection === option.key"
+        >
+            <div>
+                <mat-icon>{{ option.icon }}</mat-icon>
+                <p>{{ option.label }}</p>
+            </div>
+        </mat-list-item>
+        </mat-nav-list>
+    </aside>
+    <main class="content">
+        <ng-container [ngSwitch]="selectedSection">
+            <app-users-table *ngSwitchCase="'users'" class="table-container"></app-users-table>
+            <app-airports-table *ngSwitchCase="'airports'" class="table-container"></app-airports-table>
+        </ng-container>
+  </main>
+</div>
