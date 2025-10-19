@@ -1,16 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { UserService } from '../../../../services/backend/user.service';
-import { SnackbarService } from '../../../../services/frontend/snackbar.service';
-import { CommonUtils } from '../../../../utils/common.util';
+import { UserService } from '../../../../../services/backend/user.service';
+import { SnackbarService } from '../../../../../services/frontend/snackbar.service';
+import { CommonUtils } from '../../../../../utils/common.util';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { UserProfile } from '../../../../models/user.models';
+import { UserProfile } from '../../../../../models/user.models';
 
 @Component({
   selector: 'app-users-edit-modal',
@@ -63,13 +63,14 @@ export class UsersEditModalComponent implements OnInit{
     }
 
     const requestBody = this.constructPayload();
-    this.userService.updateUserDetails(requestBody, this.userProfileData?.username).subscribe({
+    
+    this.userService.updateUserDetails(requestBody, this.userProfileData?.username, this.userProfileData.role).subscribe({
       next: () => {
         this.snackbar.success('User Details updated successfully!');
         this.dialogRef.close("success");
       },
       error: (err: any) => {
-        this.snackbar.error(`User Details were not updated successfully!:${err}`);
+        this.snackbar.error(`User Details were not updated successfully! ${err?.error?.key}`);
       }
     });  
   }
@@ -85,7 +86,7 @@ export class UsersEditModalComponent implements OnInit{
     }
 
     if(this.isPassenger()){
-      payload.passPort = formData.passport;
+      payload.passport = formData.passport;
     }
     return payload;
   }
@@ -117,7 +118,7 @@ export class UsersEditModalComponent implements OnInit{
           this.userUpdateForm.patchValue({ passport })
         },
         error: (err: any) => {
-          this.snackbar.error(`Passenger passport was not retrieved:${err}`);
+          this.snackbar.error(`Passenger passport was not retrieved:${err?.error?.key}`);
         }
       })
     }

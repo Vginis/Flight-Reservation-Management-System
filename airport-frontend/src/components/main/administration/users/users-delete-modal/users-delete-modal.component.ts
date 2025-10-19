@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { UserProfile } from '../../../../models/user.models';
+import { UserProfile } from '../../../../../models/user.models';
 import { UsersEditModalComponent } from '../users-edit-modal/users-edit-modal.component';
-import { UserService } from '../../../../services/backend/user.service';
-import { SnackbarService } from '../../../../services/frontend/snackbar.service';
+import { UserService } from '../../../../../services/backend/user.service';
+import { SnackbarService } from '../../../../../services/frontend/snackbar.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -32,7 +32,7 @@ export class UsersDeleteModalComponent {
           this.dialogRef.close("success");
         },
         error: (err: any) => {
-          this.snackbar.error(`User was not deleted:${err}`);
+          this.snackbar.error(`User was not deleted:${err?.error?.key}`);
         }
       })
   }

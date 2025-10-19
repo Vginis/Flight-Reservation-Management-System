@@ -7,10 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { UserProfile } from '../../../../models/user.models';
-import { UserService } from '../../../../services/backend/user.service';
-import { SearchParams } from '../../../../models/common.models';
-import { CommonUtils } from '../../../../utils/common.util';
+import { UserProfile } from '../../../../../models/user.models';
+import { UserService } from '../../../../../services/backend/user.service';
+import { SearchParams } from '../../../../../models/common.models';
+import { CommonUtils } from '../../../../../utils/common.util';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsersCreateModalComponent } from '../users-create-modal/users-create-modal.component';
 import { UsersEditModalComponent } from '../users-edit-modal/users-edit-modal.component';
 import { UsersDeleteModalComponent } from '../users-delete-modal/users-delete-modal.component';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
@@ -105,11 +104,9 @@ export class UsersTableComponent implements OnInit,AfterViewInit{
 
   ngAfterViewInit(): void {
     this.paginator.page.subscribe(() => {
-      console.log(this.paginator);
       this.loadUsersTable()}
     );
     this.sort.sortChange.subscribe(() => {
-      console.log(this.sort.direction);
       this.params.sortBy = this.sort.active;
       this.params.sortDirection = this.sort.direction;
       this.loadUsersTable();
@@ -117,7 +114,6 @@ export class UsersTableComponent implements OnInit,AfterViewInit{
   }
 
   applyFilter(): void {
-    console.log(this.filterValue);
     if(this.filterBy!=='' && this.filterValue!==''){
       this.params.searchField = this.filterBy;
       this.params.searchValue = this.filterValue;

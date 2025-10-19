@@ -5,13 +5,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { UserService } from '../../../../services/backend/user.service';
-import { SnackbarService } from '../../../../services/frontend/snackbar.service';
-import { CommonUtils } from '../../../../utils/common.util';
+import { UserService } from '../../../../../services/backend/user.service';
+import { SnackbarService } from '../../../../../services/frontend/snackbar.service';
+import { CommonUtils } from '../../../../../utils/common.util';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { debounceTime, distinctUntilChanged, EMPTY, filter, switchMap } from 'rxjs';
-import { AirlineService } from '../../../../services/backend/airline.service';
+import { debounceTime, distinctUntilChanged, 
+filter, switchMap } from 'rxjs';
+import { AirlineService } from '../../../../../services/backend/airline.service';
 
 @Component({
   selector: 'app-users-create-modal',
@@ -160,7 +161,7 @@ export class UsersCreateModalComponent implements OnInit{
       },
       error: (err: any) => {
         console.error(err);
-        this.snackbar.error('User was not created successfully!');
+        this.snackbar.error(`User was not created successfully! ${err?.error?.key}`);
       }
     });  
   }
