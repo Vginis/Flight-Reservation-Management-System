@@ -58,7 +58,7 @@ export class ChangePasswordModalComponent {
       },
       error: (err: any) => {
         console.error(err);
-        this.snackbar.error('Password was not updated successfully!');
+        this.snackbar.error(`Password was not updated successfully! ${err?.error?.key}`);
       }
     });  
   }

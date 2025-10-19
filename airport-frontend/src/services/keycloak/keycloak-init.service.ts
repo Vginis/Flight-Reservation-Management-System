@@ -21,7 +21,10 @@ export class KeycloakInitService {
                     clientId: environment.keycloak.config.clientId
                 }, 
                 initOptions: {
-                    onLoad: 'check-sso', 
+                    onLoad: 'check-sso',
+                    checkLoginIframe: true,
+                    checkLoginIframeInterval: 30,
+                    silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
                  },
                 enableBearerInterceptor: true
             })

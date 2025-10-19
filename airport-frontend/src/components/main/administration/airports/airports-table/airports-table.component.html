@@ -1,0 +1,74 @@
+<div class="airports-table-container">
+  
+  <div>
+    <h2>Airports Management</h2>
+
+    <div class="filter-container">
+      <mat-form-field appearance="outline" class="filter-input">
+        <mat-label>Filter by</mat-label>
+        <mat-select [(value)]="filterBy">
+          <mat-option *ngFor="let option of filterOptions" [value]="option.key">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-input">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Enter value..." [(ngModel)]="filterValue"/>
+      </mat-form-field>
+
+      <button color="primary" mat-raised-button (click)="applyFilter()" class="filter-button" [disabled]=isFilteringEmpty()>
+        Filter
+      </button>
+      <button color="primary" mat-button (click)="resetFiltering()" class="filter-reset-button">
+        Reset
+      </button>
+
+      <button mat-raised-button color="primary" (click)="openCreateModal()" class="airports-create-button">
+        Create Airport
+      </button>
+  </div>
+
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" matSort [matSortDisableClear]="true" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="airportName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Airport Name </th>
+        <td mat-cell *matCellDef="let airport"> {{ airport.airportName }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+        <td mat-cell *matCellDef="let airport"> {{ airport.city }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
+        <td mat-cell *matCellDef="let airport"> {{ airport.country }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+        <td mat-cell *matCellDef="let airport"> {{ airport.u3digitCode }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let airport">
+          <button mat-icon-button color="primary" (click)="editAirport(airport)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteAirport(airport)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="pagingOptions" showFirstLastButtons></mat-paginator>
+</div>

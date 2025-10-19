@@ -28,8 +28,9 @@ export class UserService {
         return this.httpClient.put(`${this.usersUrl}/user-profile`, payload);
     }
 
-    updateUserDetails(payload: any, username: string): Observable<any> {
-        return this.httpClient.put(`${this.usersUrl}`, payload, { params: {username: username} });
+    updateUserDetails(payload: any, username: string, role: string): Observable<any> {
+        const url = (role === CommonUtils.PASSENGER) ? this.passengersUrl : this.usersUrl;
+        return this.httpClient.put(`${url}`, payload, { params: {username: username} });
     }
 
     resetPassword(payload: any): Observable<any> {

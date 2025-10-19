@@ -98,7 +98,7 @@ export class ViewProfileModalComponent implements OnInit{
       },
       error: (err: any) => {
         console.error(err);
-        this.snackbar.error('Profile was not updated successfully!');
+        this.snackbar.error(`Profile was not updated successfully! ${err?.error?.key}`);
       }
     });  
   }
