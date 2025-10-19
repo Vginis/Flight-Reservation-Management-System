@@ -146,7 +146,7 @@ class UserServiceTest {
         Mockito.when(userRepository.getEntityManager()).thenReturn(entityManager);
         Mockito.when(entityManager.merge(Mockito.any(User.class))).thenReturn(user);
 
-        Assertions.assertDoesNotThrow(() -> userService.updateUser(userUpdateRepresentation));
+        Assertions.assertDoesNotThrow(() -> userService.updateUserProfile(userUpdateRepresentation));
     }
 
     @Test
@@ -155,7 +155,7 @@ class UserServiceTest {
         Mockito.when(userRepository.findUserByUsername("user-1")).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class,
-                () -> userService.updateUser(userUpdateRepresentation));
+                () -> userService.updateUserProfile((userUpdateRepresentation)));
     }
 
     @Test

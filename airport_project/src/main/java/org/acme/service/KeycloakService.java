@@ -11,7 +11,8 @@ import org.acme.exception.ErrorResponse;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.representation.user.UserCreateRepresentation;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UserResource;
@@ -28,7 +29,7 @@ public class KeycloakService {
 
     private Keycloak keycloak;
     private static final int CHANGE_PASSWORD_EMAIL_SECONDS_LIFESPAN = 172800;
-    private static final Logger log = Logger.getLogger(KeycloakService.class);
+    private static final Logger log = LoggerFactory.getLogger(KeycloakService.class);
 
     @Inject
     KeycloakConfiguration keycloakConfiguration;
@@ -106,7 +107,7 @@ public class KeycloakService {
             UserResource user = keycloak.realm(keycloakConfiguration.getKeycloakAppRealm()).users().get(userId);
             user.executeActionsEmail(List.of("UPDATE_PASSWORD"), CHANGE_PASSWORD_EMAIL_SECONDS_LIFESPAN);
         } catch (RuntimeException e) {
-            log.errorf("Failed to send 'Update your password' email to user with keycloak id :%s", userId);
+            log.error("Failed to send 'Update your password' email to user with keycloak id :{}", userId);
         }
     }
 
@@ -130,5 +131,26 @@ public class KeycloakService {
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setValue(newPassword);
         return credentialRepresentation;
+    }
+
+    public void deleteUser(String username){
+        List<UserRepresentation> userRepresentations = keycloak.realm(keycloakConfiguration.getKeycloakAppRealm())
+                .users().search(username);
+
+        if(userRepresentations.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        try (Response response = keycloak.realm(keycloakConfiguration.getKeycloakAppRealm())
+                .users()
+                .delete(userRepresentations.getFirst().getId())) {
+
+            if (response.getStatus() != 204 && response.getStatus() != 200) {
+                log.info("Failed to delete user {} — status: {}", userRepresentations.getFirst().getUsername(), response.getStatus());
+            }
+        } catch (Exception e) {
+            log.error("Error deleting user {}", userRepresentations.getFirst().getUsername(), e);
+        }
+
     }
 }

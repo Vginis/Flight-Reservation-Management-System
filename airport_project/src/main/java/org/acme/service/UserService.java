@@ -138,6 +138,7 @@ public class UserService {
             handleAirlineAdministratorDeletion(user);
         }
 
+        keycloakService.deleteUser(user.getUsername());
         userRepository.getEntityManager().remove(user);
     }
 

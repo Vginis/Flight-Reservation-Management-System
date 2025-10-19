@@ -62,7 +62,8 @@ public class PassengerService {
         }
 
         User user = userOptional.get();
-        if(!user.getUsername().equals(username)){
+        Optional<Passenger> passengerOptional = passengerRepository.findPassengerByPassport(passengerUpdateRepresentation.getPassport());
+        if(!user.getUsername().equals(username) || (passengerOptional.isPresent() && !passengerOptional.get().getUsername().equals(username))){
             throw new InvalidRequestException(ErrorMessages.USER_EXISTS);
         }
 

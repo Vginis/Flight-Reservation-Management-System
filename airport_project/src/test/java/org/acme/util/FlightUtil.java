@@ -1,9 +1,6 @@
 package org.acme.util;
 
-import org.acme.domain.Airline;
-import org.acme.domain.Airport;
 import org.acme.domain.Flight;
-import org.acme.domain.FlightSeatLayout;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightRepresentation;
