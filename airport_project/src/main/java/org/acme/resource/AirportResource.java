@@ -12,6 +12,7 @@ import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.AirportSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
+import org.acme.representation.MessageRepresentation;
 import org.acme.representation.airport.AirportCreateRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -54,7 +55,7 @@ public class AirportResource {
     @RolesAllowed(Role.SYSTEM_ADMIN)
     public Response updateAirport(@Valid AirportUpdateRepresentation representation) {
         airportService.updateAirport(representation);
-        return Response.ok(SuccessMessages.AIRPORT_UPDATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRPORT_UPDATE_SUCCESS)).build();
     }
 
     @DELETE
@@ -62,6 +63,6 @@ public class AirportResource {
     @Path("/{id}")
     public Response removeAirport(@PathParam("id") Integer id) {
         airportService.deleteAirport(id);
-        return Response.ok(SuccessMessages.AIRPORT_DELETION_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRPORT_DELETION_SUCCESS)).build();
     }
 }

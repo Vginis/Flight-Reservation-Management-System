@@ -49,8 +49,8 @@ public class AirportService {
     private void validateIfAirportExistsForUpdate(AirportUpdateRepresentation airportUpdateRepresentation){
         Optional<Airport> airportOptionalBy3DCode = airportRepository.findAirportBy3DCode(airportUpdateRepresentation.getU3digitCode());
         Optional<Airport> airportOptionalByName = airportRepository.findAirportByName(airportUpdateRepresentation.getAirportName());
-        if((airportOptionalBy3DCode.isPresent() && airportOptionalBy3DCode.get().getId().equals(airportUpdateRepresentation.getId())) ||
-                (airportOptionalByName.isPresent() && airportOptionalByName.get().getId().equals(airportUpdateRepresentation.getId()))){
+        if((airportOptionalBy3DCode.isPresent() && !airportOptionalBy3DCode.get().getId().equals(airportUpdateRepresentation.getId())) ||
+                (airportOptionalByName.isPresent() && !airportOptionalByName.get().getId().equals(airportUpdateRepresentation.getId()))){
             throw new InvalidRequestException(ErrorMessages.AIRPORT_EXISTS);
         }
     }
