@@ -8,6 +8,8 @@ public class ErrorMessages {
     public static final String ENTITY_NOT_FOUND = "Entity was not found in the system.";
     public static final String INVALID_VALUE = "Invalid value.";
 
+    public static final String AIRCRAFT_HAS_PENDING_FLIGHTS = "An aircraft that has Flights pending can't be erased from the system";
+
     public static final String AIRPORT_EXISTS = "Airport already exists in the system";
 
     public static final String AIRLINE_EXISTS = "Airline already exists in the system.";

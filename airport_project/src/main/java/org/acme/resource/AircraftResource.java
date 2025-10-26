@@ -1,25 +1,24 @@
 package org.acme.resource;
 
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import io.quarkus.security.Authenticated;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
-import org.acme.representation.aircraft.AircraftCreateRepresentation;
-import org.acme.representation.aircraft.AircraftUpdateRepresentation;
+import org.acme.representation.MessageRepresentation;
+import org.acme.representation.aircraft.AircraftCreateUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.service.AircraftService;
 import org.acme.validation.EnumerationValue;
-
-import jakarta.annotation.security.RolesAllowed;
 
 @Path(AirportProjectURIs.AIRCRAFTS)
 @Authenticated
@@ -46,9 +45,9 @@ public class AircraftResource {
     @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createAircraft(@Valid AircraftCreateRepresentation aircraftCreateRepresentation){
+    public Response createAircraft(@Valid AircraftCreateUpdateRepresentation aircraftCreateRepresentation){
         aircraftService.createAircraft(aircraftCreateRepresentation);
-        return Response.ok(SuccessMessages.AIRCRAFT_CREATION_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRCRAFT_CREATION_SUCCESS)).build();
     }
 
     @PUT
@@ -56,10 +55,10 @@ public class AircraftResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAircraft(@Valid AircraftUpdateRepresentation aircraftUpdateRepresentation,
+    public Response updateAircraft(@Valid AircraftCreateUpdateRepresentation aircraftUpdateRepresentation,
                                    @NotNull @PathParam("id") Integer id){
         aircraftService.updateAircraft(aircraftUpdateRepresentation, id);
-        return Response.ok(SuccessMessages.AIRPORT_UPDATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRPORT_UPDATE_SUCCESS)).build();
     }
 
     @DELETE
@@ -68,6 +67,6 @@ public class AircraftResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAircraft(@NotNull @PathParam("id") Integer id){
         aircraftService.deleteAircraft(id);
-        return Response.ok(SuccessMessages.AIRCRAFT_DELETION_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRCRAFT_DELETION_SUCCESS)).build();
     }
 }

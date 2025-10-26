@@ -69,9 +69,10 @@ export class NavbarComponent implements OnInit{
     this.router.navigate(['/administration']);
   }
 
-  isSystemAdmin(): boolean{
+  isAdmin(): boolean{
     if(this.loggedIn){
-      return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN);
+      return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN) ||
+        this.identityService.hasRole(CommonUtils.AIRLINE_ADMIN);
     }
     return false;
   }

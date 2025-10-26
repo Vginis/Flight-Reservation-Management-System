@@ -1,8 +1,7 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import org.acme.representation.aircraft.AircraftCreateRepresentation;
-import org.acme.representation.aircraft.AircraftUpdateRepresentation;
+import org.acme.representation.aircraft.AircraftCreateUpdateRepresentation;
 
 @Entity
 @Table(name = "aircrafts")
@@ -32,7 +31,7 @@ public class Aircraft {
     public Aircraft() {
     }
 
-    public Aircraft(AircraftCreateRepresentation aircraftCreateRepresentation, Airline airline) {
+    public Aircraft(AircraftCreateUpdateRepresentation aircraftCreateRepresentation, Airline airline) {
         this.aircraftName = aircraftCreateRepresentation.getAircraftName();
         this.aircraftCapacity = aircraftCreateRepresentation.getAircraftCapacity();
         this.aircraftRows = aircraftCreateRepresentation.getAircraftRows();
@@ -64,8 +63,10 @@ public class Aircraft {
         return airline;
     }
 
-    public void edit(AircraftUpdateRepresentation aircraftUpdateRepresentation){
+    public void edit(AircraftCreateUpdateRepresentation aircraftUpdateRepresentation){
         this.aircraftName = aircraftUpdateRepresentation.getAircraftName();
         this.aircraftCapacity = aircraftUpdateRepresentation.getAircraftCapacity();
+        this.aircraftColumns = aircraftUpdateRepresentation.getAircraftColumns();
+        this.aircraftRows = aircraftUpdateRepresentation.getAircraftRows();
     }
 }

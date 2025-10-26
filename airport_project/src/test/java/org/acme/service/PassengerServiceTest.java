@@ -7,7 +7,7 @@ import org.acme.exception.InvalidRequestException;
 import org.acme.mapper.AddressMapper;
 import org.acme.persistence.PassengerRepository;
 import org.acme.persistence.UserRepository;
-import org.acme.representation.PassengerUpdateRepresentation;
+import org.acme.representation.passenger.PassengerUpdateRepresentation;
 import org.acme.representation.user.PassengerCreateRepresentation;
 import org.acme.util.UserUtil;
 import org.junit.jupiter.api.Assertions;

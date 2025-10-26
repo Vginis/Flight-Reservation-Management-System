@@ -9,9 +9,8 @@ import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AircraftMapper;
 import org.acme.persistence.AircraftRepository;
 import org.acme.persistence.AirlineRepository;
-import org.acme.representation.aircraft.AircraftCreateRepresentation;
+import org.acme.representation.aircraft.AircraftCreateUpdateRepresentation;
 import org.acme.representation.aircraft.AircraftRepresentation;
-import org.acme.representation.aircraft.AircraftUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 import org.acme.util.AircraftUtil;
@@ -43,15 +42,13 @@ class AircraftServiceTest {
 
     Aircraft aircraft;
     AircraftRepresentation aircraftRepresentation;
-    AircraftCreateRepresentation aircraftCreateRepresentation;
-    AircraftUpdateRepresentation aircraftUpdateRepresentation;
+    AircraftCreateUpdateRepresentation aircraftCreateUpdateRepresentation;
     Airline airline;
     @BeforeEach
     void setup(){
        aircraft = AircraftUtil.createAircraft();
        aircraftRepresentation = AircraftUtil.createAircraftRepresentation();
-       aircraftCreateRepresentation = AircraftUtil.createAircraftCreateRepresentation();
-       aircraftUpdateRepresentation = AircraftUtil.createAircraftUpdateRepresentation();
+       aircraftCreateUpdateRepresentation = AircraftUtil.createAircraftCreateRepresentation();
        airline = AirlineUtil.createAirline();
     }
 
@@ -75,7 +72,7 @@ class AircraftServiceTest {
         Mockito.when(airlineRepository.findByIdOptional(Mockito.any()))
                 .thenReturn(Optional.of(airline));
         Mockito.doNothing().when(aircraftRepository).persist(Mockito.any(Aircraft.class));
-        Assertions.assertDoesNotThrow(() -> aircraftService.createAircraft(aircraftCreateRepresentation));
+        Assertions.assertDoesNotThrow(() -> aircraftService.createAircraft(aircraftCreateUpdateRepresentation));
     }
 
     @Test
@@ -84,7 +81,7 @@ class AircraftServiceTest {
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () ->
-                aircraftService.createAircraft(aircraftCreateRepresentation));
+                aircraftService.createAircraft(aircraftCreateUpdateRepresentation));
     }
 
     @Test
@@ -95,7 +92,7 @@ class AircraftServiceTest {
                 .thenReturn(entityManager);
         Mockito.when(entityManager.merge(Mockito.any(Aircraft.class)))
                 .thenReturn(aircraft);
-        Assertions.assertDoesNotThrow(() -> aircraftService.updateAircraft(aircraftUpdateRepresentation,1));
+        Assertions.assertDoesNotThrow(() -> aircraftService.updateAircraft(aircraftCreateUpdateRepresentation,1));
     }
 
     @Test
@@ -103,7 +100,7 @@ class AircraftServiceTest {
         Mockito.when(aircraftRepository.findByIdOptional(1))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(ResourceNotFoundException.class, () ->
-                aircraftService.updateAircraft(aircraftUpdateRepresentation, 1));
+                aircraftService.updateAircraft(aircraftCreateUpdateRepresentation, 1));
     }
 
     @Test

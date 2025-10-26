@@ -3,7 +3,7 @@
         <mat-nav-list>
         <mat-list-item
             onKeyPress
-            *ngFor="let option of menuOptions"
+            *ngFor="let option of filteredMenuOptions"
             (click)="selectSection(option)"
             [class.active]="selectedSection === option.key"
         >
@@ -18,6 +18,8 @@
         <ng-container [ngSwitch]="selectedSection">
             <app-users-table *ngSwitchCase="'users'" class="table-container"></app-users-table>
             <app-airports-table *ngSwitchCase="'airports'" class="table-container"></app-airports-table>
+            <app-airlines-table *ngSwitchCase="'airlines'" class="table-container"></app-airlines-table>
+            <app-aircrafts-table *ngSwitchCase="'aircrafts'" class="table-container"></app-aircrafts-table>
         </ng-container>
   </main>
 </div>

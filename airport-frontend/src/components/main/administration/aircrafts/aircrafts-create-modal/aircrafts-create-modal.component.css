@@ -1,0 +1,82 @@
+.create-aircraft-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row-cols-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+
+  mat-slider {
+    width: 200px;
+  }
+}
+
+.seat-map-preview {
+  margin-top: 1rem;
+  text-align: left;
+  align-items: center;
+}
+
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #69a2e4;
+  padding: 1rem;
+  width: 800px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.seat-row {
+  display: flex;
+  gap: 4px;
+}
+
+.seat {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  gap: 4px;
+}
+
+.aisle {
+  margin-left: 20px;
+}
+
+button {
+    padding: 1.5rem;
+    margin-bottom: 5%;
+}
+
+.cockpit {
+  width: 100%;
+  background: #1e3d59;
+  color: white;
+  text-align: center;
+  border-top-left-radius: 100% 100%;
+  border-top-right-radius: 100% 100%;
+  padding: 1rem 0;
+  font-weight: bold;
+}
+
+.tail {
+  background: #1e3d59;
+  color: white;
+  text-align: center;
+  border-bottom-left-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}

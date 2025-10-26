@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ getLabel() }}</h2>
+<mat-dialog-content class="create-aircraft-content">
+    <form [formGroup]="aircraftCreateForm">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Aircraft Name</mat-label>
+            <input matInput formControlName="aircraftName"/>
+        </mat-form-field>
+
+        <div class="row-cols-inputs">
+            <div>
+                <mat-label>Rows</mat-label>
+                <mat-slider min="1" max="60" step="1" thumbLabel>
+                    <input matSliderThumb value="1" formControlName="aircraftRows">
+                </mat-slider>
+                <p>{{ aircraftCreateForm.value.aircraftRows}} rows</p>
+            </div>
+
+            <div>
+                <mat-label>Columns</mat-label>
+                <mat-slider min="1" max="8" step="1" thumbLabel>
+                    <input matSliderThumb value="1" formControlName="aircraftColumns">
+                </mat-slider>
+                <p>{{ aircraftCreateForm.value.aircraftColumns}} seats per row</p>
+            </div>
+        </div>
+
+        <div class="seat-map-preview">
+            <h3>Seat Map Preview (Capacity: {{ capacity() }})</h3>
+            
+            <div class="cockpit">
+                <h3>✈ Cockpit</h3>
+            </div>
+
+            <div class="seat-grid">
+                <div *ngFor="let row of seatRows;" class="seat">
+                    <div *ngFor="let seat of leftSeatColumns;" class="seat">
+                        <mat-icon>event_seat</mat-icon>
+                    </div>
+
+                    <div class="aisle" style="background-color: black;">
+
+                    </div>
+
+                    <div *ngFor="let seat of rightSeatColumns;" class="seat">
+                        <mat-icon>event_seat</mat-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tail">
+                <h3>Tail</h3>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="createOrUpdateAircraft()"
+    [disabled]="aircraftCreateForm.invalid"
+  >
+    {{ getButtonLabel() }}
+  </button>
+</mat-dialog-actions>

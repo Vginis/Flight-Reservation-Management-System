@@ -1,0 +1,36 @@
+.airlines-table-container {
+  padding: 2rem;
+  padding-left: 5%;
+}
+
+.filter-container {
+  margin-bottom: 1rem;
+}
+
+.filter-input {
+  margin-left: 3%;
+  height: 57px;
+  width: 15%;
+}
+
+.filter-button {
+  margin-left: 5%;
+  height: 57px;
+  width: 8%;
+}
+
+.filter-reset-button {
+  margin-left: 2%;
+  height: 57px;
+  width: 8%;
+  border-radius: 8px;
+  border: 2px solid lightgrey;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}

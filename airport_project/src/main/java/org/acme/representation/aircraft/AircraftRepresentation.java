@@ -6,7 +6,6 @@ public class AircraftRepresentation {
     private Integer aircraftCapacity;
     private Integer aircraftRows;
     private Integer aircraftColumns;
-    private String airline2DigitCode;
 
     public Integer getId() {
         return id;
@@ -46,13 +45,5 @@ public class AircraftRepresentation {
 
     public void setAircraftColumns(Integer aircraftColumns) {
         this.aircraftColumns = aircraftColumns;
-    }
-
-    public String getAirline2DigitCode() {
-        return airline2DigitCode;
-    }
-
-    public void setAirline2DigitCode(String airline2DigitCode) {
-        this.airline2DigitCode = airline2DigitCode;
     }
 }
