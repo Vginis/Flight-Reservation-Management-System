@@ -16,6 +16,7 @@ public class FlightRepresentation {
     private String arrivalAirport;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime arrivalTime;
+    private String flightState;
     private Integer aircraftId;
 
     public Integer getId() {
@@ -80,6 +81,14 @@ public class FlightRepresentation {
 
     public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public String getFlightState() {
+        return flightState;
+    }
+
+    public void setFlightState(String flightState) {
+        this.flightState = flightState;
     }
 
     public Integer getAircraftId() {

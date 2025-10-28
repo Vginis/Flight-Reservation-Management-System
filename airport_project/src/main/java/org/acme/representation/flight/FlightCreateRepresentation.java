@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 public class FlightCreateRepresentation {
     @NotBlank
     private String flightNumber;
-    @NotNull
-    private Integer airlineId;
     @NotBlank
     private String departureAirport;
     @NotNull @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
@@ -29,14 +27,6 @@ public class FlightCreateRepresentation {
 
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
-    }
-
-    public Integer getAirlineId() {
-        return airlineId;
-    }
-
-    public void setAirlineId(Integer airlineId) {
-        this.airlineId = airlineId;
     }
 
     public String getDepartureAirport() {

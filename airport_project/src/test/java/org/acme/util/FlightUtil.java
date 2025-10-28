@@ -28,7 +28,6 @@ public class FlightUtil {
     public static FlightCreateRepresentation createFlightCreateRepresentation(){
         FlightCreateRepresentation flightCreateRepresentation = new FlightCreateRepresentation();
         flightCreateRepresentation.setAircraftId(1);
-        flightCreateRepresentation.setAirlineId(1);
         flightCreateRepresentation.setFlightNumber("AA-121");
         flightCreateRepresentation.setArrivalAirport("ATH");
         flightCreateRepresentation.setDepartureAirport("SKG");

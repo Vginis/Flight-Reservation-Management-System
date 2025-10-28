@@ -3,6 +3,7 @@ package org.acme.domain;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.acme.constant.FlightStatus;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 
@@ -42,6 +43,10 @@ public class Flight {
     @Column(name = "arrTime")
     private LocalDateTime arrivalTime;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "flight_status")
+    private FlightStatus flightStatus;
+
     @Valid
     @NotNull
     @OneToOne(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,6 +64,7 @@ public class Flight {
         this.arrivalAirport = arrivalAirport;
         this.arrivalTime = flightCreateRepresentation.getArrivalTime();
         this.flightSeatLayout = flightSeatLayout;
+        this.flightStatus = FlightStatus.SCHEDULED;
     }
 
     public Integer getId() {
@@ -91,6 +97,10 @@ public class Flight {
 
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
+    }
+
+    public FlightStatus getFlightStatus() {
+        return flightStatus;
     }
 
     public FlightSeatLayout getFlightSeatLayout() {
