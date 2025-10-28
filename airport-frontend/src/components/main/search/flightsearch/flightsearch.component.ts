@@ -21,7 +21,6 @@ import { MatIconModule } from '@angular/material/icon';
         MatDatepickerModule,
         MatNativeDateModule,
         MatButtonModule,
-        MatDatepickerModule,
         MatIconModule
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,

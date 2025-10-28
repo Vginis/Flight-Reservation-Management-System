@@ -8,6 +8,7 @@ import { AirlinesTableComponent } from './airlines/airlines-table/airlines-table
 import { CommonUtils } from '../../../utils/common.util';
 import { IdentityService } from '../../../services/keycloak/identity.service';
 import { AircraftsTableComponent } from './aircrafts/aircrafts-table/aircrafts-table.component';
+import { FlightsTableComponent } from './flights/flights-table/flights-table.component';
 
 @Component({
   selector: 'app-administration',
@@ -16,6 +17,7 @@ import { AircraftsTableComponent } from './aircrafts/aircrafts-table/aircrafts-t
     AirportsTableComponent,
     AirlinesTableComponent,
     AircraftsTableComponent,
+    FlightsTableComponent,
     CommonModule,
     MatListModule,
     MatIconModule
@@ -29,7 +31,8 @@ export class AdministrationComponent implements OnInit{
     { key:'users', label:'Users', icon: 'person', rolesAllowed: [CommonUtils.SYSTEM_ADMIN]},
     { key: 'airports', label: 'Airports', icon: 'location_on', rolesAllowed: [CommonUtils.SYSTEM_ADMIN]},
     { key: 'airlines', label: 'Airlines', icon: 'local_airport', rolesAllowed: [CommonUtils.SYSTEM_ADMIN]},
-    { key: 'aircrafts', label: 'Aircrafts', icon: 'flight_takeoff', rolesAllowed: [CommonUtils.AIRLINE_ADMIN]}
+    { key: 'aircrafts', label: 'Aircrafts', icon: 'flight_takeoff', rolesAllowed: [CommonUtils.AIRLINE_ADMIN]},
+    { key: 'flights', label: 'Flights', icon: 'card_travel', rolesAllowed: [CommonUtils.AIRLINE_ADMIN]},  
   ]
   filteredMenuOptions: any[] = [];
   userRoles: string[] = [];

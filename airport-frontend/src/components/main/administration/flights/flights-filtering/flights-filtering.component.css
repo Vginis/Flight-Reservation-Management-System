@@ -1,0 +1,51 @@
+.filter-container {
+  margin-bottom: 1rem;
+}
+
+.filter-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;        
+}
+
+.filter-input,.filter-airport-input {
+  margin-left: 1%;
+  height: 57px;
+  width: 15%;
+}
+
+.filter-airport-input{
+  width: 25%;
+}
+
+.filter-button {
+  margin-left: 5%;
+  height: 57px;
+  width: 8%;
+}
+
+.filter-reset-button {
+  margin-left: 2%;
+  height: 57px;
+  width: 8%;
+  border-radius: 8px;
+  border: 2px solid lightgrey;
+}
+
+.filter-date-field {
+  width: 230px;
+  padding: 2vh;
+  margin-left: 2%;
+  margin-bottom: 5px;
+}
+
+.filter-date-field-wrapper {
+  margin-top: 24px;
+}

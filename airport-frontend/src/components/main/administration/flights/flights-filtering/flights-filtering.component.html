@@ -1,0 +1,96 @@
+<div class="filter-container">
+    <form [formGroup]="flightsFilterForm" (ngSubmit)="onSubmit()">
+        <div class="filter-row">
+            <mat-form-field appearance="outline" class="filter-input">
+                <mat-label>Filter by</mat-label>
+                <mat-select formControlName="filterBy">
+                    <mat-option *ngFor="let option of filterOptions" [value]="option.key">
+                        {{ option.label }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="filter-input">
+                <mat-label>Search</mat-label>
+                <input matInput placeholder="Enter value..." formControlName="filterValue"/>
+            </mat-form-field>
+
+            <div class="filter-date-field-wrapper">
+                <mat-form-field appearance="fill" class="filter-date-field">
+                    <mat-label>Choose departure date</mat-label>
+                    <input matInput [matDatepickerFilter]="disablePastDates"
+                        [matDatepicker]="departurePicker" formControlName="departureDate"
+                        (dateChange)="onDepartingSelected($event)">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="departurePicker">
+                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #departurePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-date-field-wrapper">
+                <mat-form-field appearance="fill" class="filter-date-field">
+                    <mat-label>Choose arrival date</mat-label>
+                    <input matInput [matDatepickerFilter]="validateArrivalDates"
+                        [matDatepicker]="arrivalPicker" formControlName="arrivalDate"
+                        >
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="arrivalPicker">
+                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #arrivalPicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="filter-row second-row">
+            <mat-form-field appearance="outline" class="filter-airport-input">
+                <mat-label>Departure Airport</mat-label>
+                <input
+                    type="text"
+                    matInput
+                    placeholder="Search airport..."
+                    [matAutocomplete]="auto"
+                    formControlName="departureAirport"
+                />
+                <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayAirport"
+                    (optionSelected)="onAirportSelected($event.option.value)"
+                >
+                    <mat-option *ngFor="let airport of airports" [value]="airport">
+                    {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="filter-airport-input">
+                <mat-label>Arrival Airport</mat-label>
+                <input
+                    type="text"
+                    matInput
+                    placeholder="Search airport..."
+                    [matAutocomplete]="auto"
+                    formControlName="arrivalAirport"
+                />
+                <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayAirport"
+                    (optionSelected)="onAirportSelected($event.option.value)"
+                >
+                    <mat-option *ngFor="let airport of airports" [value]="airport">
+                    {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <button color="primary" mat-raised-button class="filter-button">
+                Filter
+            </button>
+            <button color="primary" mat-button class="filter-reset-button">
+                Reset
+            </button>
+        </div>
+    </form>
+</div>
