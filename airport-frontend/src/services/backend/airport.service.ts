@@ -25,6 +25,14 @@ export class AirportService {
         return this.httpClient.get<any>(`${this.airportsUrl}`, { params: httpParams });
     }
 
+    smartSearchAirports(value: string | null): Observable<any> {
+        let httpParams = new HttpParams();
+        if(value!==null) {
+            httpParams = httpParams.set('value', value);
+        }
+        return this.httpClient.get<any>(`${this.airportsUrl}/smart-search`, { params: httpParams });
+    }
+
     createAirport(payload: any): Observable<any> {
         return this.httpClient.post<any>(`${this.airportsUrl}`, payload);
     }

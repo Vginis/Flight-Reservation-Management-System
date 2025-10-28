@@ -42,6 +42,13 @@ public class AirportResource {
         return Response.ok(airportService.searchAirportsByParams(query)).build();
     }
 
+    @GET
+    @Path("smart-search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response smartSearchAirports(@QueryParam("value") String value){
+        return Response.ok(airportService.smartSearchAirports(value)).build();
+    }
+
     @POST
     @RolesAllowed(Role.SYSTEM_ADMIN)
     @Produces(MediaType.APPLICATION_JSON)

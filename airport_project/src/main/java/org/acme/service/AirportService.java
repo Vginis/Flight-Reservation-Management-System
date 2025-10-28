@@ -16,6 +16,7 @@ import org.acme.representation.airport.AirportUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -28,6 +29,10 @@ public class AirportService {
 
     public PageResult<AirportRepresentation> searchAirportsByParams(PageQuery<AirportSortAndFilterBy> query){
         return airportMapper.map(airportRepository.searchAirportsByParams(query));
+    }
+
+    public List<AirportRepresentation> smartSearchAirports(String value){
+        return airportMapper.map(airportRepository.smartSearchAirports(value));
     }
 
     @Transactional
