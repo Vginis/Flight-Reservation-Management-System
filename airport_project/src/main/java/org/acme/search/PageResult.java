@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PageResult<T> {
     private final long total;
-    private final List<T> results;
+    private List<T> results;
 
     public PageResult(long total, List<T> results) {
         this.total = total;
@@ -17,5 +17,9 @@ public class PageResult<T> {
 
     public List<T> getResults() {
         return results;
+    }
+
+    public void setResults(List<T> results) {
+        this.results = results;
     }
 }

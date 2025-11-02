@@ -52,7 +52,6 @@ export class AirportsEditModalComponent implements OnInit{
 
     const requestBody = this.constructPayload();
     
-    console.log(requestBody);
     this.airportService.updateAirport(requestBody).subscribe({
       next: () => {
         this.snackbar.success('Airport Details updated successfully!');
@@ -67,7 +66,6 @@ export class AirportsEditModalComponent implements OnInit{
   private patchForm(airportRepresentation: AirportRepresentation | null): void {
     if(!this.airportUpdateForm.invalid) return;
 
-    console.log(airportRepresentation);
     this.airportUpdateForm.patchValue({
       airportName: airportRepresentation?.airportName,
       city: airportRepresentation?.city,

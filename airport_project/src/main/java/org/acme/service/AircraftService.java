@@ -41,6 +41,16 @@ public class AircraftService {
         return aircraftMapper.map(aircraftPageResult);
     }
 
+    public List<AircraftRepresentation> smartSearchAircraft(String aircraftName){
+        String username = userContext.extractUsername();
+        Optional<AirlineAdministrator> airlineAdministratorOptional = airlineAdministratorRepository.findByUsername(username);
+        if(airlineAdministratorOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        return aircraftMapper.map(aircraftRepository.smartSearchAircraft(aircraftName, airlineAdministratorOptional.get().getAirline()));
+    }
+
     @Transactional
     public void createAircraft(AircraftCreateUpdateRepresentation aircraftCreateRepresentation){
         Optional<AirlineAdministrator> airlineAdministratorOptional = airlineAdministratorRepository.findByUsername(userContext.extractUsername());

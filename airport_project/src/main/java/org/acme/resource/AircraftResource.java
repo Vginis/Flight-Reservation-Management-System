@@ -15,7 +15,6 @@ import org.acme.constant.ValueEnum;
 import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.representation.MessageRepresentation;
-import org.acme.representation.MessageRepresentation;
 import org.acme.representation.aircraft.AircraftCreateUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.service.AircraftService;
@@ -40,6 +39,14 @@ public class AircraftResource {
         PageQuery<AircraftSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AircraftSortAndFilterBy.class), searchValue, size, index
                 , ValueEnum.fromValue(sortBy, AircraftSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
         return Response.ok(aircraftService.searchAircraftsByParams(query)).build();
+    }
+
+    @GET
+    @Path("smart-search")
+    @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response smartSearchAircraft(@QueryParam("aircraftName") String aircraftName){
+        return Response.ok(aircraftService.smartSearchAircraft(aircraftName)).build();
     }
 
     @POST

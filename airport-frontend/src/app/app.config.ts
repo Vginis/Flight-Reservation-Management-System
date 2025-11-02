@@ -7,13 +7,15 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { KeycloakInitService } from '../services/keycloak/keycloak-init.service';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LoadingInterceptor } from '../interceptors/loading.interceptor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    importProvidersFrom(KeycloakAngularModule),
+    importProvidersFrom(KeycloakAngularModule, MatDatepickerModule, MatNativeDateModule),
     provideHttpClient(withInterceptorsFromDi()), 
     {
       provide: APP_INITIALIZER,

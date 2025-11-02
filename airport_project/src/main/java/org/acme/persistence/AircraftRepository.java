@@ -1,10 +1,12 @@
 package org.acme.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.domain.Aircraft;
+import org.acme.domain.Airline;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 
@@ -52,5 +54,21 @@ public class AircraftRepository extends AbstractSearchRepository<Aircraft> {
             queryBuilder.append(" AND al.u2digitCode = :airline");
             params.put("airline", query.getSearchValue());
         }
+    }
+
+    public List<Aircraft> smartSearchAircraft(String aircraftName, Airline airline){
+        StringBuilder queryBuilder = new StringBuilder("SELECT a FROM Aircraft a ");
+        queryBuilder.append("JOIN a.airline al ");
+
+        Parameters parameters = new Parameters();
+        queryBuilder.append("WHERE al.u2digitCode = :code");
+        parameters.and("code", airline.getU2digitCode());
+
+        if(aircraftName!=null){
+            queryBuilder.append(" and a.aircraftName like '%'||:aircraftName||'%'");
+            parameters.and("aircraftName", aircraftName);
+        }
+        PanacheQuery<Aircraft> querySearch = this.find(queryBuilder.toString(), Sort.empty(), parameters).page(0, 10);
+        return querySearch.list();
     }
 }
