@@ -2,27 +2,39 @@
     <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill" class="search-field">
             <mat-label>Flying from</mat-label>
-            <mat-select formControlName="from">
-                <mat-option *ngFor="let city of cities" [value]="city">
-                    {{ city.city }} ({{ city.code }})
+            <input
+                type="text"
+                matInput
+                [matAutocomplete]="departureAuto"
+                formControlName="from"
+            />
+            <mat-autocomplete
+                #departureAuto="matAutocomplete"
+                [displayWith]="displayAirport"
+            >
+                <mat-option *ngFor="let airport of airports" [value]="airport">
+                {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
                 </mat-option>
-            </mat-select>
-            <mat-error *ngIf="searchForm.get('from')?.hasError('required')">
-                Departure is required
-            </mat-error>
+            </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="search-field">
             <mat-label>Flying to</mat-label>
-            <mat-select formControlName="to">
-                <mat-option *ngFor="let city of cities" [value]="city">
-                    {{ city.city }} ({{ city.code }})
+            <input
+                type="text"
+                matInput
+                [matAutocomplete]="arrivalAuto"
+                formControlName="to"
+            />
+            <mat-autocomplete
+                #arrivalAuto="matAutocomplete"
+                [displayWith]="displayAirport"
+            >
+                <mat-option *ngFor="let airport of airports" [value]="airport">
+                {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
                 </mat-option>
-            </mat-select>
-            <mat-error *ngIf="searchForm.get('to')?.hasError('required')">
-                Destination is required
-            </mat-error>
-            <mat-error *ngIf="searchForm.hasError('sameRoute')">
+            </mat-autocomplete>
+            <mat-error *ngIf="searchForm.controls['to']?.hasError('sameAirport')">
                 Departure and destination cannot be the same!
             </mat-error>
         </mat-form-field>

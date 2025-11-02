@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -8,6 +8,9 @@ import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { AirportService } from '../../../../services/backend/airport.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'app-flightsearch',
@@ -21,28 +24,53 @@ import { MatIconModule } from '@angular/material/icon';
         MatDatepickerModule,
         MatNativeDateModule,
         MatButtonModule,
+        MatAutocompleteModule,
         MatIconModule
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './flightsearch.component.html',
     styleUrls: ['./flightsearch.component.css']
 })
-export class FlightsearchComponent {
+export class FlightsearchComponent implements OnInit{
   searchForm: FormGroup;
+  airports: any = [];
 
-  cities = [
-    { city: 'Athens', code: 'ATH'},
-    { city: 'Thessaloniki', code: 'SKG'}
-  ];
-
-  constructor(private readonly fb: FormBuilder) {
-    this.searchForm = this.fb.group({
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly airportService: AirportService
+  ) {
+    this.searchForm = this.formBuilder.group({
       from: [''],
       to: [''],
       departing: [''],
       returning: ['']
     }, 
-    { validators: [this.routeValidator]});
+    { validators: [this.differentAirportsValidator]});
+  }
+
+  ngOnInit(): void {
+    this.searchForm.get('from')!.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          return this.airportService.smartSearchAirports(value);
+        })
+      )
+      .subscribe((airports) => {
+        this.airports = airports;
+      });
+    this.searchForm.get('to')!.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          return this.airportService.smartSearchAirports(value);
+        })
+      )
+      .subscribe((airports) => {
+        this.airports = airports;
+      });
   }
 
   onSubmit() {
@@ -56,12 +84,17 @@ export class FlightsearchComponent {
     return date >= today;
   };
 
-  routeValidator(control: AbstractControl): ValidationErrors | null {
-    const from = control.get('from')?.value;
-    const to = control.get('to')?.value;
+  differentAirportsValidator(control: AbstractControl): ValidationErrors | null {
+    const departureAirport = control.get('from');
+    const arrivalAirport = control.get('to');
 
-    if (from && to && from.code === to.code) {
-      return { sameRoute: true };
+    if (departureAirport?.value.u3digitCode!==undefined && arrivalAirport && departureAirport?.value.u3digitCode === arrivalAirport?.value.u3digitCode) {
+      arrivalAirport.setErrors({ ...arrivalAirport.errors, sameAirport: true });
+    } else {
+      if (arrivalAirport?.hasError('sameAirport')) {
+        const { sameAirport, ...otherErrors } = arrivalAirport.errors || {};
+        arrivalAirport.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+      }
     }
     return null;
   }
@@ -87,6 +120,10 @@ export class FlightsearchComponent {
   atLeastOneSelected = (): boolean => {
     const { from, to, departing, returning } = this.searchForm.value;
     return !!(from || to || departing || returning);
+  }
+
+  displayAirport(airport: any): string {
+    return airport ? `${airport.city} (${airport.u3digitCode})` : '';
   }
 
   formIsNotValid = (): boolean => {

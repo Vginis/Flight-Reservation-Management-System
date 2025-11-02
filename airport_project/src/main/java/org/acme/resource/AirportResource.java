@@ -1,6 +1,7 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -43,6 +44,7 @@ public class AirportResource {
     }
 
     @GET
+    @PermitAll
     @Path("smart-search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response smartSearchAirports(@QueryParam("value") String value){
