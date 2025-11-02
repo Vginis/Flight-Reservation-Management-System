@@ -15,12 +15,6 @@ public class FlightSeatLayout {
     @Column(name = "aircraft_id", nullable = false)
     private Integer aircraftId;
 
-    @Column(name = "seat_rows", nullable = false)
-    private Integer seatRows;
-
-    @Column(name = "seat_columns", nullable = false)
-    private Integer seatColumns;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id",referencedColumnName = "id")
     private Flight flight;
@@ -33,8 +27,6 @@ public class FlightSeatLayout {
 
     public FlightSeatLayout(Aircraft aircraft) {
         this.aircraftId = aircraft.getId();
-        this.seatRows = aircraft.getAircraftRows();
-        this.seatColumns = aircraft.getAircraftColumns();
         this.reservedSeats = new ArrayList<>();
     }
 
@@ -44,14 +36,6 @@ public class FlightSeatLayout {
 
     public Integer getAircraftId() {
         return aircraftId;
-    }
-
-    public Integer getSeatRows() {
-        return seatRows;
-    }
-
-    public Integer getSeatColumns() {
-        return seatColumns;
     }
 
     public Flight getFlight() {

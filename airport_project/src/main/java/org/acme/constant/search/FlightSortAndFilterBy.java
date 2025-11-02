@@ -6,6 +6,7 @@ import org.acme.search.SortBy;
 public enum FlightSortAndFilterBy implements ValueEnum, SortBy {
     FLIGHT_NUMBER("flightNumber"),
     FLIGHT_UUID("flightUUID"),
+    FLIGHT_STATUS("flightStatus"),
     AIRLINE("airline","al.u2digitCode"),
     DEPARTURE_AIRPORT("departureAirport", "da.u3digitCode"),
     DEPARTURE_TIME("departureTime"),

@@ -17,7 +17,7 @@ public class SuccessMessages {
 
     public static final String FLIGHT_CREATION_SUCCESS = "flight_creation_success";
     public static final String FLIGHT_UPDATE_SUCCESS = "flight_update_success";
-    public static final String FLIGHT_DELETE_SUCCESS = "flight_deletion_success";
+    public static final String FLIGHT_CANCEL_SUCCESS = "flight_cancellation_success";
 
     public static final String PASSENGER_CREATE_SUCCESS = "passenger_created_successfully";
     public static final String PASSENGER_UPDATE_SUCCESS = "passenger_updated_successfully";

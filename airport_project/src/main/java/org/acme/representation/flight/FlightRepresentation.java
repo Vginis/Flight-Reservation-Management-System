@@ -1,6 +1,8 @@
 package org.acme.representation.flight;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.acme.representation.aircraft.AircraftRepresentation;
+import org.acme.representation.airport.AirportRepresentation;
 
 import java.time.LocalDateTime;
 
@@ -9,15 +11,15 @@ public class FlightRepresentation {
     private Integer id;
     private String flightNumber;
     private String flightUUID;
+    private String flightStatus;
     private String airlineU2DigitCode;
-    private String departureAirport;
+    private AirportRepresentation departureAirport;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime departureTime;
-    private String arrivalAirport;
+    private AirportRepresentation arrivalAirport;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime arrivalTime;
-    private String flightState;
-    private Integer aircraftId;
+    private AircraftRepresentation aircraft;
 
     public Integer getId() {
         return id;
@@ -43,6 +45,14 @@ public class FlightRepresentation {
         this.flightUUID = flightUUID;
     }
 
+    public String getFlightStatus() {
+        return flightStatus;
+    }
+
+    public void setFlightStatus(String flightStatus) {
+        this.flightStatus = flightStatus;
+    }
+
     public String getAirlineU2DigitCode() {
         return airlineU2DigitCode;
     }
@@ -51,11 +61,11 @@ public class FlightRepresentation {
         this.airlineU2DigitCode = airlineU2DigitCode;
     }
 
-    public String getDepartureAirport() {
+    public AirportRepresentation getDepartureAirport() {
         return departureAirport;
     }
 
-    public void setDepartureAirport(String departureAirport) {
+    public void setDepartureAirport(AirportRepresentation departureAirport) {
         this.departureAirport = departureAirport;
     }
 
@@ -67,11 +77,11 @@ public class FlightRepresentation {
         this.departureTime = departureTime;
     }
 
-    public String getArrivalAirport() {
+    public AirportRepresentation getArrivalAirport() {
         return arrivalAirport;
     }
 
-    public void setArrivalAirport(String arrivalAirport) {
+    public void setArrivalAirport(AirportRepresentation arrivalAirport) {
         this.arrivalAirport = arrivalAirport;
     }
 
@@ -83,19 +93,11 @@ public class FlightRepresentation {
         this.arrivalTime = arrivalTime;
     }
 
-    public String getFlightState() {
-        return flightState;
+    public AircraftRepresentation getAircraft() {
+        return aircraft;
     }
 
-    public void setFlightState(String flightState) {
-        this.flightState = flightState;
-    }
-
-    public Integer getAircraftId() {
-        return aircraftId;
-    }
-
-    public void setAircraftId(Integer aircraftId) {
-        this.aircraftId = aircraftId;
+    public void setAircraft(AircraftRepresentation aircraft) {
+        this.aircraft = aircraft;
     }
 }

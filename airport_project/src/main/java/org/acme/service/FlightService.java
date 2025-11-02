@@ -4,24 +4,26 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
-import org.acme.constant.search.FlightSortAndFilterBy;
 import org.acme.domain.*;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
+import org.acme.mapper.AircraftMapper;
 import org.acme.mapper.FlightMapper;
 import org.acme.persistence.AircraftRepository;
 import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirportRepository;
 import org.acme.persistence.FlightRepository;
+import org.acme.representation.aircraft.AircraftRepresentation;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightMultipleParamsSearchDTO;
 import org.acme.representation.flight.FlightRepresentation;
-import org.acme.search.PageQuery;
+import org.acme.search.FlightPageQuery;
 import org.acme.search.PageResult;
 import org.acme.util.UserContext;
 import org.acme.validation.FlightValidator;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -41,10 +43,23 @@ public class FlightService {
     UserContext userContext;
     @Inject
     AirlineAdministratorRepository airlineAdministratorRepository;
+    @Inject
+    AircraftMapper aircraftMapper;
 
-    public PageResult<FlightRepresentation> searchFlightsByParams(PageQuery<FlightSortAndFilterBy> query){
+    public PageResult<FlightRepresentation> searchFlightsByParams(FlightPageQuery query){
         PageResult<Flight> flightPageResult = flightRepository.searchFlightsByParams(query);
-        return flightMapper.map(flightPageResult);
+        List<FlightRepresentation> flightRepresentations = flightPageResult.getResults().stream().map(flight -> {
+            FlightRepresentation flightRepresentation = flightMapper.map(flight);
+
+            Optional<Aircraft> aircraftOptional = aircraftRepository.findByIdOptional(flight.getFlightSeatLayout().getAircraftId());
+            if(aircraftOptional.isEmpty()){
+                throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+            }
+            flightRepresentation.setAircraft(aircraftMapper.map(aircraftOptional.get()));
+            return flightRepresentation;
+        }).toList();
+
+        return new PageResult<>(flightPageResult.getTotal(), flightRepresentations);
     }
 
     public PageResult<FlightRepresentation> searchFlightsByMultipleParams(FlightMultipleParamsSearchDTO flightMultipleParamsSearchDTO, Integer size, Integer index){
@@ -67,13 +82,16 @@ public class FlightService {
 
         flightValidator.validateCreatedFlightDates(flightCreateRepresentation.getDepartureTime(),flightCreateRepresentation.getArrivalTime());
         Aircraft aircraft = aircraftOptional.get();
+        Airport departureAirport = departureAirportOptional.get();
+        Airport arrivalAirport = arrivalAirportOptional.get();
         Airline airline = airlineAdministratorOptional.get().getAirline();
-        if (!airline.getU2digitCode().equals(aircraft.getAirline().getU2digitCode())) {
+        if (!airline.getU2digitCode().equals(aircraft.getAirline().getU2digitCode()) 
+            || departureAirport.getU3digitCode().equals(arrivalAirport.getU3digitCode())) {
             throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
         }
 
         FlightSeatLayout flightSeatLayout = new FlightSeatLayout(aircraft);
-        Flight flight = new Flight(flightCreateRepresentation, airline, departureAirportOptional.get(),arrivalAirportOptional.get(), flightSeatLayout);
+        Flight flight = new Flight(flightCreateRepresentation, airline, departureAirport,arrivalAirport, flightSeatLayout);
         flightSeatLayout.setFlight(flight);
 
         flightRepository.persist(flight);
@@ -95,13 +113,13 @@ public class FlightService {
     }
 
     @Transactional
-    public void deleteFlight(Integer flightId) {
+    public void cancelFlight(Integer flightId) {
         Optional<Flight> flightOptional = flightRepository.findByIdOptional(flightId);
         if(flightOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         Flight flight = flightOptional.get();
-        flightRepository.delete(flight);
+        flight.cancelFlight();
     }
 }

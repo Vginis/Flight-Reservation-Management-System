@@ -12,13 +12,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
-import org.acme.constant.ValueEnum;
+import org.acme.constant.search.FlightSearchFilterParamsDTO;
+import org.acme.constant.search.FlightSearchParamsDTO;
 import org.acme.constant.search.FlightSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
+import org.acme.representation.MessageRepresentation;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightMultipleParamsSearchDTO;
-import org.acme.search.PageQuery;
+import org.acme.search.FlightPageQuery;
 import org.acme.service.FlightService;
 import org.acme.validation.EnumerationValue;
 
@@ -36,12 +38,20 @@ public class FlightResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByParams(@QueryParam("searchField") @EnumerationValue(acceptedEnum = FlightSortAndFilterBy.class) String searchField,
                                    @QueryParam("searchValue") String searchValue,
+                                   @QueryParam("departureDate") @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$") String departureDate,
+                                   @QueryParam("arrivalDate") @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$") String arrivalDate,
+                                   @QueryParam("departureAirport") Integer departureAirportId,
+                                   @QueryParam("arrivalAirport") Integer arrivalAirportId,
                                    @QueryParam("size") @DefaultValue("10") Integer size,
                                    @QueryParam("index") @DefaultValue("0") Integer index,
                                    @QueryParam("sortBy") @EnumerationValue(acceptedEnum = FlightSortAndFilterBy.class) String sortBy,
                                    @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
-        PageQuery<FlightSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, FlightSortAndFilterBy.class), searchValue, size, index
-                , ValueEnum.fromValue(sortBy, FlightSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
+        FlightSearchFilterParamsDTO flightSearchFilterParamsDTO = new FlightSearchFilterParamsDTO(searchField, searchValue,
+                departureDate, arrivalDate, departureAirportId, arrivalAirportId);
+        FlightSearchParamsDTO flightSearchParamsDTO = new FlightSearchParamsDTO(flightSearchFilterParamsDTO, size, index,
+                sortBy, sortDirection);
+        FlightPageQuery query = new FlightPageQuery(flightSearchParamsDTO, departureDate, arrivalDate, departureAirportId,
+                arrivalAirportId);
         return Response.ok(flightService.searchFlightsByParams(query)).build();
     }
 
@@ -65,7 +75,7 @@ public class FlightResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createFLight(@Valid FlightCreateRepresentation flightCreateRepresentation) {
         flightService.createFlight(flightCreateRepresentation);
-        return Response.ok(SuccessMessages.FLIGHT_CREATION_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.FLIGHT_CREATION_SUCCESS)).build();
     }
 
     @PUT
@@ -75,17 +85,17 @@ public class FlightResource {
     @Path("/{flightId}")
     public Response updateFlight(@PathParam("flightId") Integer id, @Valid FlightDateUpdateRepresentation representation) {
         flightService.updateFlightDates(representation, id);
-        return Response.ok(SuccessMessages.FLIGHT_UPDATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.FLIGHT_UPDATE_SUCCESS)).build();
     }
 
-    @DELETE
+    @PUT
     @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
-    @Path("{id:[0-9]+}")
+    @Path("cancel-flight/{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteFlight(@PathParam("id") Integer id) {
-        flightService.deleteFlight(id);
-        return Response.ok(SuccessMessages.FLIGHT_DELETE_SUCCESS).build();
+    public Response cancelFlight(@PathParam("id") Integer id) {
+        flightService.cancelFlight(id);
+        return Response.ok(new MessageRepresentation(SuccessMessages.FLIGHT_CANCEL_SUCCESS)).build();
     }
 
 }

@@ -13,9 +13,9 @@ public class FlightUtil {
         flightRepresentation.setId(1);
         flightRepresentation.setFlightNumber("AA-121");
         flightRepresentation.setFlightUUID("uuid");
-        flightRepresentation.setAircraftId(1);
-        flightRepresentation.setArrivalAirport("ATH");
-        flightRepresentation.setDepartureAirport("SKG");
+//        flightRepresentation.setAircraftId(1);
+//        flightRepresentation.setArrivalAirport("ATH");
+//        flightRepresentation.setDepartureAirport("SKG");
         flightRepresentation.setArrivalTime(LocalDateTime.now());
         flightRepresentation.setDepartureTime(LocalDateTime.now());
         return flightRepresentation;

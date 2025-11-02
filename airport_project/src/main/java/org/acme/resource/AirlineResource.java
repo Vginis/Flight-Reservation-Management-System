@@ -13,6 +13,7 @@ import org.acme.constant.SuccessMessages;
 import org.acme.constant.ValueEnum;
 import org.acme.constant.search.AirlineSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
+import org.acme.representation.MessageRepresentation;
 import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.airline.AirlineUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -73,7 +74,7 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAirline(@Valid AirlineUpdateRepresentation representation) {
         airlineService.updateAirlineDetails(representation);
-        return Response.ok(SuccessMessages.AIRLINE_UPDATE_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRLINE_UPDATE_SUCCESS)).build();
     }
 
     @DELETE
@@ -83,6 +84,6 @@ public class AirlineResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteAirline(@PathParam("id") Integer id) {
         airlineService.deleteAirline(id);
-        return Response.ok(SuccessMessages.AIRLINE_DELETION_SUCCESS).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRLINE_DELETION_SUCCESS)).build();
     }
 }

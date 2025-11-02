@@ -7,7 +7,7 @@ import org.acme.constant.search.FlightSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.domain.Flight;
 import org.acme.representation.flight.FlightMultipleParamsSearchDTO;
-import org.acme.search.PageQuery;
+import org.acme.search.FlightPageQuery;
 import org.acme.search.PageResult;
 
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
-    public PageResult<Flight> searchFlightsByParams(PageQuery<FlightSortAndFilterBy> query){
+    public PageResult<Flight> searchFlightsByParams(FlightPageQuery query){
         StringBuilder queryBuilder = new StringBuilder("SELECT f FROM Flight f ");
         queryBuilder.append("JOIN f.airline al ");
         queryBuilder.append("LEFT JOIN f.departureAirport da ");
@@ -37,9 +37,7 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
         queryBuilder.append("WHERE 1=1");
 
         Map<String, Object> params = new HashMap<>();
-        if(query.getSearchField()!=null && query.getSearchValue()!=null){
-            putParametersForFlightSearch(query, queryBuilder, params);
-        }
+        putParametersForFlightSearch(query, queryBuilder, params);
 
         Optional<Sort> sortOptional = (query.getSortBy()!=null && query.getSortDirection()!=null) ?
                 toSort(query.getSortBy().getOrderBy(), query.getSortDirection().value()) :
@@ -54,38 +52,46 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
         return new PageResult<>(flightList.size(), flightList);
     }
 
-    private void putParametersForFlightSearch(PageQuery<FlightSortAndFilterBy> query, StringBuilder queryBuilder, Map<String, Object> params){
-        if(query.getSearchField().value().equals("flightNumber")){
-            queryBuilder.append(" AND f.flightNumber like '%'||:flightNumber||'%'");
-            params.put("flightNumber", query.getSearchValue());
+    private void putParametersForFlightSearch(FlightPageQuery query, StringBuilder queryBuilder, Map<String, Object> params){
+        if(query.getSearchField()!=null && query.getSearchValue()!=null){
+            if(query.getSearchField().value().equals("flightNumber")){
+                queryBuilder.append(" AND f.flightNumber like '%'||:flightNumber||'%'");
+                params.put("flightNumber", query.getSearchValue());
+            }
+
+            if(query.getSearchField().value().equals("flightUUID")){
+                queryBuilder.append(" AND f.flightUUID like '%'||:flightUUID||'%'");
+                params.put("flightUUID", query.getSearchValue());
+            }
+
+            if(query.getSearchField().value().equals("flightStatus")){
+                queryBuilder.append(" AND lower(f.flightStatus) like '%'||:flightStatus||'%'");
+                params.put("flightStatus", query.getSearchValue().toLowerCase());
+            }
         }
-        if(query.getSearchField().value().equals("flightUUID")){
-            queryBuilder.append(" AND f.flightUUID like '%'||:flightUUID||'%'");
-            params.put("flightUUID", query.getSearchValue());
+
+        if(query.getDepartureAirportId()!=null){
+            queryBuilder.append(" AND da.id = :departureAirport");
+            params.put(DEPARTURE_AIRPORT_LABEL, query.getDepartureAirportId());
         }
-        if(query.getSearchField().value().equals("airline")){
-            queryBuilder.append(" AND al.u2digitCode = :airline");
-            params.put("airline", query.getSearchValue());
+
+        if(query.getArrivalAirportId()!=null){
+            queryBuilder.append(" AND aa.id = :arrivalAirport");
+            params.put(ARRIVAL_AIRPORT_LABEL, query.getArrivalAirportId());
         }
-        if(query.getSearchField().value().equals(DEPARTURE_AIRPORT_LABEL)){
-            queryBuilder.append(" AND da.u3digitCode = :departureAirport");
-            params.put(DEPARTURE_AIRPORT_LABEL, query.getSearchValue());
-        }
-        if(query.getSearchField().value().equals(ARRIVAL_AIRPORT_LABEL)){
-            queryBuilder.append(" AND aa.u3digitCode = :arrivalAirport");
-            params.put(ARRIVAL_AIRPORT_LABEL, query.getSearchValue());
-        }
-        if(query.getSearchField().value().equals(DEPARTURE_TIME_LABEL)){
+
+        if(query.getDepartureDate()!=null){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-            LocalDateTime depTime = LocalDateTime.parse(query.getSearchValue(), formatter);
-            queryBuilder.append(" AND f.departureTime = :departureTime");
+            LocalDateTime depTime = LocalDateTime.parse(query.getDepartureDate(), formatter);
+            queryBuilder.append(" AND f.departureTime >= :departureTime");
             params.put(DEPARTURE_TIME_LABEL, depTime);
         }
-        if(query.getSearchField().value().equals(ARRIVAL_TIME_LABEL)){
+
+        if(query.getArrivalDate()!=null){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-            LocalDateTime arrTime = LocalDateTime.parse(query.getSearchValue(), formatter);
-            queryBuilder.append(" AND f.arrivalTime = :arrivalTime");
-            params.put(ARRIVAL_TIME_LABEL, arrTime);
+            LocalDateTime arrTime = LocalDateTime.parse(query.getArrivalDate(), formatter);
+            queryBuilder.append(" AND f.arrivalTime <= :arrivalTime");
+            params.put(ARRIVAL_TIME_LABEL, arrTime.withHour(23).withMinute(59).withSecond(59));
         }
     }
 
