@@ -69,6 +69,10 @@ export class NavbarComponent implements OnInit{
     this.router.navigate(['/administration']);
   }
 
+  navigateToHomePage() {
+    this.router.navigate(['/']);
+  }
+
   isAdmin(): boolean{
     if(this.loggedIn){
       return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN) ||

@@ -1,5 +1,7 @@
 <mat-toolbar color="primary" class="toolbar">
-  <span class="logo">SkyBook Platform✈️</span>
+  <button mat-button (click)="navigateToHomePage()">
+    <span class="logo">SkyBook Platform✈️</span>
+  </button>
 
   <button mat-button class="profileButton" *ngIf="!loggedIn" (click)="toLogin()">
     <mat-icon>account_circle</mat-icon>
