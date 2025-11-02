@@ -1,0 +1,39 @@
+.create-flight-modal {
+  height: 500px;
+  width: 900px
+}
+
+.create-flight-content {
+  flex-direction: column;
+}
+
+.text-input-fields { 
+  display: flex;
+  gap: 5%;
+  margin-top: 2%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.airport-input {
+  margin-right: 3%;
+  margin-left: 3%;
+  width: 100%;
+}
+
+.filter-date-fields,.filter-aircraft-fields {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.filter-date-field,.filter-aircraft-field {
+  margin-right: 5%;
+}
+
+button {
+    padding: 1.5rem;
+    margin-bottom: 5%;
+}

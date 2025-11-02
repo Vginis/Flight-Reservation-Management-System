@@ -2,8 +2,12 @@
     <div>
         <h2>Flights Management</h2>
 
-        <app-flights-filtering></app-flights-filtering>
-
+        
+        <app-flights-filtering (filterFormSubmission)="handleFormSubmit($event)"></app-flights-filtering>
+        <button mat-raised-button color="primary" (click)="openCreateModal()" class="flights-create-button">
+            Create new Flight
+        </button>
+    
         <div class="table-wrapper">
             <table mat-table [dataSource]="dataSource" matSort [matSortDisableClear]="true" class="mat-elevation-z8">
 
@@ -17,9 +21,26 @@
                 <td mat-cell *matCellDef="let flight"> {{ flight.flightUUID }} </td>
             </ng-container>
 
+            <ng-container matColumnDef="flightStatus">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let flight">
+                    <span
+                        class="status-badge"
+                        [ngClass]="{
+                        'status-scheduled': flight.flightStatus === 'SCHEDULED',
+                        'status-cancelled': flight.flightStatus === 'CANCELLED'
+                        }"
+                    >
+                        <mat-icon *ngIf="flight.flightStatus === 'SCHEDULED'">check_circle</mat-icon>
+                        <mat-icon *ngIf="flight.flightStatus === 'CANCELLED'">cancel</mat-icon>
+                        {{ flight.flightStatus }}
+                    </span>
+                </td>
+            </ng-container>
+
             <ng-container matColumnDef="departureAirport">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Departure Airport </th>
-                <td mat-cell *matCellDef="let flight"> {{ flight.departureAirport }} </td>
+                <td mat-cell *matCellDef="let flight"> {{ flight.departureAirport.u3digitCode }} </td>
             </ng-container>
 
             <ng-container matColumnDef="departureTime">
@@ -29,7 +50,7 @@
 
             <ng-container matColumnDef="arrivalAirport">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Arrival Airport </th>
-                <td mat-cell *matCellDef="let flight"> {{ flight.arrivalAirport }} </td>
+                <td mat-cell *matCellDef="let flight"> {{ flight.arrivalAirport.u3digitCode }} </td>
             </ng-container>
 
             <ng-container matColumnDef="arrivalTime">
@@ -39,13 +60,24 @@
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td mat-cell *matCellDef="let user">
-                <button mat-icon-button color="primary">
-                    <mat-icon>edit</mat-icon>
+                <td mat-cell *matCellDef="let flight">
+                <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionsMenu"
+                    matTooltip="More actions"
+                    aria-label="Flight actions">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
-                <button mat-icon-button color="warn">
-                    <mat-icon>delete</mat-icon>
-                </button>
+                <mat-menu #actionsMenu="matMenu">
+                    <button mat-menu-item (click)="editFlight(flight)" color="primary">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Flight</span>
+                    </button>
+                    <button *ngIf="flight.flightStatus === 'SCHEDULED'" mat-menu-item (click)="deleteFlight(flight)" color="warn">
+                        <mat-icon>delete</mat-icon>
+                        <span>Cancel Flight</span>
+                    </button>
+                </mat-menu>
                 </td>
             </ng-container>
 

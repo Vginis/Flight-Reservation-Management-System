@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -32,9 +32,15 @@ import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
   styleUrl: './flights-filtering.component.css'
 })
 export class FlightsFilteringComponent implements OnInit{
-  filterOptions = [{key:'flightNumber',label:'Flight Number'}, {key:'flightUUID',label:'Flight Identifier'}];
+  filterOptions = [
+    {key:'flightNumber',label:'Flight Number'}, 
+    {key:'flightUUID',label:'Flight Identifier'},
+    {key:'flightStatus',label:'Flight Status'}
+  ];
   flightsFilterForm: FormGroup;
   airports: any = [];
+
+  @Output() filterFormSubmission = new EventEmitter<any>();
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -51,8 +57,19 @@ export class FlightsFilteringComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log("HERE");
     this.flightsFilterForm.get('departureAirport')!.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          return this.airportService.smartSearchAirports(value);
+        })
+      )
+      .subscribe((airports) => {
+        this.airports = airports;
+      });
+
+    this.flightsFilterForm.get('arrivalAirport')!.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
@@ -94,12 +111,19 @@ export class FlightsFilteringComponent implements OnInit{
     return airport ? `${airport.city} (${airport.u3digitCode})` : '';
   }
 
-  onAirportSelected(airport: any): void {
-    console.log('Selected airport:', airport);
-    // optionally patch or trigger other logic here
+  onSubmit(): void {
+    this.filterFormSubmission.emit(this.flightsFilterForm.value);
   }
 
-  onSubmit(): void {
-    console.log('Form submitted', this.flightsFilterForm.value);
+  resetFilterForm(): void {
+    this.flightsFilterForm.patchValue({
+      filterBy: '',
+      filterValue: '',
+      departureAirport: '',
+      departureDate: '',
+      arrivalAirport: '',
+      arrivalDate: ''
+    });
+    this.filterFormSubmission.emit(this.flightsFilterForm.value);
   }
 }

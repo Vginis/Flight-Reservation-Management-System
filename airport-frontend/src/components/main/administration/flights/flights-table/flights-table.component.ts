@@ -5,11 +5,15 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { SearchParams } from '../../../../../models/common.models';
+import { FlightSearchParams, SearchParams } from '../../../../../models/common.models';
 import { MatDialog } from '@angular/material/dialog';
 import { FlightRepresentation } from '../../../../../models/flight.models';
 import { FlightService } from '../../../../../services/backend/flight.service';
 import { FlightsFilteringComponent } from '../flights-filtering/flights-filtering.component';
+import { CommonUtils } from '../../../../../utils/common.util';
+import { FlightsCreateModalComponent } from '../flights-create-modal/flights-create-modal.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { FlightsCancelModalComponent } from '../flights-cancel-modal/flights-cancel-modal.component';
 
 @Component({
   selector: 'app-flights-table',
@@ -20,18 +24,19 @@ import { FlightsFilteringComponent } from '../flights-filtering/flights-filterin
     MatSortModule,
     MatIconModule,
     MatButtonModule,
+    MatMenuModule,
     FlightsFilteringComponent
   ],
   templateUrl: './flights-table.component.html',
   styleUrl: './flights-table.component.css'
 })
 export class FlightsTableComponent implements OnInit,AfterViewInit {
-  displayedColumns: string[] = ['flightNumber', 'flightUUID', 'departureAirport', 'departureTime', 'arrivalAirport', 'arrivalTime', 'actions'];
+  displayedColumns: string[] = ['flightNumber', 'flightUUID', 'flightStatus', 'departureAirport', 'departureTime', 'arrivalAirport', 'arrivalTime', 'actions'];
   dataSource = new MatTableDataSource<FlightRepresentation>([]);
   sortBy: string = 'flightNumber';
   sortDirection: string = 'asc';
   
-  params!: SearchParams;
+  params!: FlightSearchParams;
   pagingOptions = [10,20,50];
   
   
@@ -70,6 +75,10 @@ export class FlightsTableComponent implements OnInit,AfterViewInit {
     this.params = {
       searchField: '',
       searchValue: '',
+      departureDate: '',
+      arrivalDate: '',
+      departureAirport: null,
+      arrivalAirport: null,
       size: 10,
       index: 0,
       sortBy: 'flightNumber',
@@ -90,24 +99,24 @@ export class FlightsTableComponent implements OnInit,AfterViewInit {
   }
 
   async openCreateModal() {
-    // const dialogRef = this.dialog.open(UsersCreateModalComponent);
-    // await this.reloadTableAfterModalAction(dialogRef);
+    const dialogRef = this.dialog.open(FlightsCreateModalComponent);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
   
-  async editFlight(user: any) {
-    // const dialogRef = this.dialog.open(UsersEditModalComponent, {
-    //   data: user
-    // });
+  async editFlight(flight: any) {
+    const dialogRef = this.dialog.open(FlightsCreateModalComponent, {
+      data: flight
+    });
 
-    //await this.reloadTableAfterModalAction(dialogRef);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
   
-  async deleteFlight(user: any) {
-    // const dialogRef = this.dialog.open(UsersDeleteModalComponent, {
-    //   data: user
-    // });
+  async deleteFlight(flight: any) {
+    const dialogRef = this.dialog.open(FlightsCancelModalComponent, {
+      data: flight
+    });
 
-    //await this.reloadTableAfterModalAction(dialogRef);
+    await this.reloadTableAfterModalAction(dialogRef);
   }
 
   async reloadTableAfterModalAction(dialogRef: any){
@@ -117,5 +126,17 @@ export class FlightsTableComponent implements OnInit,AfterViewInit {
       }
     })
   }
-  
+
+  handleFormSubmit(formData: any): void {
+    this.params.searchField = formData.filterBy;
+    this.params.searchValue = formData.filterValue;
+    this.params.departureAirport = formData.departureAirport?.airportId;
+    this.params.arrivalAirport = formData.arrivalAirport?.airportId;
+    this.params.departureDate = (formData.departureDate!=='') ? 
+      CommonUtils.formatDateForDateTimePattern(formData.departureDate) : '';
+    this.params.arrivalDate = (formData.arrivalDate!=='') ? 
+      CommonUtils.formatDateForDateTimePattern(formData.arrivalDate) : '';
+    
+    this.loadFlightsTable();
+  }
 }

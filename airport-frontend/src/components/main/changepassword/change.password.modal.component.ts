@@ -66,9 +66,7 @@ export class ChangePasswordModalComponent {
   passwordMatchValidator(formGroup: FormGroup){
     const password = formGroup.get('newPassword')?.value;
     const confirm = formGroup.get('newPasswordConfirmation')?.value;
-    console.log(password);
-    console.log(confirm);
-    console.log(password === confirm);
+
     return password === confirm ? null : { passwordsMismatch: true };
   }
 

@@ -6,3 +6,10 @@ export interface SearchParams {
     sortBy: string;
     sortDirection: string;
 }
+
+export interface FlightSearchParams extends SearchParams {
+    departureDate: string;
+    arrivalDate: string;
+    departureAirport: number | null;
+    arrivalAirport: number | null;
+}

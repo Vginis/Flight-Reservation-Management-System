@@ -57,7 +57,6 @@
                 <mat-autocomplete
                     #auto="matAutocomplete"
                     [displayWith]="displayAirport"
-                    (optionSelected)="onAirportSelected($event.option.value)"
                 >
                     <mat-option *ngFor="let airport of airports" [value]="airport">
                     {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
@@ -77,7 +76,6 @@
                 <mat-autocomplete
                     #auto="matAutocomplete"
                     [displayWith]="displayAirport"
-                    (optionSelected)="onAirportSelected($event.option.value)"
                 >
                     <mat-option *ngFor="let airport of airports" [value]="airport">
                     {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
@@ -85,10 +83,10 @@
                 </mat-autocomplete>
             </mat-form-field>
 
-            <button color="primary" mat-raised-button class="filter-button">
+            <button color="primary" type="submit" mat-raised-button class="filter-button">
                 Filter
             </button>
-            <button color="primary" mat-button class="filter-reset-button">
+            <button color="primary" type="button" mat-button (click)="resetFilterForm()" class="filter-reset-button">
                 Reset
             </button>
         </div>

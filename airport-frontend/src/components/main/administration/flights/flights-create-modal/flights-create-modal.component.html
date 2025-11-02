@@ -1,0 +1,126 @@
+<div class="create-flight-modal">
+    <h2 mat-dialog-title>{{ getLabel() }}</h2>
+    <mat-dialog-content class="create-flight-content">
+        <form [formGroup]="flightCreateForm" (ngSubmit)="createOrUpdateFlight()">
+            <div class="text-input-fields">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Flight number</mat-label>
+                    <input matInput formControlName="flightNumber"/>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="airport-input">
+                    <mat-label>Departure Airport</mat-label>
+                    <input
+                        type="text"
+                        matInput
+                        [matAutocomplete]="departureAuto"
+                        formControlName="departureAirport"
+                    />
+                    <mat-autocomplete
+                        #departureAuto="matAutocomplete"
+                        [displayWith]="displayAirport"
+                    >
+                        <mat-option *ngFor="let airport of airports" [value]="airport">
+                        {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="flightCreateForm.controls['arrivalAirport']?.hasError('sameAirport')">
+                        Destination and Arrival airports can't be the same.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="airport-input">
+                    <mat-label>Arrival Airport</mat-label>
+                    <input
+                        type="text"
+                        matInput
+                        [matAutocomplete]="arrivalAuto"
+                        formControlName="arrivalAirport"
+                    />
+                    <mat-autocomplete
+                        #arrivalAuto="matAutocomplete"
+                        [displayWith]="displayAirport"
+                    >
+                        <mat-option *ngFor="let airport of airports" [value]="airport">
+                        {{ airport.airportName }}, {{ airport.city }} ({{ airport.u3digitCode }})
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="flightCreateForm.get('arrivalAirport')?.hasError('sameAirport')">
+                        Departure and arrival airports can't be the same.
+                    </mat-error>
+                    <mat-error *ngIf="flightCreateForm.controls['arrivalAirport'].hasError('required') && flightCreateForm.get('arrivalAirport')?.touched">
+                        Arrival airport is required.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-date-fields">
+                <mat-form-field appearance="fill" class="filter-date-field">
+                    <mat-label>Choose departure date</mat-label>
+                    <input matInput [matDatepickerFilter]="disablePastDates"
+                        [matDatepicker]="departurePicker" formControlName="departureDate"
+                        (dateChange)="onDepartingSelected($event)">
+                    <mat-datepicker-toggle matIconSuffix [for]="departurePicker">
+                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #departurePicker [startAt]="defaultStartDate"></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill"  class="filter-date-field">
+                    <mat-label>Departure Time</mat-label>
+                    <input matInput type="time" formControlName="departureTime">
+                </mat-form-field>
+            </div>
+
+            <div class="filter-date-fields">
+                <mat-form-field appearance="fill" class="filter-date-field">
+                    <mat-label>Choose arrival date</mat-label>
+                    <input matInput [matDatepickerFilter]="validateArrivalDates"
+                        [matDatepicker]="arrivalPicker" formControlName="arrivalDate"
+                        >
+                    <mat-datepicker-toggle matIconSuffix [for]="arrivalPicker">
+                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #arrivalPicker [startAt]="defaultStartDate"></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill"  class="filter-date-field">
+                    <mat-label>Arrival Time</mat-label>
+                    <input matInput type="time" formControlName="arrivalTime">
+                </mat-form-field>
+            </div>
+
+            <div class="filter-aircraft-fields">
+                <mat-form-field appearance="outline" class="aircraft-input">
+                    <mat-label>Aircraft</mat-label>
+                    <input
+                        type="text"
+                        matInput
+                        [matAutocomplete]="aircraftAuto"
+                        formControlName="aircraft"
+                    />
+                    <mat-autocomplete
+                        #aircraftAuto="matAutocomplete"
+                        [displayWith]="displayAircraft"
+                    >
+                        <mat-option *ngFor="let aircraft of aircrafts" [value]="aircraft">
+                        {{ aircraft.aircraftName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <button type="button" mat-button mat-dialog-close>Cancel</button>
+                <button
+                    type="submit"
+                    mat-flat-button
+                    color="primary"
+                >
+                    {{ getButtonLabel() }}
+                </button>
+           </div>
+        </form>
+    </mat-dialog-content>
+    
+</div>
