@@ -18,13 +18,16 @@ export class AirlineService {
 
         if (params.searchField !== undefined) httpParams = httpParams.set('searchField', params.searchField);
         if (params.searchValue !== undefined) httpParams = httpParams.set('searchValue', params.searchValue);
-        
+
         httpParams = httpParams.set('size', params.size);
         httpParams = httpParams.set('index', params.index);
-       
+
         if (params.sortDirection) httpParams = httpParams.set('sortDirection', params.sortDirection);
         if (params.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
         return this.httpClient.get<any>(`${this.airlinesUrl}`, { params: httpParams });
     }
 
+    getAirlineLogos(airlineCodes: Set<string>): Observable<any> {
+        return this.httpClient.post<any>(`${this.airlinesUrl}/logos`, [...airlineCodes]);
+    }
 }

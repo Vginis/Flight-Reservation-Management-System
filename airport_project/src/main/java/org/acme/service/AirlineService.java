@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.search.AirlineSortAndFilterBy;
 import org.acme.domain.Airline;
+import org.acme.domain.AirlineLogo;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirlineMapper;
@@ -13,9 +14,13 @@ import org.acme.persistence.AirlineRepository;
 import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.representation.airline.AirlineUpdateRepresentation;
+import org.acme.representation.file.AirlineFileRepresentation;
+import org.acme.representation.file.FileRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,7 +34,34 @@ public class AirlineService {
     AirlineRepository airlineRepository;
 
     public PageResult<AirlineRepresentation> searchAirlinesByParams(PageQuery<AirlineSortAndFilterBy> query){
-        return airlineMapper.map(airlineRepository.searchAirlinesByParams(query));
+        List<AirlineRepresentation> airlineRepresentations = new ArrayList<>();
+        PageResult<Airline> airlinePageResult = airlineRepository.searchAirlinesByParams(query);
+        for(Airline airline: airlinePageResult.getResults()){
+            AirlineRepresentation airlineRepresentation = airlineMapper.map(airline);
+            AirlineLogo logo = airline.getLogo();
+            airlineRepresentation.setFileRepresentation(new FileRepresentation(logo.getFileName(), logo.getContentType(),
+                    logo.getContent()));
+
+            airlineRepresentations.add(airlineRepresentation);
+        }
+        return new PageResult<>(airlinePageResult.getTotal(), airlineRepresentations);
+    }
+
+    public List<AirlineFileRepresentation> getAirlineLogos(List<String> airlineCodes) {
+        List<AirlineFileRepresentation> fileRepresentations = new ArrayList<>();
+        for(String code: airlineCodes) {
+            Optional<Airline> airlineOptional = airlineRepository.findOptionalAirlineByU2DigitCode(code);
+            if(airlineOptional.isEmpty()){
+                throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+            }
+
+            Airline airline = airlineOptional.get();
+            AirlineLogo logo = airline.getLogo();
+            fileRepresentations.add(new AirlineFileRepresentation(logo.getFileName(), logo.getContentType(),
+                    logo.getContent(),airline.getU2digitCode()));
+        }
+
+        return fileRepresentations;
     }
 
     public String getMostPopularAirport(Integer id){

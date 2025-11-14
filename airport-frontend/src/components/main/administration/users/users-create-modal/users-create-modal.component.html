@@ -67,6 +67,42 @@
                 </mat-error>
             </mat-form-field>
 
+            <div *ngIf="isAirlineAdmin()" style="display: flex; border: 1px solid rgba(0, 0, 0, 0.23); padding: 1rem; border-radius: 20px; width: 80%;">
+                <div class="file-upload-container">
+                    <mat-label class="file-upload-label">Airline Logo</mat-label>
+
+                    <div class="file-upload-box">
+                        <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="fileInput.click()"
+                        [disabled]="!nonExistingAirline"
+                        >
+                            <mat-icon>upload</mat-icon>
+                            Choose File
+                        </button>
+
+                        <span class="file-name" *ngIf="selectedFile">{{ selectedFile.name }}</span>
+
+                        <input
+                        #fileInput
+                        type="file"
+                        accept="image/*"
+                        (change)="onFileSelected($event)"
+                        hidden
+                        />
+                    </div>
+                    <mat-error *ngIf="logoRequiredError" class="logo-error">
+                     Airline logo is required for Airline Administrators.
+                    </mat-error>
+                </div>   
+
+                <div class="image-preview-container" *ngIf="imagePreview">
+                    <img [src]="imagePreview" alt="Airline Logo Preview" class="image-preview" />
+                </div>
+            </div>
+
             <div class="role-input">
                 <mat-form-field appearance="fill">
                     <mat-label>Role</mat-label>

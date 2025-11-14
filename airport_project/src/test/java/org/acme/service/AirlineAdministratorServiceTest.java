@@ -16,6 +16,7 @@ import org.acme.representation.user.AirlineAdministratorCreateRepresentation;
 import org.acme.util.AddressUtil;
 import org.acme.util.AirlineUtil;
 import org.acme.util.UserUtil;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,8 @@ class AirlineAdministratorServiceTest {
     AirlineAdministratorRepository airlineAdministratorRepository;
     @Mock
     KeycloakService keycloakService;
+    @Mock
+    FileUpload fileUpload;
 
     User user;
     Airline airline;
@@ -68,7 +71,7 @@ class AirlineAdministratorServiceTest {
                 .createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
 
         Assertions.assertDoesNotThrow(() -> airlineAdministratorService
-                .createAirlineAdministrator(airlineAdministratorCreateRepresentation));
+                .createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
     }
 
     @Test
@@ -77,7 +80,7 @@ class AirlineAdministratorServiceTest {
                 .thenReturn(Optional.of(new User()));
         Assertions.assertThrows(InvalidRequestException.class,
                 () -> airlineAdministratorService.
-                        createAirlineAdministrator(airlineAdministratorCreateRepresentation));
+                        createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
     }
 
     @Test
@@ -88,6 +91,6 @@ class AirlineAdministratorServiceTest {
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(ResourceNotFoundException.class,
                 () -> airlineAdministratorService.
-                        createAirlineAdministrator(airlineAdministratorCreateRepresentation));
+                        createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
     }
 }

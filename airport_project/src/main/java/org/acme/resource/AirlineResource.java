@@ -20,6 +20,8 @@ import org.acme.search.PageQuery;
 import org.acme.service.AirlineService;
 import org.acme.validation.EnumerationValue;
 
+import java.util.List;
+
 import static org.acme.constant.AirportProjectURIs.AIRLINES;
 
 @Path(AIRLINES)
@@ -41,6 +43,14 @@ public class AirlineResource {
         PageQuery<AirlineSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AirlineSortAndFilterBy.class), searchValue, size, index
                 , ValueEnum.fromValue(sortBy, AirlineSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
         return Response.ok(airlineService.searchAirlinesByParams(query)).build();
+    }
+
+    @POST
+    @Path("logos")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAirlineLogos(List<String> airlineCodes) {
+        return Response.ok(airlineService.getAirlineLogos(airlineCodes)).build();
     }
 
     @GET

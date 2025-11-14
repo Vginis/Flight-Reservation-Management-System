@@ -56,6 +56,10 @@ export class UserService {
         return this.httpClient.post(`${url}`, payload);
     }
 
+    createAirlineAdministrator(formData: FormData): Observable<any> {
+        return this.httpClient.post(`${this.airlineAdminsUrl}`, formData)
+    }
+
     deleteUser(userId: number): Observable<any> {
         return this.httpClient.delete(`${this.usersUrl}/${userId}`);
     }
@@ -64,9 +68,7 @@ export class UserService {
         if(role === CommonUtils.PASSENGER){
             return this.passengersUrl;
         }
-        if(role === CommonUtils.AIRLINE_ADMIN){
-            return this.airlineAdminsUrl;
-        }
+        
         return this.usersUrl;
     }
 }

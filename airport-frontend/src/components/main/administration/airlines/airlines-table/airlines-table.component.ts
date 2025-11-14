@@ -33,7 +33,7 @@ import { AirlineRepresentation } from '../../../../../models/airline.model';
   styleUrl: './airlines-table.component.css'
 })
 export class AirlinesTableComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['airlineName', 'u2digitCode', 'actions'];
+  displayedColumns: string[] = ['airlineName', 'u2digitCode'];
   dataSource = new MatTableDataSource<AirlineRepresentation>([]);
   sortBy: string = 'airlineName';
   sortDirection: string = 'asc';

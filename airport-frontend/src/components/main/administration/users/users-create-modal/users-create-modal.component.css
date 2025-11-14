@@ -21,10 +21,67 @@
 }
 
 .role-input {
-    margin-top: 1%;
+    margin-top: 2%;
 }
 
 .create-buttons-container button{
     margin-right: 5%;
     margin-bottom: 5%;
+}
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.file-upload-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 4px;
+}
+
+.file-upload-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.file-upload-box:hover {
+  border-color: #3f51b5;
+}
+
+.file-name {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.image-preview-container{
+    margin-top: 5px;
+    margin-left: 50px;
+    height: 140px;
+    width: 140px;
+    overflow: hidden;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
 }

@@ -33,6 +33,10 @@ public class Airline {
     @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL)
     private List<Aircraft> aircrafts = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "logo_id", referencedColumnName = "id")
+    private AirlineLogo logo;
+
     public Airline() {
         super();
     }
@@ -95,23 +99,12 @@ public class Airline {
         this.aircrafts = aircrafts;
     }
 
-    public void addFlight(Flight flight) {
-        if (flight == null)
-            return;
-        if (flight.getAirline() != this)
-            throw new RuntimeException("Entry in the wrong Airline.");
-        if (flights.contains(flight)) {
-            throw new RuntimeException("Flight already exists.");
-        }
-        flights.add(flight);
+    public AirlineLogo getLogo() {
+        return logo;
     }
 
-    public void removeFlight(Flight flight) {
-        if (flight == null)
-            return;
-        if (!flights.contains(flight))
-            throw new RuntimeException("Flight doesn't exist.");
-        flights.remove(flight);
+    public void setLogo(AirlineLogo logo) {
+        this.logo = logo;
     }
 
     public String mostPopularAirport() {

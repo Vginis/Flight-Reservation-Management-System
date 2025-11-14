@@ -14,5 +14,8 @@ import java.util.List;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {FlightMapper.class})
 @RequestScoped
-public interface AirlineMapper extends OneWayMapper<AirlineRepresentation, Airline>{
+public interface AirlineMapper extends OneWayMapper<AirlineRepresentation, Airline> {
+    @Override
+    @Mapping(target = "fileRepresentation", ignore = true)
+    AirlineRepresentation map(Airline e);
 }

@@ -2,6 +2,7 @@ package org.acme.representation.airline;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.acme.representation.file.FileRepresentation;
 
 public class AirlineCreateRepresentation {
 
@@ -12,6 +13,8 @@ public class AirlineCreateRepresentation {
             message = "Airline code must have only uppercase letters (e.g. AG, ACA)"
     )
     private String u2digitCode;
+
+    private FileRepresentation airlineLogo;
 
     public AirlineCreateRepresentation() {
     }
@@ -35,5 +38,13 @@ public class AirlineCreateRepresentation {
 
     public void setU2digitCode(String u2digitCode) {
         this.u2digitCode = u2digitCode;
+    }
+
+    public FileRepresentation getAirlineLogo() {
+        return airlineLogo;
+    }
+
+    public void setAirlineLogo(FileRepresentation airlineLogo) {
+        this.airlineLogo = airlineLogo;
     }
 }

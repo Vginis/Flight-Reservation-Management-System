@@ -32,6 +32,10 @@ import { AirlineService } from '../../../../../services/backend/airline.service'
 export class UsersCreateModalComponent implements OnInit{
   usersCreateForm: FormGroup;
   roles= CommonUtils.RoleObjects;
+  selectedFile: File | null = null;
+  nonExistingAirline: boolean = true;
+  imagePreview: string | null = null;
+  logoRequiredError: boolean = true;
 
   constructor(
     private readonly dialogRef: MatDialogRef<UsersCreateModalComponent>,
@@ -122,9 +126,23 @@ export class UsersCreateModalComponent implements OnInit{
       if(airlineData && airlineData.total > 0) {
         airlineNameControl.setValue(airlineData?.results[0]?.airlineName);
         airlineNameControl.disable({ emitEvent: false });
+        this.nonExistingAirline = false;
+        this.mapFileRepresentationToObject(airlineData?.results[0]?.fileRepresentation);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.imagePreview = reader.result as string;
+        };
+        if(this.selectedFile!==null){
+          reader.readAsDataURL(this.selectedFile);
+        }
+        
       } else if(airlineData && airlineData.total===0){
         airlineNameControl.reset();
         airlineNameControl.enable({ emitEvent: false });
+        this.nonExistingAirline = true;
+        this.selectedFile = null;
+        this.imagePreview = '';
       }
     })
   }
@@ -154,15 +172,43 @@ export class UsersCreateModalComponent implements OnInit{
     if(this.usersCreateForm.invalid) return;
     
     const { requestBody, role } = this.constructPayload();
-    this.userService.createUser(requestBody, role).subscribe({
-      next: () => {
-        this.snackbar.success('User created successfully and will be informed by email.');
-        this.dialogRef.close("success");
-      },
-      error: (err: any) => {
-        this.snackbar.error(`User was not created successfully! ${err?.error?.key}`);
+
+    if(role === CommonUtils.AIRLINE_ADMIN){
+      this.logoRequiredError = this.selectedFile === null;
+      if(this.logoRequiredError) {
+        return;
       }
-    });  
+
+      const formData = new FormData();
+      formData.append(
+        'airlineAdministratorCreateRepresentation',
+        new Blob([JSON.stringify(requestBody)], { type: 'application/json' })
+      );
+
+      if (this.selectedFile) {
+        formData.append('airlineLogo', this.selectedFile);
+      }
+
+      this.userService.createAirlineAdministrator(formData).subscribe({
+        next: () => {
+          this.snackbar.success('User created successfully and will be informed by email.');
+          this.dialogRef.close("success");
+        },
+        error: (err: any) => {
+          this.snackbar.error(`User was not created successfully! ${err?.error?.key}`);
+        }
+      });
+    } else {
+      this.userService.createUser(requestBody, role).subscribe({
+        next: () => {
+          this.snackbar.success('User created successfully and will be informed by email.');
+          this.dialogRef.close("success");
+        },
+        error: (err: any) => {
+          this.snackbar.error(`User was not created successfully! ${err?.error?.key}`);
+        }
+      }); 
+    }
   }
 
   private constructPayload(): any{
@@ -202,6 +248,30 @@ export class UsersCreateModalComponent implements OnInit{
   isAirlineAdmin(): boolean {
     const role = this.usersCreateForm.get("role")?.value as string;
     return role === CommonUtils.AIRLINE_ADMIN;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  mapFileRepresentationToObject(fileData: any): void {
+    const byteCharacters = atob(fileData.content);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileData.filetype });
+    this.selectedFile = new File([blob], fileData.filename, { type: fileData.filetype });
   }
 
   get addresses(): FormArray {

@@ -1,9 +1,12 @@
 package org.acme.representation.airline;
 
+import org.acme.representation.file.FileRepresentation;
+
 public class AirlineRepresentation{
     private Integer id;
     private String airlineName;
     private String u2digitCode;
+    private FileRepresentation fileRepresentation;
 
     public Integer getId() {
         return id;
@@ -27,5 +30,13 @@ public class AirlineRepresentation{
 
     public void setU2digitCode(String u2digitCode) {
         this.u2digitCode = u2digitCode;
+    }
+
+    public FileRepresentation getFileRepresentation() {
+        return fileRepresentation;
+    }
+
+    public void setFileRepresentation(FileRepresentation fileRepresentation) {
+        this.fileRepresentation = fileRepresentation;
     }
 }

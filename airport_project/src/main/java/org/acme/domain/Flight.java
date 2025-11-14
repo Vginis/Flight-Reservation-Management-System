@@ -141,7 +141,7 @@ public class Flight {
         this.arrivalTime = flightDateUpdateRepresentation.getArrivalTime();
     }
 
-    public void cancelFlight(){
-        this.flightStatus = FlightStatus.CANCELLED;
+    public void updateFlight(FlightStatus newStatus){
+        this.flightStatus = newStatus;
     }
 }
