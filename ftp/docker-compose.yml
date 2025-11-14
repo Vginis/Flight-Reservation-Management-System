@@ -1,0 +1,10 @@
+services:
+  sftp:
+    image: atmoz/sftp
+    container_name: sftp-server
+    ports:
+      - "2222:22"
+    volumes:
+      - /home/airport/uploads:/home/admin/uploads
+    environment:
+      - SFTP_USERS=admin:password:1001
