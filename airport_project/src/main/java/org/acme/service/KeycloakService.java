@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.ErrorMessages;
-import org.acme.constant.KeycloakConfiguration;
+import org.acme.config.KeycloakConfiguration;
 import org.acme.exception.ErrorResponse;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
@@ -56,7 +56,7 @@ public class KeycloakService {
                 .users().search(userCreateRepresentation.getUsername());
 
         if(!existingUsers.isEmpty()){
-            throw new InvalidRequestException(new ErrorResponse(400, ErrorMessages.USER_EXISTS));
+            throw new InvalidRequestException(ErrorMessages.USER_EXISTS);
         }
 
         UserRepresentation keycloakUserRepresentation = constructKeycloakUserRepresentation(userCreateRepresentation);

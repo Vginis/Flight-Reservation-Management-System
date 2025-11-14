@@ -1,7 +1,7 @@
 package org.acme.service;
 
 import jakarta.ws.rs.core.Response;
-import org.acme.constant.KeycloakConfiguration;
+import org.acme.config.KeycloakConfiguration;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.representation.user.UserCreateRepresentation;
