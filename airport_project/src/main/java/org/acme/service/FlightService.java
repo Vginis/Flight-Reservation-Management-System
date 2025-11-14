@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
+import org.acme.constant.FlightStatus;
 import org.acme.domain.*;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
@@ -113,13 +114,15 @@ public class FlightService {
     }
 
     @Transactional
-    public void cancelFlight(Integer flightId) {
+    public void updateFlightStatus(Integer flightId, FlightStatus newFlightStatus) {
         Optional<Flight> flightOptional = flightRepository.findByIdOptional(flightId);
         if(flightOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
         Flight flight = flightOptional.get();
-        flight.cancelFlight();
+        FlightStatus currentFlightStatus = flight.getFlightStatus();
+        flightValidator.validateFlightStatusUpdate(currentFlightStatus, newFlightStatus);
+        flight.updateFlight(newFlightStatus);
     }
 }

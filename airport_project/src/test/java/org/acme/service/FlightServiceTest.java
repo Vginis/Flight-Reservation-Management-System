@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import jakarta.persistence.EntityManager;
+import org.acme.constant.FlightStatus;
 import org.acme.constant.search.FlightSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.domain.Flight;
@@ -140,7 +141,7 @@ class FlightServiceTest {
         Mockito.doNothing().when(flightRepository)
                         .delete(Mockito.any(Flight.class));
         Assertions.assertDoesNotThrow(
-                () -> flightService.cancelFlight(1));
+                () -> flightService.updateFlightStatus(1, FlightStatus.CANCELLED));
     }
 
     @Test
@@ -148,6 +149,6 @@ class FlightServiceTest {
         Mockito.when(flightRepository.findByIdOptional(1))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(ResourceNotFoundException.class,
-                () -> flightService.cancelFlight(1));
+                () -> flightService.updateFlightStatus(1,FlightStatus.CANCELLED));
     }
 }

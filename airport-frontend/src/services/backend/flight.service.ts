@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { FlightSearchParams } from "../../models/common.models";
+import { FlightSearchHomePageParams, FlightSearchParams } from "../../models/common.models";
 
 @Injectable({
     providedIn: 'root'
@@ -38,6 +38,21 @@ export class FlightService {
         return this.httpClient.get<any>(`${this.flightUrl}`, { params: httpParams });
     }
 
+    searchFlightsHomePage(params: FlightSearchHomePageParams): Observable<any> { 
+        let httpParams = new HttpParams();
+        if (params.departureAirport !== null && params.departureAirport !== undefined) httpParams 
+            = httpParams.set("departureAirport", params.departureAirport.u3digitCode);
+        if (params.arrivalAirport !== null && params.arrivalAirport !== undefined) httpParams 
+            = httpParams.set("arrivalAirport", params.arrivalAirport.u3digitCode);
+
+        if(params.departureDate !== undefined) httpParams = httpParams.set("departureDate", params.departureDate);
+        if(params.arrivalDate !== undefined) httpParams = httpParams.set("arrivalDate", params.arrivalDate);
+
+        httpParams = httpParams.set('size', params.size);
+        httpParams = httpParams.set('index', params.index);
+        return this.httpClient.get<any>(`${this.flightUrl}/multiple-params`, { params: httpParams });
+    }
+
     createFlight(payload: any): Observable<any> {
         return this.httpClient.post<any>(`${this.flightUrl}`, payload);
     }
@@ -46,8 +61,12 @@ export class FlightService {
         return this.httpClient.put<any>(`${this.flightUrl}/${id}`, payload);
     }
 
-    cancelFlight(id: number): Observable<any> {
+    updateFlightStatus(id: number, newStatus: string): Observable<any> {
         let httpParams = new HttpParams();
-        return this.httpClient.put<any>(`${this.flightUrl}/cancel-flight/${id}`, { params: httpParams });
+        httpParams = httpParams.set("newStatus",newStatus);
+        console.log(httpParams);
+        console.log(newStatus);
+
+        return this.httpClient.put<any>(`${this.flightUrl}/update-flight-status/${id}`, {}, { params: httpParams });
     }
 }

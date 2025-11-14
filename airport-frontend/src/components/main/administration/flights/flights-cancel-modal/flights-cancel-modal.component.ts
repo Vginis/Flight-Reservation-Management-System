@@ -25,7 +25,7 @@ export class FlightsCancelModalComponent {
   ) {}
 
   cancelFlight(): void{
-    this.flightService.cancelFlight(this.flightData?.id).subscribe({
+    this.flightService.updateFlightStatus(this.flightData?.id, "CANCELLED").subscribe({
         next: () => {
           this.snackbar.success("Flight cancelled successfully");
           this.dialogRef.close("success");

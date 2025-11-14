@@ -5,6 +5,7 @@ export interface FlightRepresentation {
     id: number,
     flightNumber: string,
     flightUUID: string,
+    flightStatus: string,
     airlineU2DigitCode: string,
     departureAirport: AirportRepresentation,
     departureTime: string,

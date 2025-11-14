@@ -1,0 +1,13 @@
+.update-dialog-content { max-width: 520px; }
+.warning-title { margin-top: 0; }
+.warning-body { color: #333; }
+.warning-note { color: #666; font-size: 0.95rem; margin-bottom: 1rem; }
+.update-buttons-container{
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+}
+
+.update-button {
+    margin-left: 5%;
+}

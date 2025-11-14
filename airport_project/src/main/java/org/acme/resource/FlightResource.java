@@ -6,12 +6,15 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.constant.FlightStatus;
 import org.acme.constant.Role;
 import org.acme.constant.SuccessMessages;
+import org.acme.constant.ValueEnum;
 import org.acme.constant.search.FlightSearchFilterParamsDTO;
 import org.acme.constant.search.FlightSearchParamsDTO;
 import org.acme.constant.search.FlightSortAndFilterBy;
@@ -90,11 +93,13 @@ public class FlightResource {
 
     @PUT
     @RolesAllowed(Role.AIRLINE_ADMINISTRATOR)
-    @Path("cancel-flight/{id:[0-9]+}")
+    @Path("update-flight-status/{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response cancelFlight(@PathParam("id") Integer id) {
-        flightService.cancelFlight(id);
+    public Response updateFlightStatus(@PathParam("id") Integer id,
+                                       @QueryParam("newStatus") @NotNull @EnumerationValue(acceptedEnum = FlightStatus.class)
+                                        String newStatus) {
+        flightService.updateFlightStatus(id, ValueEnum.fromValue(newStatus, FlightStatus.class));
         return Response.ok(new MessageRepresentation(SuccessMessages.FLIGHT_CANCEL_SUCCESS)).build();
     }
 

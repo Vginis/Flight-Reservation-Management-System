@@ -3,6 +3,7 @@ package org.acme.validation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.acme.constant.ErrorMessages;
+import org.acme.constant.FlightStatus;
 import org.acme.domain.Airport;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Set;
 
 @ApplicationScoped
 public class FlightValidator {
@@ -74,6 +76,33 @@ public class FlightValidator {
         Optional<Airport> departureAirportOptional = airportRepository.findAirportBy3DCode(airport);
         if(departureAirportOptional.isEmpty()){
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+    }
+
+    public void validateFlightStatusUpdate(FlightStatus currentStatus, FlightStatus newStatus) {
+        switch (currentStatus) {
+            case FlightStatus.IN_FLIGHT:
+                validateFlightStatusUpdateInFlight(newStatus);
+                break;
+            case FlightStatus.CANCELLED, FlightStatus.ARRIVED:
+                throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
+            case FlightStatus.DELAYED:
+                validateFlightStatusUpdateDelayed(newStatus);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void validateFlightStatusUpdateInFlight(FlightStatus newStatus) {
+        if(!newStatus.equals(FlightStatus.ARRIVED)){
+            throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
+        }
+    }
+
+    private void validateFlightStatusUpdateDelayed(FlightStatus newStatus) {
+        if(!Set.of(FlightStatus.CANCELLED, FlightStatus.IN_FLIGHT).contains(newStatus)) {
+            throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
         }
     }
 }

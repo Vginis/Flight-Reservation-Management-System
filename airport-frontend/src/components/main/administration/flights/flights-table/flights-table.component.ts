@@ -5,7 +5,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FlightSearchParams, SearchParams } from '../../../../../models/common.models';
+import { FlightSearchParams } from '../../../../../models/common.models';
 import { MatDialog } from '@angular/material/dialog';
 import { FlightRepresentation } from '../../../../../models/flight.models';
 import { FlightService } from '../../../../../services/backend/flight.service';
@@ -14,6 +14,7 @@ import { CommonUtils } from '../../../../../utils/common.util';
 import { FlightsCreateModalComponent } from '../flights-create-modal/flights-create-modal.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { FlightsCancelModalComponent } from '../flights-cancel-modal/flights-cancel-modal.component';
+import { FlightStatusUpdateModalComponent } from '../flight-statusupdate-modal/flight-statusupdate-modal.component';
 
 @Component({
   selector: 'app-flights-table',
@@ -111,12 +112,20 @@ export class FlightsTableComponent implements OnInit,AfterViewInit {
     await this.reloadTableAfterModalAction(dialogRef);
   }
   
-  async deleteFlight(flight: any) {
+  async cancelFlight(flight: any) {
     const dialogRef = this.dialog.open(FlightsCancelModalComponent, {
       data: flight
     });
 
     await this.reloadTableAfterModalAction(dialogRef);
+  }
+
+  async updateFlightStatus(flight: any) {
+    const dialogRef = this.dialog.open(FlightStatusUpdateModalComponent, {
+      data: flight
+    });
+
+    await this.reloadTableAfterModalAction(dialogRef); 
   }
 
   async reloadTableAfterModalAction(dialogRef: any){
@@ -132,11 +141,15 @@ export class FlightsTableComponent implements OnInit,AfterViewInit {
     this.params.searchValue = formData.filterValue;
     this.params.departureAirport = formData.departureAirport?.airportId;
     this.params.arrivalAirport = formData.arrivalAirport?.airportId;
-    this.params.departureDate = (formData.departureDate!=='') ? 
-      CommonUtils.formatDateForDateTimePattern(formData.departureDate) : '';
-    this.params.arrivalDate = (formData.arrivalDate!=='') ? 
-      CommonUtils.formatDateForDateTimePattern(formData.arrivalDate) : '';
+    this.params.departureDate = (formData.departureDate==='') ? '' :
+      CommonUtils.formatDateForDateTimePattern(formData.departureDate);
+    this.params.arrivalDate = (formData.arrivalDate==='') ? '' : 
+      CommonUtils.formatDateForDateTimePattern(formData.arrivalDate);
     
     this.loadFlightsTable();
+  }
+
+  flightIsNotInFinalStatus(flight: FlightRepresentation): boolean {
+    return flight.flightStatus !== 'CANCELLED' && flight.flightStatus !== 'ARRIVED';
   }
 }

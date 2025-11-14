@@ -28,11 +28,17 @@
                         class="status-badge"
                         [ngClass]="{
                         'status-scheduled': flight.flightStatus === 'SCHEDULED',
-                        'status-cancelled': flight.flightStatus === 'CANCELLED'
+                        'status-cancelled': flight.flightStatus === 'CANCELLED',
+                        'status-delayed': flight.flightStatus === 'DELAYED',
+                        'status-in-flight': flight.flightStatus === 'IN_FLIGHT',
+                        'status-arrived': flight.flightStatus === 'ARRIVED'
                         }"
                     >
                         <mat-icon *ngIf="flight.flightStatus === 'SCHEDULED'">check_circle</mat-icon>
                         <mat-icon *ngIf="flight.flightStatus === 'CANCELLED'">cancel</mat-icon>
+                        <mat-icon *ngIf="flight.flightStatus === 'DELAYED'">timelapse</mat-icon>
+                        <mat-icon *ngIf="flight.flightStatus === 'IN_FLIGHT'">local_airport</mat-icon>
+                        <mat-icon *ngIf="flight.flightStatus === 'ARRIVED'">location_pin</mat-icon>
                         {{ flight.flightStatus }}
                     </span>
                 </td>
@@ -73,9 +79,13 @@
                         <mat-icon>edit</mat-icon>
                         <span>Edit Flight</span>
                     </button>
-                    <button *ngIf="flight.flightStatus === 'SCHEDULED'" mat-menu-item (click)="deleteFlight(flight)" color="warn">
+                    <button *ngIf="flightIsNotInFinalStatus(flight)" mat-menu-item (click)="cancelFlight(flight)" color="warn">
                         <mat-icon>delete</mat-icon>
                         <span>Cancel Flight</span>
+                    </button>
+                    <button *ngIf="flightIsNotInFinalStatus(flight)" mat-menu-item (click)="updateFlightStatus(flight)" color="primary">
+                        <mat-icon>tips_and_updates</mat-icon>
+                        <span>Update Status</span>
                     </button>
                 </mat-menu>
                 </td>

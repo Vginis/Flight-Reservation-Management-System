@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>
+  <mat-icon aria-hidden="true">tips_and_updates</mat-icon>
+  &nbsp; Update Flight Status
+</h2>
+
+<mat-dialog-content class="update-dialog-content">
+  <p class="warning-title"><strong>Update the current flight's status.</strong></p>
+
+  <p class="warning-body">
+    This action may be <strong>irreversible</strong>.
+  </p>
+
+  <p class="warning-note" aria-live="polite">
+    Please proceed only if you are certain you want to update the status of the flight.
+  </p>
+
+  <mat-form-field appearance="fill" class="status-selector">
+    <mat-label>Update Flight Status</mat-label>
+    <mat-select [(value)]="selectedStatus">
+      <mat-option *ngFor="let status of availableStatuses" [value]="status.key">
+        {{ status.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+
+<div class="update-buttons-container">
+    <button type="button" mat-button color="primary" (click)="close()">
+        Close
+    </button>
+    <button mat-raised-button color="primary" (click)="updateFlightStatus()" class="update-button" [disabled]="hasSelectedTheSameOption()">
+        Update Status
+    </button>
+</div>

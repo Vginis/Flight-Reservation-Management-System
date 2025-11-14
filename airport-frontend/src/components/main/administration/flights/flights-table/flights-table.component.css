@@ -38,3 +38,18 @@ table {
   background-color: #ffebee; 
   color: #c62828;
 }
+
+.status-delayed {
+  background-color: #ebd7c9; 
+  color: #c45003;
+}
+
+.status-arrived {
+  background-color: #bdc5f0; 
+  color: #0a27cc;
+}
+
+.status-in-flight {
+  background-color: #ece8d2de; 
+  color: #84a00ade;
+}
