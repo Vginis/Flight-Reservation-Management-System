@@ -1,0 +1,126 @@
+.single-flight {  
+  border: 1px solid rgb(201, 195, 195);
+  border-radius: 25px;
+  box-shadow: 5px 5px 2px lightgray;
+  margin-bottom: 2%;
+  width: 85%;
+  height: 220px;
+  margin-left: 5%;
+  justify-content: center;
+  align-items: center;
+}
+
+.single-flight:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.flight-information {
+  gap: 8px;
+  padding: 2%;
+  margin-left: 4%;
+  margin-right: 5%;
+  justify-content: space-between;
+  display: flex;
+}
+
+.departure {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.arrival {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-top: 1%;
+  width: 75px;
+}
+
+.code {
+  font-weight: 500;
+  margin: 2%;
+  margin-top: 20%;
+  margin-bottom: 4%;
+  font-size: 1.4rem;
+}
+
+.city {
+  font-weight: 400;
+  font-size: 0.8rem;
+  margin: 2%;
+  color: rgb(155, 147, 147);
+}
+
+.date{
+  margin: 2%;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: rgb(155, 147, 147);
+  margin-top: 20px;
+}
+
+.flight-number {
+  margin: 2%;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: rgb(155, 147, 147);
+  margin-top: 22px;
+}
+
+.flight-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-right: 15px;
+  width: 170px;
+}
+
+.airline-logo {
+  width: 60px;
+  height: auto;
+  margin-bottom: 50px;
+  margin-right: 15px;
+  object-fit: contain;
+}
+
+.flight-icon mat-icon {
+  font-size: 30px;
+  margin-right: 35px;
+  color: rgb(120, 120, 120);
+}
+
+.arrival-time {
+  font-size: 10px;
+  margin-right: 15px;
+}
+
+.round-trip {
+  margin-left: 25px;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: rgb(155, 147, 147);
+}
+
+.ticket-price {
+  margin-left: 25px;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: rgb(155, 147, 147);
+  text-align: right;
+  display: flex;
+  margin-left: 45%;
+}
+
+.flight-footer {
+  display: flex;
+}
+
+.price {
+  color: black;
+  font-size: 15px;
+  font-weight: 500;
+}

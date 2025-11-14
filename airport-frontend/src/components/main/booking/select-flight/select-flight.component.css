@@ -1,0 +1,40 @@
+.header-label {
+  margin-top: 2%;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  position: relative;
+  display: flex;
+}
+
+.header-label h2 {
+  margin: 0;
+}
+
+.header-label mat-icon {
+  position: absolute;
+  right: 0;
+  margin-right: 15%;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background-color: #1976d2; 
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.header-label mat-icon:hover {
+  background-color: #1565c0;
+}
+
+.flights-selection {
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+  position: relative;
+  width: 30%;
+  margin: 3% auto;
+}

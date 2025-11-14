@@ -11,6 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { AirportService } from '../../../../services/backend/airport.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FlightService } from '../../../../services/backend/flight.service';
+import { FlightSearchHomePageParams } from '../../../../models/common.models';
+import { SnackbarService } from '../../../../services/frontend/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-flightsearch',
@@ -37,7 +41,10 @@ export class FlightsearchComponent implements OnInit{
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly airportService: AirportService
+    private readonly airportService: AirportService,
+    private readonly flightService: FlightService,
+    private readonly snackBar: SnackbarService,
+    private readonly router: Router
   ) {
     this.searchForm = this.formBuilder.group({
       from: [''],
@@ -74,7 +81,22 @@ export class FlightsearchComponent implements OnInit{
   }
 
   onSubmit() {
-      console.log('Form submitted', this.searchForm.value);
+    const params: FlightSearchHomePageParams = {
+      departureAirport: this.searchForm.value.from,
+      arrivalAirport: this.searchForm.value.to,
+      departureDate: this.searchForm.value.departing,
+      arrivalDate: this.searchForm.value.arriving,
+      size: 10,
+      index: 0
+    }
+    this.flightService.searchFlightsHomePage(params).subscribe({
+      next: (response: any) => {
+        this.router.navigate(['/select-flight'], { state: { flights: response } });
+      },
+      error: () => {
+        this.snackBar.error(`An error has occured. For more information please contact the system administrator.`);
+      }
+    });
   }
 
   disablePastDates = (date: Date | null): boolean => {

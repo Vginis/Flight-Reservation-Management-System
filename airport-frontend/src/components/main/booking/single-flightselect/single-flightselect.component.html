@@ -1,0 +1,38 @@
+<div class="single-flight">
+    <div class="flight-information">
+        <div class="departure">
+            <p class="code">{{ flight.departureAirport.u3digitCode }}</p>
+            <p class="city">{{ flight.departureAirport.city }}</p>
+
+            <p class="date">Date</p>
+            <p>{{ formatFlightTime(flight.departureTime) }}</p>
+        </div>
+
+        <div class="flight-icon">
+            <img
+                class="airline-logo"
+                [src]="'data:image/png;base64,' + flight.content"
+                alt="Airline Logo"
+            />
+            <mat-icon style="margin-left: 25px">flight_takeoff</mat-icon>
+            <div class="arrival-time">{{ displayTravelDuration() }}</div>
+        </div>
+        
+        <div class="arrival">
+            <p class="code">{{ flight.arrivalAirport.u3digitCode }}</p>
+            <p class="city">{{ flight.arrivalAirport.city }}</p>
+
+            <p class="flight-number">Flight No.</p>
+            <p>{{ flight.flightNumber }}</p>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="flight-footer">
+        <div class="round-trip">        
+            Round - Trip
+        </div>
+        <div class="ticket-price">
+            Ticket Price: <p class="price">20</p>
+        </div>
+    </div>
+</div>
