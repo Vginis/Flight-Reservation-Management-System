@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.acme.constant.search.AirportSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.domain.Airport;
+import org.acme.domain.City;
+import org.acme.domain.Country;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirportMapper;
@@ -112,7 +114,7 @@ class AirportServiceTest {
 
     @Test
     void testUpdateAirportDetailsThrowsInvalidRequestException(){
-        Airport otherAirport = new Airport("airport 2", "Greece","Athens","BTH");
+        Airport otherAirport = new Airport("airport 2", new City(),new Country(),"BTH");
         Mockito.when(airportRepository.findByIdOptional(1))
                 .thenReturn(Optional.of(airport));
         Mockito.when(airportRepository.findAirportByName("airport 1"))

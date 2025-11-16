@@ -2,7 +2,7 @@ package org.acme.representation.airport;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-
+//TODO Rename this dto to CreateUpdateRepresentation
 public class AirportCreateRepresentation {
     @NotBlank
     private String airportName;

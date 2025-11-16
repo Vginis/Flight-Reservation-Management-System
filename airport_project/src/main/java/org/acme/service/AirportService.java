@@ -6,10 +6,14 @@ import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.search.AirportSortAndFilterBy;
 import org.acme.domain.Airport;
+import org.acme.domain.City;
+import org.acme.domain.Country;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirportMapper;
 import org.acme.persistence.AirportRepository;
+import org.acme.persistence.CityRepository;
+import org.acme.persistence.CountryRepository;
 import org.acme.representation.airport.AirportCreateRepresentation;
 import org.acme.representation.airport.AirportRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
@@ -21,11 +25,15 @@ import java.util.Optional;
 
 @ApplicationScoped
 public class AirportService {
-    @Inject
-    AirportRepository airportRepository;
 
     @Inject
+    AirportRepository airportRepository;
+    @Inject
     AirportMapper airportMapper;
+    @Inject
+    CountryRepository countryRepository;
+    @Inject
+    CityRepository cityRepository;
 
     public PageResult<AirportRepresentation> searchAirportsByParams(PageQuery<AirportSortAndFilterBy> query){
         return airportMapper.map(airportRepository.searchAirportsByParams(query));
@@ -38,8 +46,20 @@ public class AirportService {
     @Transactional
     public void createAirport(AirportCreateRepresentation airportCreateRepresentation){
         validateIfAirportExists(airportCreateRepresentation);
-        Airport createdAirport = new Airport(airportCreateRepresentation.getAirportName(), airportCreateRepresentation.getCity(),
-                airportCreateRepresentation.getCountry(), airportCreateRepresentation.getU3digitCode());
+        Optional<Country> countryOptional = countryRepository.findByName(airportCreateRepresentation.getCountry());
+        Optional<City> cityOptional = cityRepository.findByName(airportCreateRepresentation.getCity());
+        if(countryOptional.isEmpty() || cityOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        Country country = countryOptional.get();
+        City city = cityOptional.get();
+        if(!country.getCities().stream().map(City::getCityName).toList().contains(city.getCityName())) {
+            throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
+        }
+
+        Airport createdAirport = new Airport(airportCreateRepresentation.getAirportName(), city,
+                country, airportCreateRepresentation.getU3digitCode());
         airportRepository.persist(createdAirport);
     }
 
@@ -69,7 +89,20 @@ public class AirportService {
 
         validateIfAirportExistsForUpdate(airportUpdateRepresentation);
         Airport airport = airportOptional.get();
-        airport.update(airportUpdateRepresentation);
+
+        Optional<Country> countryOptional = countryRepository.findByName(airportUpdateRepresentation.getCountry());
+        Optional<City> cityOptional = cityRepository.findByName(airportUpdateRepresentation.getCity());
+        if(countryOptional.isEmpty() || cityOptional.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        Country country = countryOptional.get();
+        City city = cityOptional.get();
+        if(!country.getCities().stream().map(City::getCityName).toList().contains(city.getCityName())) {
+            throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
+        }
+
+        airport.update(airportUpdateRepresentation.getAirportName(), city, country);
         airportRepository.getEntityManager().merge(airport);
     }
 

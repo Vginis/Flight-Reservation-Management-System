@@ -1,7 +1,16 @@
 package org.acme.domain;
 
-import jakarta.persistence.*;
-import org.acme.representation.airport.AirportCreateRepresentation;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +28,13 @@ public class Airport {
     @Column(name = "name", nullable = false, length = 30, unique = true)
     private String airportName;
 
-    @Column(name = "city", nullable = false, length = 20)
-    private String city;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
+    private City city;
 
-    @Column(name = "country", nullable = false, length = 20)
-    private String country;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    private Country country;
 
     @Column(name = "u3digitCode", nullable = false, length = 3, unique = true)
     private String u3digitCode;
@@ -37,7 +48,7 @@ public class Airport {
     public Airport() {
     }
 
-    public Airport(String airportName, String city, String country, String u3digitCode) {
+    public Airport(String airportName, City city, Country country, String u3digitCode) {
         this.airportName = airportName;
         this.city = city;
         this.country = country;
@@ -58,12 +69,12 @@ public class Airport {
         return u3digitCode;
     }
 
-    public String getCountry() {
-        return country;
+    public City getCity() {
+        return city;
     }
 
-    public String getCity() {
-        return city;
+    public Country getCountry() {
+        return country;
     }
 
     public List<Flight> getDepFlights() {
@@ -90,9 +101,9 @@ public class Airport {
         return Objects.equals(id, airport.id) && Objects.equals(airportName, airport.airportName) && Objects.equals(city, airport.city) && Objects.equals(country, airport.country) && Objects.equals(u3digitCode, airport.u3digitCode);
     }
 
-    public void update(AirportCreateRepresentation representation){
-        this.airportName = representation.getAirportName();
-        this.city = representation.getCity();
-        this.country = representation.getCountry();
+    public void update(String airportName,City city,Country country){
+        this.airportName = airportName;
+        this.city = city;
+        this.country = country;
     }
 }
