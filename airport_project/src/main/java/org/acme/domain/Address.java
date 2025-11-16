@@ -13,11 +13,13 @@ public class Address {
     @Column(name = "address_name", nullable = false)
     private String addressName;
 
-    @Column(name = "city", nullable = false)
-    private String city;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
+    private City city;
 
-    @Column(name = "country", nullable = false)
-    private String country;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    private Country country;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -26,11 +28,10 @@ public class Address {
     public Address() {
     }
 
-    public Address(String addressName, String city, String country, User user) {
+    public Address(String addressName, City city, Country country) {
         this.addressName = addressName;
         this.city = city;
         this.country = country;
-        this.user = user;
     }
 
     public Integer getId() {
@@ -45,20 +46,12 @@ public class Address {
         this.addressName = addressName;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
+    public Country getCountry() {
         return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public User getUser() {

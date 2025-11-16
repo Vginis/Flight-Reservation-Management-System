@@ -14,7 +14,9 @@ public class AirportProjectURIs {
 
     public static final String AIRLINE_ADMINISTRATORS = "/airline-admins";
 
-	public static final String RESERVATIONS = "/reservations";
+	public static final String CITIES_COUNTRIES = "/cities-countries";
+
+    public static final String RESERVATIONS = "/reservations";
 
 	public static final String PASSENGERS = "/passengers";
 

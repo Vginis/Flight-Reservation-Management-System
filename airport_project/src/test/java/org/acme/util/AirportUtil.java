@@ -1,6 +1,8 @@
 package org.acme.util;
 
 import org.acme.domain.Airport;
+import org.acme.domain.City;
+import org.acme.domain.Country;
 import org.acme.representation.airport.AirportCreateRepresentation;
 import org.acme.representation.airport.AirportRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
@@ -17,7 +19,7 @@ public class AirportUtil {
     }
 
     public static Airport createAirport(){
-        return new Airport("airportName", "Athens","Greece", "ATH");
+        return new Airport("airportName", new City(),new Country(), "ATH");
     }
 
     public static AirportCreateRepresentation createAirportCreateRepresentation(){

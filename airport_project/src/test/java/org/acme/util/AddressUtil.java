@@ -9,6 +9,6 @@ public class AddressUtil {
     }
 
     public static Address createAddress(){
-        return new Address("Address 1", "Athens", "Greece", null);
+        return new Address();
     }
 }
