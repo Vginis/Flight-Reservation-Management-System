@@ -7,7 +7,6 @@ import org.acme.domain.City;
 import org.acme.domain.Country;
 import org.acme.persistence.CityRepository;
 import org.acme.persistence.CountryRepository;
-import org.apache.camel.Body;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +46,13 @@ public class CountryCityService {
             cities.add(new City(cityName, country));
         }
         return cities;
+    }
+
+    public List<String> smartSearchCountries(String value) {
+        return countryRepository.smartSearchCountries(value).stream().map(Country::getCountryName).toList();
+    }
+
+    public List<String> smartSearchCities(String value, String countryName) {
+        return cityRepository.smartSearchCities(value, countryName).stream().map(City::getCityName).toList();
     }
 }
