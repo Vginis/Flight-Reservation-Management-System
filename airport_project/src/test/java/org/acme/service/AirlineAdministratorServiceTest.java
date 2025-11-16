@@ -63,8 +63,8 @@ class AirlineAdministratorServiceTest {
         Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
                 .thenReturn(Optional.of(airline));
 
-        Mockito.when(addressMapper.mapToEntity(Mockito.any(AddressCreateRepresentation.class)))
-                .thenReturn(address);
+//        Mockito.when(addressMapper.ma(Mockito.any(AddressCreateRepresentation.class)))
+//                .thenReturn(address);
         Mockito.doNothing().when(airlineAdministratorRepository)
                 .persist(Mockito.any(AirlineAdministrator.class));
         Mockito.doNothing().when(keycloakService)

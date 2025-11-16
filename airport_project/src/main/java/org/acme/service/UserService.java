@@ -16,6 +16,7 @@ import org.acme.mapper.AddressMapper;
 import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
+import org.acme.representation.AddressRepresentation;
 import org.acme.representation.user.PasswordResetRepresentation;
 import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserRepresentation;
@@ -25,6 +26,7 @@ import org.acme.search.PageResult;
 import org.acme.util.UserContext;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -44,7 +46,18 @@ public class UserService {
     KeycloakService keycloakService;
 
     public PageResult<UserRepresentation> searchUsersByParams(PageQuery<UserSortAndFilterBy> query){
-        return userMapper.map(userRepository.searchUsersByParams(query));
+        PageResult<User> userPageResult = userRepository.searchUsersByParams(query);
+        List<UserRepresentation> userRepresentations = userPageResult.getResults().stream().map(
+                user -> {
+                    UserRepresentation userRepresentation = userMapper.map(user);
+                    userRepresentation.setAddresses(new ArrayList<>());
+                    userRepresentation.getAddresses().addAll(user.getAddresses().stream().map(address ->
+                            new AddressRepresentation(address.getAddressName(), address.getCity().getCityName(),
+                                    address.getCountry().getCountryName())).toList());
+                    return userRepresentation;
+                }
+        ).toList();
+        return new PageResult<>(userRepresentations.size(), userRepresentations);
     }
 
     @Transactional
@@ -82,7 +95,13 @@ public class UserService {
             return persistSystemAdminUser(username);
         }
 
-        return userMapper.map(userOptional.get());
+        User user = userOptional.get();
+        UserRepresentation userRepresentation = userMapper.map(user);
+        userRepresentation.setAddresses(new ArrayList<>());
+        userRepresentation.getAddresses().addAll(user.getAddresses().stream().map(address ->
+                new AddressRepresentation(address.getAddressName(),address.getCity().getCityName(),
+                        address.getCountry().getCountryName())).toList());
+        return userRepresentation;
     }
 
     private UserRepresentation persistSystemAdminUser(String username){
@@ -91,7 +110,12 @@ public class UserService {
         String email = userContext.extractEmail();
         User systemAdmin = new User(username, firstName, lastName, email);
         userRepository.persist(systemAdmin);
-        return userMapper.map(systemAdmin);
+        UserRepresentation userRepresentation = userMapper.map(systemAdmin);
+        userRepresentation.setAddresses(new ArrayList<>());
+        userRepresentation.getAddresses().addAll(systemAdmin.getAddresses().stream().map(address ->
+                new AddressRepresentation(address.getAddressName(),address.getCity().getCityName(),
+                        address.getCountry().getCountryName())).toList());
+        return userRepresentation;
     }
 
     @Transactional
@@ -113,7 +137,7 @@ public class UserService {
         user.getAddresses().clear();
         user.getAddresses().addAll(userUpdateRepresentation.getAddresses().stream()
                 .map(a -> {
-                    Address address = addressMapper.mapToEntity(a);
+                    Address address = addressMapper.mapRepresentationToEntity(a);
                     address.setUser(user);
                     return address;
                 }).toList());

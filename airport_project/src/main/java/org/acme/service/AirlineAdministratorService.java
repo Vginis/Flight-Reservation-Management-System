@@ -11,7 +11,6 @@ import org.acme.domain.AirlineAdministrator;
 import org.acme.domain.AirlineLogo;
 import org.acme.domain.User;
 import org.acme.exception.InvalidRequestException;
-import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AddressMapper;
 import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirlineRepository;
@@ -50,7 +49,7 @@ public class AirlineAdministratorService {
         AirlineAdministrator airlineAdministrator = new AirlineAdministrator(airlineAdministratorCreateRepresentation, airline);
         airlineAdministrator.getAddresses().addAll(airlineAdministratorCreateRepresentation.getAddresses().stream()
                 .map(a -> {
-                    Address address = addressMapper.mapToEntity(a);
+                    Address address = addressMapper.mapRepresentationToEntity(a);
                     address.setUser(airlineAdministrator);
                     return address;
                 }).toList());
