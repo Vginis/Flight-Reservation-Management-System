@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { debounceTime, distinctUntilChanged, 
 filter, switchMap } from 'rxjs';
 import { AirlineService } from '../../../../../services/backend/airline.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CityCountryService } from '../../../../../services/backend/citycountry.service';
 
 @Component({
   selector: 'app-users-create-modal',
@@ -24,7 +26,8 @@ import { AirlineService } from '../../../../../services/backend/airline.service'
     MatInputModule,
     ReactiveFormsModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   templateUrl: './users-create-modal.component.html',
   styleUrl: './users-create-modal.component.css'
@@ -36,13 +39,16 @@ export class UsersCreateModalComponent implements OnInit{
   nonExistingAirline: boolean = true;
   imagePreview: string | null = null;
   logoRequiredError: boolean = true;
+  countriesList: string[][] = [];
+  citiesList: string[][] = [];
 
   constructor(
     private readonly dialogRef: MatDialogRef<UsersCreateModalComponent>,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
     private readonly snackbar: SnackbarService,
-    private readonly airlineService: AirlineService
+    private readonly airlineService: AirlineService,
+    private readonly cityCountryService: CityCountryService
   ) {
     this.usersCreateForm = this.formBuilder.group({
       username: ['',Validators.required],
@@ -64,11 +70,11 @@ export class UsersCreateModalComponent implements OnInit{
 
       const normalizedRole = role?.toLowerCase();
       if (normalizedRole === 'passenger') {
-        this.handleDynamicValidatorsForPassengerForm(passportControl!, airlineNameControl!, airlineCodeControl!);
+        this.handleDynamicValidatorsForPassengerForm(passportControl, airlineNameControl, airlineCodeControl);
       } else if (normalizedRole === 'airline_admin') {
-        this.handleDynamicValidatorsForAirlineAdminForm(passportControl!, airlineNameControl!, airlineCodeControl!);
+        this.handleDynamicValidatorsForAirlineAdminForm(passportControl, airlineNameControl, airlineCodeControl);
       } else {
-        this.clearDynamicValidatorForDefaultForm(passportControl!, airlineNameControl!, airlineCodeControl!);
+        this.clearDynamicValidatorForDefaultForm(passportControl, airlineNameControl, airlineCodeControl);
       }
 
       passportControl?.updateValueAndValidity();
@@ -137,7 +143,7 @@ export class UsersCreateModalComponent implements OnInit{
           reader.readAsDataURL(this.selectedFile);
         }
         
-      } else if(airlineData && airlineData.total===0){
+      } else if(airlineData?.total===0){
         airlineNameControl.reset();
         airlineNameControl.enable({ emitEvent: false });
         this.nonExistingAirline = true;
@@ -158,10 +164,79 @@ export class UsersCreateModalComponent implements OnInit{
     }
     const addressGroup = this.formBuilder.group({
       addressName: ['',Validators.required],
-      city: ['',Validators.required],
-      country: ['',Validators.required]
+      city: [{ value: '', disabled: true },[
+        Validators.required,
+        this.validateAutocompleteCountryOption(this.citiesList[this.addresses.length] || [],
+          'City'
+        )
+      ]],
+      country: ['',[
+        Validators.required,
+        this.validateAutocompleteCountryOption(this.countriesList[this.addresses.length] || [],
+          'Country'
+        )
+      ]]
     });
     this.addresses.push(addressGroup);
+
+    const index = this.addresses.length - 1;
+
+    this.enableCityBasedOnCountryListener(index);
+    this.countriesList[index] = [];
+    this.citiesList[index] = [];
+    addressGroup.get('country')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          return this.cityCountryService.smartSearchCountries(value);
+        })
+      )
+      .subscribe((countries) => {
+        this.countriesList[index] = countries;
+        addressGroup.get('country')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(countries, 'Country')
+        ]);
+        addressGroup.get('country')!.updateValueAndValidity({ emitEvent: false });
+      });
+    
+    addressGroup.get('city')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          const countryValue = addressGroup.get('country')?.value;
+          return this.cityCountryService.smartSearchCities(value, countryValue);
+        })
+      )
+      .subscribe((cities) => {
+        this.citiesList[index] = cities;
+        addressGroup.get('city')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(cities, 'City')
+        ]);
+        addressGroup.get('city')!.updateValueAndValidity({ emitEvent: false });
+      });
+  }
+
+  enableCityBasedOnCountryListener(index: number) {
+    const group = this.addresses.at(index);
+
+    group.get('country')!.valueChanges.subscribe(value => {
+      const validCountries = this.countriesList[index] ?? [];
+
+      const isValid = validCountries.includes(value);
+
+      if (isValid) {
+        group.get('city')!.enable();
+      } else {
+        group.get('city')!.reset();
+        group.get('city')!.disable();
+      }
+    });
   }
 
   removeAddress(index: number): void {
@@ -267,7 +342,7 @@ export class UsersCreateModalComponent implements OnInit{
     const byteCharacters = atob(fileData.content);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.codePointAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: fileData.filetype });
@@ -276,6 +351,23 @@ export class UsersCreateModalComponent implements OnInit{
 
   get addresses(): FormArray {
     return this.usersCreateForm.get('addresses') as FormArray;
+  }
+  
+  displayCityCountry(cityCountry: any): string {
+    return cityCountry;
+  }
+
+  validateAutocompleteCountryOption(options: string[], formType: string) {
+    return (control: AbstractControl) => {
+      const value = control.value;
+      if(!value) return null;
+
+      if(formType === 'Country'){
+        return options.includes(value) ? null : { invalidCountryAutoComplete: true }
+      } else {
+        return options.includes(value) ? null : { invalidCityAutoComplete: true }
+      }
+    }
   }
 
   close(): void {

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../../../../services/backend/user.service';
 import { SnackbarService } from '../../../../../services/frontend/snackbar.service';
@@ -11,6 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { UserProfile } from '../../../../../models/user.models';
+import { CityCountryService } from '../../../../../services/backend/citycountry.service';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-users-edit-modal',
@@ -22,19 +25,24 @@ import { UserProfile } from '../../../../../models/user.models';
     MatInputModule,
     ReactiveFormsModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   templateUrl: './users-edit-modal.component.html',
   styleUrl: './users-edit-modal.component.css'
 })
 export class UsersEditModalComponent implements OnInit{
   userUpdateForm: FormGroup;
+  countriesList: string[][] = [];
+  citiesList: string[][] = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public readonly userProfileData: UserProfile,
     private readonly dialogRef: MatDialogRef<UsersEditModalComponent>,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
     private readonly snackbar: SnackbarService,
+    private readonly cityCountryService: CityCountryService
   ){
     this.userUpdateForm = this.formBuilder.group({
       username: [{value: '', disabled: true}, Validators.required],
@@ -130,12 +138,81 @@ export class UsersEditModalComponent implements OnInit{
     }
     const addressGroup = this.formBuilder.group({
       addressName: ['',Validators.required],
-      city: ['',Validators.required],
-      country: ['',Validators.required]
+      city: [{ value: '', disabled: true },[
+        Validators.required,
+        this.validateAutocompleteCountryOption(this.citiesList[this.addresses.length] || [],
+          'City'
+        )
+      ]],
+      country: ['',[
+        Validators.required,
+        this.validateAutocompleteCountryOption(this.countriesList[this.addresses.length] || [],
+          'Country'
+        )
+      ]]
     });
     this.addresses.push(addressGroup);
+
+    const index = this.addresses.length - 1;
+
+    this.enableCityBasedOnCountryListener(index);
+    this.countriesList[index] = [];
+    this.citiesList[index] = [];
+    addressGroup.get('country')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          return this.cityCountryService.smartSearchCountries(value);
+        })
+      )
+      .subscribe((countries) => {
+        this.countriesList[index] = countries;
+        addressGroup.get('country')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(countries, 'Country')
+        ]);
+        addressGroup.get('country')!.updateValueAndValidity({ emitEvent: false });
+      });
+        
+    addressGroup.get('city')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          const countryValue = addressGroup.get('country')?.value;
+          return this.cityCountryService.smartSearchCities(value, countryValue);
+        })
+      )
+      .subscribe((cities) => {
+        this.citiesList[index] = cities;
+        addressGroup.get('city')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(cities, 'City')
+        ]);
+        addressGroup.get('city')!.updateValueAndValidity({ emitEvent: false });
+      });
   }
 
+  enableCityBasedOnCountryListener(index: number) {
+    const group = this.addresses.at(index);
+
+    group.get('country')!.valueChanges.subscribe(value => {
+      const validCountries = this.countriesList[index] ?? [];
+
+      const isValid = validCountries.includes(value);
+
+      if (isValid) {
+        group.get('city')!.enable();
+      } else {
+        group.get('city')!.reset();
+        group.get('city')!.disable();
+      }
+    });
+  }
+  
   removeAddress(index: number): void {
     this.addresses.removeAt(index);  
   }
@@ -146,6 +223,23 @@ export class UsersEditModalComponent implements OnInit{
 
   get addresses(): FormArray {
     return this.userUpdateForm.get('addresses') as FormArray;
+  }
+
+  displayCityCountry(cityCountry: any): string {
+    return cityCountry;
+  }
+
+  validateAutocompleteCountryOption(options: string[], formType: string) {
+    return (control: AbstractControl) => {
+      const value = control.value;
+      if(!value) return null;
+
+      if(formType === 'Country'){
+        return options.includes(value) ? null : { invalidCountryAutoComplete: true }
+      } else {
+        return options.includes(value) ? null : { invalidCityAutoComplete: true }
+      }
+    }
   }
 
   close(): void {
