@@ -28,9 +28,9 @@ public class PassengerService {
     @Inject
     UserRepository userRepository;
     @Inject
-    AddressMapper addressMapper;
-    @Inject
     KeycloakService keycloakService;
+    @Inject
+    AddressMapper addressMapper;
 
     public PassengerPassportRepresentation getPassport(String username){
         Optional<Passenger> passengerOptional = passengerRepository.findPassengerByUsername(username);
@@ -51,6 +51,13 @@ public class PassengerService {
         }
 
         Passenger passenger = new Passenger(passengerCreateRepresentation);
+        passenger.getAddresses().addAll(passengerCreateRepresentation.getAddresses().stream().map(addressCreateRepresentation ->
+            {
+                Address address = addressMapper.mapRepresentationToEntity(addressCreateRepresentation);
+                address.setUser(passenger);
+                return address;
+            }
+        ).toList());
         keycloakService.createKeycloakUser(passengerCreateRepresentation, Role.PASSENGER);
         passengerRepository.persist(passenger);
     }
@@ -74,7 +81,7 @@ public class PassengerService {
         passenger.getAddresses().clear();
         passenger.getAddresses().addAll(passengerUpdateRepresentation.getAddresses().stream()
                 .map(a -> {
-                    Address address = addressMapper.mapToEntity(a);
+                    Address address = addressMapper.mapRepresentationToEntity(a);
                     address.setUser(passenger);
                     return address;
                 }).toList());

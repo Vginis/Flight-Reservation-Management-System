@@ -142,7 +142,7 @@ class UserServiceTest {
     void test_update_user(){
         Mockito.when(userContext.extractUsername()).thenReturn("user-1");
         Mockito.when(userRepository.findUserByUsername("user-1")).thenReturn(Optional.of(user));
-        Mockito.when(addressMapper.mapToEntity(Mockito.any())).thenReturn(new Address());
+        //Mockito.when(addressMapper.mapToEntity(Mockito.any())).thenReturn(new Address());
         Mockito.when(userRepository.getEntityManager()).thenReturn(entityManager);
         Mockito.when(entityManager.merge(Mockito.any(User.class))).thenReturn(user);
 

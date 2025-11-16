@@ -4,7 +4,6 @@ import org.acme.constant.Role;
 import org.acme.domain.Passenger;
 import org.acme.domain.User;
 import org.acme.exception.InvalidRequestException;
-import org.acme.mapper.AddressMapper;
 import org.acme.persistence.PassengerRepository;
 import org.acme.persistence.UserRepository;
 import org.acme.representation.passenger.PassengerUpdateRepresentation;
@@ -30,8 +29,6 @@ class PassengerServiceTest {
     PassengerRepository passengerRepository;
     @Mock
     UserRepository userRepository;
-    @Mock
-    AddressMapper addressMapper;
     @Mock
     KeycloakService keycloakService;
 
