@@ -10,12 +10,44 @@
 
             <mat-form-field appearance="outline" class="field-input">
                 <mat-label>City</mat-label>
-                <input matInput formControlName="city" required/>
+                <input
+                    type="text"
+                    matInput
+                    [matAutocomplete]="cityAuto"
+                    formControlName="city"
+                />
+                <mat-autocomplete
+                    #cityAuto="matAutocomplete"
+                    [displayWith]="displayOption"
+                >
+                    <mat-option *ngFor="let city of citiesList" [value]="city">
+                        {{ city }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="this.airportCreateForm.get('city')?.hasError('invalidCityAutoComplete')">
+                    Please select a valid city from the list.
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="field-input">
                 <mat-label>Country</mat-label>
-                <input matInput formControlName="country" required/>
+                <input
+                    type="text"
+                    matInput
+                    [matAutocomplete]="countryAuto"
+                    formControlName="country"
+                />
+                <mat-autocomplete
+                    #countryAuto="matAutocomplete"
+                    [displayWith]="displayOption"
+                >
+                    <mat-option *ngFor="let country of countriesList" [value]="country">
+                        {{ country }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="this.airportCreateForm.get('country')?.hasError('invalidCountryAutoComplete')">
+                    Please select a valid country from the list.
+                </mat-error>
             </mat-form-field>
             
             <mat-form-field appearance="outline" class="field-input">

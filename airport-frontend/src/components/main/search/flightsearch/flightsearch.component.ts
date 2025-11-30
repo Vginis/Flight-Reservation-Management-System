@@ -112,11 +112,9 @@ export class FlightsearchComponent implements OnInit{
 
     if (departureAirport?.value.u3digitCode!==undefined && arrivalAirport && departureAirport?.value.u3digitCode === arrivalAirport?.value.u3digitCode) {
       arrivalAirport.setErrors({ ...arrivalAirport.errors, sameAirport: true });
-    } else {
-      if (arrivalAirport?.hasError('sameAirport')) {
-        const { sameAirport, ...otherErrors } = arrivalAirport.errors || {};
-        arrivalAirport.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-      }
+    } else if (arrivalAirport?.hasError('sameAirport')) {
+      const { sameAirport, ...otherErrors } = arrivalAirport.errors || {};
+      arrivalAirport.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
     }
     return null;
   }

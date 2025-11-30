@@ -42,7 +42,7 @@ public class AirportRepository extends AbstractSearchRepository<Airport> {
         if(value!=null){
             queryBuilder.append(" and ( airportName like '%'||:value||'%'");
             parameters.and(VALUE_LABEL, value);
-            queryBuilder.append(" or city like '%'||:value||'%'");
+            queryBuilder.append(" or city.cityName like '%'||:value||'%'");
             parameters.and(VALUE_LABEL, value);
             queryBuilder.append(" or u3digitCode like '%'||:value||'%')");
             parameters.and(VALUE_LABEL, value);
