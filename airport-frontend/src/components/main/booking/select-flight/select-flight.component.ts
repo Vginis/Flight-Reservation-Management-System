@@ -41,7 +41,6 @@ export class SelectFlightComponent {
         for(const flight of this.flights){
           flight.content = data.find((l:any) => l.airlineCode === flight.airlineU2DigitCode).content;
         }
-        console.log(this.flights);
         this.loadingService.hide();
       },
       error: (error) => {

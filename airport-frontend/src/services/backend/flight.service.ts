@@ -64,8 +64,6 @@ export class FlightService {
     updateFlightStatus(id: number, newStatus: string): Observable<any> {
         let httpParams = new HttpParams();
         httpParams = httpParams.set("newStatus",newStatus);
-        console.log(httpParams);
-        console.log(newStatus);
 
         return this.httpClient.put<any>(`${this.flightUrl}/update-flight-status/${id}`, {}, { params: httpParams });
     }

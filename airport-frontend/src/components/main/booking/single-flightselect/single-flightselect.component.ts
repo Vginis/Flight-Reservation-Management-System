@@ -15,7 +15,6 @@ export class SingleFlightselectComponent {
   @Input() flight: any;
 
   constructor() {
-    console.log(this.flight);
   }
 
   formatFlightTime(timeString: string): string {
