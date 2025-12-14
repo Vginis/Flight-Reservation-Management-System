@@ -13,32 +13,40 @@ import { ChangePasswordModalComponent } from '../../main/changepassword/change.p
 import { IdentityService } from '../../../services/keycloak/identity.service';
 import { CommonUtils } from '../../../utils/common.util';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/backend/user.service';
+import { UserProfile } from '../../../models/user.models';
 
 @Component({
     selector: 'app-navbar',
     imports: [
-        MatMenuModule,
-        MatToolbarModule, 
-        MatIconModule,
-        CommonModule,
-        MatSelectModule,
-        MatButtonModule,
+      MatMenuModule,
+      MatToolbarModule, 
+      MatIconModule,
+      CommonModule,
+      MatSelectModule,
+      MatButtonModule,
     ],
     templateUrl: './navbar.component.html',
     styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit{
   loggedIn = false;
-
+  userProfile!: UserProfile;
+  
   constructor(
     private readonly keycloakService: KeycloakService,
     private readonly dialog: MatDialog,
     private readonly identityService: IdentityService,
-    private readonly router: Router
-  ){}
+    private readonly router: Router,
+    private readonly userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.checkLoginStatus();
+    this.userService.getUserProfile().subscribe({
+      next: profile => this.userProfile = profile,
+      error: () => this.navigateToCompleteRegistrationPage()
+    });
   }
 
   private async checkLoginStatus() {
@@ -58,7 +66,9 @@ export class NavbarComponent implements OnInit{
   }
 
   async viewProfile() {
-    this.dialog.open(ViewProfileModalComponent);
+    this.dialog.open(ViewProfileModalComponent, {
+      data: this.userProfile
+    });
   }
 
   async viewResetPasswordModal(){
@@ -73,11 +83,19 @@ export class NavbarComponent implements OnInit{
     this.router.navigate(['/']);
   }
 
+  navigateToCompleteRegistrationPage() {
+    this.router.navigate(['/complete-registration']);
+  }
+
   isAdmin(): boolean{
     if(this.loggedIn){
       return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN) ||
         this.identityService.hasRole(CommonUtils.AIRLINE_ADMIN);
     }
     return false;
+  }
+
+  hasCompletedRegistration(): boolean {
+    return this.userProfile!==undefined;
   }
 }

@@ -60,6 +60,10 @@ export class UserService {
         return this.httpClient.post(`${this.airlineAdminsUrl}`, formData)
     }
 
+    completePassengerRegistration(payload: any): Observable<any> {
+        return this.httpClient.post(`${this.passengersUrl}/complete-registration`, payload);
+    }
+
     deleteUser(userId: number): Observable<any> {
         return this.httpClient.delete(`${this.usersUrl}/${userId}`);
     }

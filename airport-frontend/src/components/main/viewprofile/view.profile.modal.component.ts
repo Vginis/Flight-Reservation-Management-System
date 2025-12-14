@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
@@ -29,10 +30,10 @@ import { SnackbarService } from '../../../services/frontend/snackbar.service';
   styleUrls: ['./view.profile.modal.component.css']
 })
 export class ViewProfileModalComponent implements OnInit{
-  userProfile: UserProfile | null = null;
   profileForm: FormGroup;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public readonly userProfile: UserProfile,
     private readonly dialogRef: MatDialogRef<ViewProfileModalComponent>,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
@@ -50,19 +51,9 @@ export class ViewProfileModalComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.loadUserProfile();
-  }
-
-  async loadUserProfile(): Promise<void> {
-    this.userService.getUserProfile().subscribe({
-      next: (profile) => {
-        this.userProfile = profile;
-        if(this.userProfile !== null) this.patchForm(this.userProfile);
-      },
-      error: (err) => {
-        console.error('Failed to fetch user profile:', err);
-      }
-    });
+    if(this.userProfile) {
+      this.patchForm(this.userProfile);
+    }
   }
 
   private patchForm(userProfile: UserProfile | null){

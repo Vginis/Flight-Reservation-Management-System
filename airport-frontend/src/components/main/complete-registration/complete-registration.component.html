@@ -1,0 +1,109 @@
+<div>
+    <h2 class="complete-registration-header">Complete your Registration</h2>
+    <p class="complete-registration-message">
+        To activate your account and be able to interact with the platform, 
+        you must complete your registration first.
+    </p>
+    <form [formGroup]="completeRegistrationForm" class="complete-registration-form" (ngSubmit)="completeRegistration()">
+        <div>
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>Username</mat-label>
+                <input type="text" matInput formControlName="username" required/>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" required/>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastName" required/>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" required/>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phoneNumber" required/>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="complete-registration-form-field">
+                <mat-label>Passport</mat-label>
+                <input matInput formControlName="passport" required/>
+            </mat-form-field>
+        </div>
+
+        <div formArrayName="addresses">
+            <div class="addresses-title-container">
+                <h4 style="padding-top: 0.3%;">Addresses</h4>
+                <button mat-button color="primary" (click)="addAddress()" type="button">
+                    <mat-icon>add_circle_outline</mat-icon>
+                </button>
+            </div>
+
+            <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i" class="address-group">
+                <mat-form-field appearance="outline" class="complete-registration-form-field">
+                    <mat-label>Street</mat-label>
+                    <input matInput formControlName="addressName" required />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="complete-registration-form-field">
+                    <mat-label>Country</mat-label>
+                    <input
+                        type="text"
+                        matInput
+                        [matAutocomplete]="countryAuto"
+                        formControlName="country"
+                    />
+                    <mat-autocomplete
+                        #countryAuto="matAutocomplete"
+                        [displayWith]="displayCityCountry"
+                    >
+                        <mat-option *ngFor="let country of countriesList[i]" [value]="country">
+                            {{ country }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="addresses.at(i).get('country')?.hasError('invalidCountryAutoComplete')">
+                        Please select a valid country from the list.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="complete-registration-form-field">
+                    <mat-label>City</mat-label>
+                    <input
+                        type="text"
+                        matInput
+                        [matAutocomplete]="cityAuto"
+                        formControlName="city"
+                    />
+                    <mat-autocomplete
+                        #cityAuto="matAutocomplete"
+                        [displayWith]="displayCityCountry"
+                    >
+                        <mat-option *ngFor="let city of citiesList[i]" [value]="city">
+                            {{ city }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="addresses.at(i).get('city')?.hasError('invalidCityAutoComplete')">
+                        Please select a valid city from the list.
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-stroked-button color="warn" (click)="removeAddress(i)" type="button">
+                    Remove
+                </button>
+            </div>
+
+        </div>
+
+        <div>
+            <button type="submit" mat-raised-button color="primary">
+                Complete Registration
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,25 @@
+.complete-registration-header {
+    margin-top: 2%;
+    margin-left: 4%;
+}
+
+.complete-registration-message {
+    margin-top: 2%;
+    margin-left: 4%;
+    color: rgb(114, 105, 105);
+}
+
+.complete-registration-form {
+    margin-left: 6%;
+    margin-top: 2%;
+}
+
+.complete-registration-form-field {
+    width: 20%;
+    padding: 0.5rem;
+}
+
+.addresses-title-container{
+    display: flex;
+    padding-top: 2%;
+}

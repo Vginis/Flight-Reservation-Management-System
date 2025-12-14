@@ -16,6 +16,7 @@ import org.acme.persistence.UserRepository;
 import org.acme.representation.passenger.PassengerPassportRepresentation;
 import org.acme.representation.passenger.PassengerUpdateRepresentation;
 import org.acme.representation.user.PassengerCreateRepresentation;
+import org.acme.util.UserContext;
 
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public class PassengerService {
     KeycloakService keycloakService;
     @Inject
     AddressMapper addressMapper;
+    @Inject
+    UserContext userContext;
 
     public PassengerPassportRepresentation getPassport(String username){
         Optional<Passenger> passengerOptional = passengerRepository.findPassengerByUsername(username);
@@ -43,7 +46,18 @@ public class PassengerService {
         return passengerPassportRepresentation;
     }
 
-    public void createPassenger(PassengerCreateRepresentation passengerCreateRepresentation){
+    public void createPassengerAsAdmin(PassengerCreateRepresentation passengerCreateRepresentation){
+        createPassenger(passengerCreateRepresentation);
+        keycloakService.createKeycloakUser(passengerCreateRepresentation, Role.PASSENGER);
+    }
+
+    public void completePassengerRegistration(PassengerCreateRepresentation passengerCreateRepresentation){
+        String username = this.userContext.extractUsername();
+        passengerCreateRepresentation.setUsername(username);
+        createPassenger(passengerCreateRepresentation);
+    }
+
+    private void createPassenger(PassengerCreateRepresentation passengerCreateRepresentation) {
         Optional<User> userOptional = userRepository.findUserByUsername(passengerCreateRepresentation.getUsername());
         Optional<Passenger> passengerOptional = passengerRepository.findPassengerByPassport(passengerCreateRepresentation.getPassport());
         if(userOptional.isPresent() || passengerOptional.isPresent()){
@@ -52,13 +66,12 @@ public class PassengerService {
 
         Passenger passenger = new Passenger(passengerCreateRepresentation);
         passenger.getAddresses().addAll(passengerCreateRepresentation.getAddresses().stream().map(addressCreateRepresentation ->
-            {
-                Address address = addressMapper.mapRepresentationToEntity(addressCreateRepresentation);
-                address.setUser(passenger);
-                return address;
-            }
+                {
+                    Address address = addressMapper.mapRepresentationToEntity(addressCreateRepresentation);
+                    address.setUser(passenger);
+                    return address;
+                }
         ).toList());
-        keycloakService.createKeycloakUser(passengerCreateRepresentation, Role.PASSENGER);
         passengerRepository.persist(passenger);
     }
 

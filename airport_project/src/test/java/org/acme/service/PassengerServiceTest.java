@@ -50,14 +50,14 @@ class PassengerServiceTest {
         Mockito.when(passengerRepository.findPassengerByPassport("passport123")).thenReturn(Optional.empty());
         Mockito.doNothing().when(keycloakService).createKeycloakUser(passengerCreateRepresentation, Role.PASSENGER);
         Mockito.doNothing().when(passengerRepository).persist(Mockito.any(Passenger.class));
-        Assertions.assertDoesNotThrow(() -> passengerService.createPassenger(passengerCreateRepresentation));
+        Assertions.assertDoesNotThrow(() -> passengerService.createPassengerAsAdmin(passengerCreateRepresentation));
     }
 
     @Test
     void test_create_passenger_user_exists(){
         Mockito.when(userRepository.findUserByUsername("username")).thenReturn(Optional.empty());
         Mockito.when(passengerRepository.findPassengerByPassport("passport123")).thenReturn(Optional.of(new Passenger()));
-        Assertions.assertThrows(InvalidRequestException.class, () -> passengerService.createPassenger(passengerCreateRepresentation));
+        Assertions.assertThrows(InvalidRequestException.class, () -> passengerService.createPassengerAsAdmin(passengerCreateRepresentation));
     }
 
     @Test

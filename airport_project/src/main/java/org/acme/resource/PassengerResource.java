@@ -1,11 +1,16 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.Role;
@@ -27,9 +32,17 @@ public class PassengerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @PermitAll
     public Response createPassenger(@Valid PassengerCreateRepresentation passengerCreateRepresentation) {
-        passengerService.createPassenger(passengerCreateRepresentation);
+        passengerService.createPassengerAsAdmin(passengerCreateRepresentation);
+        return Response.ok(new MessageRepresentation(SuccessMessages.PASSENGER_CREATE_SUCCESS)).build();
+    }
+
+    @POST
+    @Path("complete-registration")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response completePassengerRegistration(@Valid PassengerCreateRepresentation passengerCreateRepresentation) {
+        passengerService.completePassengerRegistration(passengerCreateRepresentation);
         return Response.ok(new MessageRepresentation(SuccessMessages.PASSENGER_CREATE_SUCCESS)).build();
     }
 
