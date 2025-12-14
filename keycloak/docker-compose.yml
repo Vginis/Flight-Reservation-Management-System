@@ -10,7 +10,6 @@ services:
       KC_FEATURES: scripts
     volumes:
       - ./import:/opt/keycloak/data/import
-      - ./themes:/opt/keycloak/themes
     command: >
       start-dev
       --hostname=localhost
