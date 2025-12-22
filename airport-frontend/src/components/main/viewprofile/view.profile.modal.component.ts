@@ -9,11 +9,14 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../../services/backend/user.service';
 import { UserProfile } from '../../../models/user.models';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonUtils} from '../../../utils/common.util';
 import { SnackbarService } from '../../../services/frontend/snackbar.service';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { CityCountryService } from '../../../services/backend/citycountry.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-view.profile.modal',
@@ -24,20 +27,24 @@ import { SnackbarService } from '../../../services/frontend/snackbar.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   templateUrl: './view.profile.modal.component.html',
   styleUrls: ['./view.profile.modal.component.css']
 })
 export class ViewProfileModalComponent implements OnInit{
   profileForm: FormGroup;
+  countriesList: string[][] = [];
+  citiesList: string[][] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public readonly userProfile: UserProfile,
     private readonly dialogRef: MatDialogRef<ViewProfileModalComponent>,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
-    private readonly snackbar: SnackbarService
+    private readonly snackbar: SnackbarService,
+    private readonly cityCountryService: CityCountryService
   ) {
     this.profileForm = this.formBuilder.group({
       username: [{value: '', disabled: true},Validators.required],
@@ -68,11 +75,7 @@ export class ViewProfileModalComponent implements OnInit{
 
     this.addresses.clear();
     userProfile?.addresses?.forEach((addr: any) => {
-      this.addresses.push(this.formBuilder.group({
-        addressName: [addr.addressName],
-        city: [addr.city],
-        country: [addr.country]
-      }))
+      this.addresses.push(this.createAddressGroup(addr));
     })
   }
 
@@ -85,7 +88,7 @@ export class ViewProfileModalComponent implements OnInit{
     this.userService.updateUserProfile(requestBody).subscribe({
       next: () => {
         this.snackbar.success('Profile updated successfully!');
-        this.dialogRef.close();
+        this.dialogRef.close("success");
       },
       error: (err: any) => {
         console.error(err);
@@ -109,20 +112,107 @@ export class ViewProfileModalComponent implements OnInit{
     return this.profileForm.get('addresses') as FormArray;
   }
 
+  private createAddressGroup(addr?: any): FormGroup {
+    const group = this.formBuilder.group({
+      addressName: [addr?.addressName || '', Validators.required],
+      city: [{ value: addr?.city || '', disabled: true }, Validators.required],
+      country: [addr?.country || '', Validators.required]
+    });
+
+    const index = this.addresses.length;
+
+    this.countriesList[index] = [];
+    this.citiesList[index] = [];
+
+    this.enableCityBasedOnCountryListener(group, index);
+
+    group.get('country')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(value =>
+          this.cityCountryService.smartSearchCountries(value)
+        )
+      )
+      .subscribe(countries => {
+        this.countriesList[index] = countries;
+        group.get('country')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(countries, 'Country')
+        ]);
+        group.get('country')!.updateValueAndValidity({ emitEvent: false });
+      });
+
+    group.get('city')!.valueChanges
+      .pipe(
+        filter((value): value is string => value !== null),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(value => {
+          const countryValue = group.get('country')!.value;
+          return this.cityCountryService.smartSearchCities(value, countryValue);
+        })
+      )
+      .subscribe(cities => {
+        this.citiesList[index] = cities;
+        group.get('city')!.setValidators([
+          Validators.required,
+          this.validateAutocompleteCountryOption(cities, 'City')
+        ]);
+        group.get('city')!.updateValueAndValidity({ emitEvent: false });
+      });
+
+    if (addr?.country) {
+      group.get('city')!.enable();
+    }
+
+    return group;
+    }
+
+
   addAddress(): void {
     if(this.addresses.length==2){
       return;
     }
-    const addressGroup = this.formBuilder.group({
-      addressName: ['',Validators.required],
-      city: ['',Validators.required],
-      country: ['',Validators.required]
+    
+    this.addresses.push(this.createAddressGroup());
+  }
+  
+  enableCityBasedOnCountryListener(group: FormGroup, index: number) {
+    group.get('country')!.valueChanges.subscribe(value => {
+      const validCountries = this.countriesList[index] ?? [];
+
+      const isValid = validCountries.includes(value);
+
+      if (isValid) {
+        group.get('city')!.enable();
+      } else {
+        group.get('city')!.reset();
+        group.get('city')!.disable();
+      }
     });
-    this.addresses.push(addressGroup);
   }
 
   removeAddress(index: number): void {
     this.addresses.removeAt(index);  
+  }
+  
+  displayCityCountry(cityCountry: any): string {
+    return cityCountry;
+  }
+
+  validateAutocompleteCountryOption(options: string[], formType: string) {
+    return (control: AbstractControl) => {
+      const value = control.value;
+      if(!value) return null;
+
+      if(formType === 'Country'){
+        return options.includes(value) ? null : { invalidCountryAutoComplete: true }
+      } else {
+        return options.includes(value) ? null : { invalidCityAutoComplete: true }
+      }
+    }
   }
 
   close(): void {

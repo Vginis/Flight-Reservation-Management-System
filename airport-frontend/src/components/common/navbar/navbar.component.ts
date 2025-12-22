@@ -66,9 +66,15 @@ export class NavbarComponent implements OnInit{
   }
 
   async viewProfile() {
-    this.dialog.open(ViewProfileModalComponent, {
+    const dialogRef = this.dialog.open(ViewProfileModalComponent, {
       data: this.userProfile
     });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+      if(result==='success'){
+        globalThis.location.reload();
+      }
+    })
   }
 
   async viewResetPasswordModal(){
