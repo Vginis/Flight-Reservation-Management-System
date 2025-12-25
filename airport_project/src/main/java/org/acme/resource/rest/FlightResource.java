@@ -8,7 +8,15 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.FlightStatus;
@@ -56,6 +64,13 @@ public class FlightResource {
         FlightPageQuery query = new FlightPageQuery(flightSearchParamsDTO, departureDate, arrivalDate, departureAirportId,
                 arrivalAirportId);
         return Response.ok(flightService.searchFlightsByParams(query)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("flight-seat-layout/{uuid}")
+    public Response getFlightLayoutByUUID(@PathParam("uuid") String uuid) {
+        return Response.ok(flightService.getFlightLayoutByUUID(uuid)).build();
     }
 
     @GET

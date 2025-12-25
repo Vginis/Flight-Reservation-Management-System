@@ -1,6 +1,17 @@
 package org.acme.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import org.acme.constant.SeatReservationState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +31,7 @@ public class FlightSeatLayout {
     private Flight flight;
 
     @OneToMany(mappedBy = "flightSeatLayout", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    private List<FlightSeatState> reservedSeats;
+    private List<FlightSeatState> reservedSeats;//todo rename the reservedSeats field to "seats" or "flightSeats"
 
     public FlightSeatLayout() {
     }
@@ -28,6 +39,12 @@ public class FlightSeatLayout {
     public FlightSeatLayout(Aircraft aircraft) {
         this.aircraftId = aircraft.getId();
         this.reservedSeats = new ArrayList<>();
+        for(int row=1; row<aircraft.getAircraftRows()+1;row++){
+            for(int column=1; column<aircraft.getAircraftColumns()+1; column++){
+                FlightSeatState flightSeatState = new FlightSeatState(row, column, SeatReservationState.AVAILABLE, this);
+                reservedSeats.add(flightSeatState);
+            }
+        }
     }
 
     public Integer getId() {

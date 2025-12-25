@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.acme.constant.SeatReservationState;
 @Entity
-@Table(name = "flight_seat_state")
+@Table(name = "flight_seat_state")//TODO Rename it to flight_seat
 public class FlightSeatState {
     @Id
     @Column(name = "id")
@@ -26,6 +26,16 @@ public class FlightSeatState {
     @JoinColumn(name = "flight_seat_layout_id", referencedColumnName = "id")
     private FlightSeatLayout flightSeatLayout;
 
+    public FlightSeatState() {
+    }
+
+    public FlightSeatState(Integer seatRow, Integer seatColumn, SeatReservationState state, FlightSeatLayout flightSeatLayout) {
+        this.seatRow = seatRow;
+        this.seatColumn = seatColumn;
+        this.state = state;
+        this.flightSeatLayout = flightSeatLayout;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -44,5 +54,9 @@ public class FlightSeatState {
 
     public FlightSeatLayout getFlightSeatLayout() {
         return flightSeatLayout;
+    }
+
+    public void updateSeatState(SeatReservationState seatReservationState) {
+        this.state = seatReservationState;
     }
 }

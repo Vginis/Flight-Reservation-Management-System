@@ -5,7 +5,13 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.FlightStatus;
-import org.acme.domain.*;
+import org.acme.domain.Aircraft;
+import org.acme.domain.Airline;
+import org.acme.domain.AirlineAdministrator;
+import org.acme.domain.Airport;
+import org.acme.domain.Flight;
+import org.acme.domain.FlightSeatLayout;
+import org.acme.domain.FlightSeatState;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AircraftMapper;
@@ -14,11 +20,13 @@ import org.acme.persistence.AircraftRepository;
 import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirportRepository;
 import org.acme.persistence.FlightRepository;
-import org.acme.representation.aircraft.AircraftRepresentation;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightMultipleParamsSearchDTO;
 import org.acme.representation.flight.FlightRepresentation;
+import org.acme.representation.reservation.FlightSeatLayoutRepresentation;
+import org.acme.representation.reservation.FlightSeatLayoutUpdateRepresentation;
+import org.acme.representation.reservation.FlightSeatRepresentation;
 import org.acme.search.FlightPageQuery;
 import org.acme.search.PageResult;
 import org.acme.util.UserContext;
@@ -61,6 +69,49 @@ public class FlightService {
         }).toList();
 
         return new PageResult<>(flightPageResult.getTotal(), flightRepresentations);
+    }
+
+    public FlightSeatLayoutRepresentation getFlightLayoutByUUID(String uuid) {
+        Optional<Flight> flightOptional = flightRepository.getFlightByUUID(uuid);
+        if(flightOptional.isEmpty()) {
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        Flight flight = flightOptional.get();
+        FlightSeatLayout flightSeatLayout = flight.getFlightSeatLayout();
+
+        Optional<Aircraft> aircraftOptional = aircraftRepository.findByIdOptional(flightSeatLayout.getAircraftId());
+        if(aircraftOptional.isEmpty()) {
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        Aircraft aircraft = aircraftOptional.get();
+
+        return new FlightSeatLayoutRepresentation(
+                aircraft.getAircraftRows(), aircraft.getAircraftColumns(),
+                flightSeatLayout.getReservedSeats().stream().map(FlightSeatRepresentation::new).toList(),
+                flightMapper.map(flight)
+        );
+    }
+
+    @Transactional
+    public FlightSeatLayout updateSeatState(FlightSeatLayoutUpdateRepresentation flightSeatLayoutUpdateRepresentation) {
+        Optional<Flight> flightOptional = flightRepository.getFlightByUUID(flightSeatLayoutUpdateRepresentation.getFlightUUID());
+        if(flightOptional.isEmpty()) {
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+
+        FlightSeatLayout flightSeatLayout = flightOptional.get().getFlightSeatLayout();
+        Optional<FlightSeatState> flightSeatStateOptional = flightSeatLayout.getReservedSeats().stream()
+                .filter(seat -> seat.getSeatColumn().equals(flightSeatLayoutUpdateRepresentation.getColumnIndex())
+                        && seat.getSeatRow().equals(flightSeatLayoutUpdateRepresentation.getRowIndex())).findFirst();
+        if(flightSeatStateOptional.isEmpty()) {
+            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+        }
+        FlightSeatState flightSeatState = flightSeatStateOptional.get();
+        flightSeatState.updateSeatState(flightSeatLayoutUpdateRepresentation.getSeatReservationState());
+
+        return flightSeatLayout;
     }
 
     public PageResult<FlightRepresentation> searchFlightsByMultipleParams(FlightMultipleParamsSearchDTO flightMultipleParamsSearchDTO, Integer size, Integer index){
