@@ -1,4 +1,4 @@
-<div class="single-flight">
+<button class="single-flight" tabindex="0" (click)="onFlightClick()" (keydown)="onFlightKeyDown($event)">
     <div class="flight-information">
         <div class="departure">
             <p class="code">{{ flight.departureAirport.u3digitCode }}</p>
@@ -35,4 +35,4 @@
             Ticket Price: <p class="price">20</p>
         </div>
     </div>
-</div>
+</button>

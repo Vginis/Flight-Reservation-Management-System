@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-single-flightselect',
@@ -14,9 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
 export class SingleFlightselectComponent {
   @Input() flight: any;
 
-  constructor() {
+  constructor(
+    private readonly router: Router,
+  ) {
   }
-
+//todo move these date methods to common util static class
   formatFlightTime(timeString: string): string {
     const date = new Date(timeString);
 
@@ -35,7 +38,6 @@ export class SingleFlightselectComponent {
   displayTravelDuration() : string {
     const departure = new Date(this.flight.departureTime);
     const arrival = new Date(this.flight.arrivalTime);
-
     const diffMs = arrival.getTime() - departure.getTime();
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMinutes / 60);
@@ -48,5 +50,17 @@ export class SingleFlightselectComponent {
     });
 
     return (minutes === 0) ? `${hours}h: ${formattedEndTime}` : `${hours}h ${minutes}m: ${formattedEndTime}` 
+  }
+
+  onFlightClick(): void {
+    const flightUUID = this.flight.flightUUID;
+    this.router.navigate(['/booking', flightUUID]);
+  }
+
+  onFlightKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.onFlightClick();
+    }
   }
 }
