@@ -1,6 +1,7 @@
 package org.acme.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.RequestScoped;
 import org.acme.constant.search.FlightSortAndFilterBy;
@@ -28,6 +29,11 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
     public static final String ARRIVAL_TIME_LABEL = "arrivalTime";
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String FLIGHT_UUID_LABEL = "flightUUID";
+
+    public Optional<Flight> getFlightByUUID(String flightUUID) {
+        return find("flightUUID = :flightUUID", Parameters.with(FLIGHT_UUID_LABEL, flightUUID)).firstResultOptional();
+    }
 
     public PageResult<Flight> searchFlightsByParams(FlightPageQuery query){
         StringBuilder queryBuilder = new StringBuilder("SELECT f FROM Flight f ");
@@ -59,9 +65,9 @@ public class FlightRepository extends AbstractSearchRepository<Flight> {
                 params.put("flightNumber", query.getSearchValue());
             }
 
-            if(query.getSearchField().value().equals("flightUUID")){
+            if(query.getSearchField().value().equals(FLIGHT_UUID_LABEL)){
                 queryBuilder.append(" AND f.flightUUID like '%'||:flightUUID||'%'");
-                params.put("flightUUID", query.getSearchValue());
+                params.put(FLIGHT_UUID_LABEL, query.getSearchValue());
             }
 
             if(query.getSearchField().value().equals("flightStatus")){
