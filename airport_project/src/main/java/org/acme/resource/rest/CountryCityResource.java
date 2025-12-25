@@ -1,4 +1,4 @@
-package org.acme.resource;
+package org.acme.resource.rest;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

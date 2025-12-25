@@ -1,4 +1,4 @@
-package org.acme.resource;
+package org.acme.resource.rest;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
