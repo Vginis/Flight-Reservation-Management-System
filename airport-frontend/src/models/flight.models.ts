@@ -13,3 +13,25 @@ export interface FlightRepresentation {
     arrivalTime: string,
     aircraft: AircraftRepresentation
 }
+
+export type SeatState = 'AVAILABLE' | 'LOCKED' | 'BOOKED';
+
+export interface FlightSeatUpdate {
+  flightUUID: string;
+  rowIndex: number;
+  columnIndex: number;
+  seatReservationState: SeatState;
+}
+
+export interface FlightSeatRepresentation {
+  rowIndex: number;
+  columnIndex: number;
+  seatReservationState: SeatState;
+}
+
+export interface FlightSeatLayoutRepresentation {
+  rows: number,
+  columns: number,
+  flightSeatRepresentationList: FlightSeatRepresentation[],
+  flightInformation: FlightRepresentation
+}

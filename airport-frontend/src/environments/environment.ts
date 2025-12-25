@@ -8,7 +8,8 @@ export const environment = {
         }
     },
     backend: {
-        url:  'http://localhost:8010'
+        url:  'http://localhost:8010',
+        ws_url: 'ws://localhost:8010'
     },
     frontend: {
         url: 'http://localhost:4200'

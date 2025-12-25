@@ -53,6 +53,10 @@ export class FlightService {
         return this.httpClient.get<any>(`${this.flightUrl}/multiple-params`, { params: httpParams });
     }
 
+    getFlightSeatLayoutByUUID(uuid: string): Observable<any> {
+        return this.httpClient.get<any>(`${this.flightUrl}/flight-seat-layout/${uuid}`);
+    }
+
     createFlight(payload: any): Observable<any> {
         return this.httpClient.post<any>(`${this.flightUrl}`, payload);
     }

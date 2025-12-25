@@ -8,7 +8,7 @@ import { CompleteRegistrationComponent } from '../components/main/complete-regis
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
-    { path: 'booking', component: BookingComponent, canActivate: [AccessGuard] },
+    { path: 'booking/:flightUUID', component: BookingComponent, canActivate: [AccessGuard] },
     { path: 'administration', component: AdministrationComponent, canActivate: [AccessGuard] },
     { path: 'select-flight', component: SelectFlightComponent, canActivate: [AccessGuard] },
     { path: 'complete-registration', component: CompleteRegistrationComponent, canActivate: [AccessGuard] }
