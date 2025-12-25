@@ -1,6 +1,7 @@
-package org.acme.representation;
+package org.acme.representation.reservation;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.acme.representation.TicketRepresentation;
 
 import java.util.List;
 

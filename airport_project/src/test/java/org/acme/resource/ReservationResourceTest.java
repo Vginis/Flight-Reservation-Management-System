@@ -7,7 +7,7 @@ import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
 import org.acme.persistence.JPATest;
-import org.acme.representation.ReservationRepresentation;
+import org.acme.representation.reservation.ReservationRepresentation;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
