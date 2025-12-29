@@ -27,6 +27,7 @@ export interface FlightSeatRepresentation {
   rowIndex: number;
   columnIndex: number;
   seatReservationState: SeatState;
+  lastUpdatedBy: string;
 }
 
 export interface FlightSeatLayoutRepresentation {

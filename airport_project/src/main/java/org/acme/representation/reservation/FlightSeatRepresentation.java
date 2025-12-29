@@ -7,6 +7,7 @@ public class FlightSeatRepresentation {
     private Integer rowIndex;
     private Integer columnIndex;
     private SeatReservationState seatReservationState;
+    private String lastUpdatedBy;
 
     public FlightSeatRepresentation() {
     }
@@ -15,6 +16,7 @@ public class FlightSeatRepresentation {
         this.rowIndex = flightSeatState.getSeatRow();
         this.columnIndex = flightSeatState.getSeatColumn();
         this.seatReservationState = flightSeatState.getState();
+        this.lastUpdatedBy = flightSeatState.getLastUpdatedBy();
     }
 
     public Integer getRowIndex() {
@@ -39,5 +41,13 @@ public class FlightSeatRepresentation {
 
     public void setSeatReservationState(SeatReservationState seatReservationState) {
         this.seatReservationState = seatReservationState;
+    }
+
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public void setLastUpdatedBy(String lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
     }
 }

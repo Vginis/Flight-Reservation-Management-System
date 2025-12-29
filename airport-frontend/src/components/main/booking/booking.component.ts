@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FlightService } from '../../../services/backend/flight.service';
-import { SnackbarService } from '../../../services/frontend/snackbar.service';
 import { FlightRepresentation, FlightSeatLayoutRepresentation, FlightSeatRepresentation, FlightSeatUpdate, SeatState } from '../../../models/flight.models';
+import { IdentityService } from '../../../services/keycloak/identity.service';
 
 @Component({
   selector: 'app-booking',
@@ -26,12 +26,13 @@ export class BookingComponent implements OnInit, OnDestroy {
   rightSeatColumns = Array.from({ length: 3 });
   flightInformation!: FlightRepresentation;
   selectedSeats = new Set<string>();
+  bookedSeats = new Set<string>();
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly flightSeatLayoutService: FlightSeatLayoutService,
     private readonly flightService: FlightService,
-    private readonly snackbar: SnackbarService
+    private readonly identityService: IdentityService
   ) {}
 
   ngOnInit(): void {
@@ -74,8 +75,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   private loadSelectedSeats(flightSeatRepresentationList: FlightSeatRepresentation[]): void {
     for(const seat of flightSeatRepresentationList) {
+      const seatId = this.getSeatId(seat.rowIndex, seat.columnIndex);
+      
       if(seat.seatReservationState === 'LOCKED') {
-        this.selectedSeats.add(this.getSeatId(seat.rowIndex, seat.columnIndex));
+        this.selectedSeats.add(seatId);
+      }
+
+      const loggedInUsername = this.identityService.getKeycloakProfileIdentity()?.username;
+      if(seat.seatReservationState === 'BOOKED' || (seat.seatReservationState === 'LOCKED' && loggedInUsername !== seat.lastUpdatedBy)) {
+        this.bookedSeats.add(seatId);
       }
     }
   } 
@@ -153,11 +161,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   resolveNewSeatState(rowIndex: number, colIndex: number): SeatState {
     const seatId = this.getSeatId(rowIndex, colIndex);
-    if(this.selectedSeats.has(seatId)) {
-      return 'AVAILABLE';
-    }
+    return this.selectedSeats.has(seatId) ? 'AVAILABLE' : 'LOCKED';
+  }
 
-    return 'LOCKED';
+  isBooked(rowIndex: number, colIndex: number): boolean {
+    return this.bookedSeats.has(this.getSeatId(rowIndex, colIndex));
+  }
+
+  isLocked(rowIndex: number, colIndex: number): boolean {
+    return this.selectedSeats.has(this.getSeatId(rowIndex, colIndex));
   }
 
   getSeatId(rowIndex: number, colIndex: number): string {

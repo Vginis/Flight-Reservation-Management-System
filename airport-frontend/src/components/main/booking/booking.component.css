@@ -94,3 +94,17 @@
   background-color: rgba(25, 118, 210, 0.15);
   border-radius: 6px;
 }
+
+.seat-btn.booked {
+  background-color: rgba(200, 0, 0, 0.15);
+  border-radius: 6px;
+  cursor: not-allowed;
+}
+
+.seat-btn.booked mat-icon {
+  color: #9e9e9e;
+}
+
+.seat-btn.booked:hover {
+  background-color: rgba(200, 0, 0, 0.15);
+}
