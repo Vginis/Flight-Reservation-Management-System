@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.FlightStatus;
+import org.acme.constant.SeatReservationState;
 import org.acme.domain.Aircraft;
 import org.acme.domain.Airline;
 import org.acme.domain.AirlineAdministrator;
@@ -95,7 +96,7 @@ public class FlightService {
     }
 
     @Transactional
-    public FlightSeatLayout updateSeatState(FlightSeatLayoutUpdateRepresentation flightSeatLayoutUpdateRepresentation) {
+    public void updateSeatState(FlightSeatLayoutUpdateRepresentation flightSeatLayoutUpdateRepresentation, String username) {
         Optional<Flight> flightOptional = flightRepository.getFlightByUUID(flightSeatLayoutUpdateRepresentation.getFlightUUID());
         if(flightOptional.isEmpty()) {
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
@@ -109,9 +110,17 @@ public class FlightService {
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
         FlightSeatState flightSeatState = flightSeatStateOptional.get();
-        flightSeatState.updateSeatState(flightSeatLayoutUpdateRepresentation.getSeatReservationState());
+        validateFlightSeatUpdate(flightSeatState, username, flightSeatLayoutUpdateRepresentation.getSeatReservationState());
+        flightSeatState.updateSeatState(flightSeatLayoutUpdateRepresentation.getSeatReservationState(), username);
+    }
 
-        return flightSeatLayout;
+    private void validateFlightSeatUpdate(FlightSeatState flightSeatState, String username, SeatReservationState newState) {
+        SeatReservationState state = flightSeatState.getState();
+        if(state.equals(SeatReservationState.BOOKED) ||
+            (state.equals(SeatReservationState.LOCKED) && flightSeatState.getLastUpdatedBy()!=null &&!flightSeatState.getLastUpdatedBy().equals(username)) ||
+            (state.equals(SeatReservationState.AVAILABLE) && newState.equals(SeatReservationState.BOOKED))) {
+            throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
+        }
     }
 
     public PageResult<FlightRepresentation> searchFlightsByMultipleParams(FlightMultipleParamsSearchDTO flightMultipleParamsSearchDTO, Integer size, Integer index){

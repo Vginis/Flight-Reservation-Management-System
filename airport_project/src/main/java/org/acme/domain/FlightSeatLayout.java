@@ -41,7 +41,7 @@ public class FlightSeatLayout {
         this.reservedSeats = new ArrayList<>();
         for(int row=1; row<aircraft.getAircraftRows()+1;row++){
             for(int column=1; column<aircraft.getAircraftColumns()+1; column++){
-                FlightSeatState flightSeatState = new FlightSeatState(row, column, SeatReservationState.AVAILABLE, this);
+                FlightSeatState flightSeatState = new FlightSeatState(row, column, SeatReservationState.AVAILABLE, null, this);
                 reservedSeats.add(flightSeatState);
             }
         }

@@ -24,4 +24,6 @@ public class AirportProjectURIs {
 
 	public static final String FLIGHTS = "/flights";
 
+    public static final String WS_SESSION = "/ws-session";
+
 }

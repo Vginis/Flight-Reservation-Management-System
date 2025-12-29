@@ -21,6 +21,9 @@ public class FlightSeatState {
     @Column(name = "state", nullable = false,length = 20)
     private SeatReservationState state;
 
+    @Column(name = "last_updated_by", length = 100)
+    private String lastUpdatedBy;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "flight_seat_layout_id", referencedColumnName = "id")
@@ -29,10 +32,11 @@ public class FlightSeatState {
     public FlightSeatState() {
     }
 
-    public FlightSeatState(Integer seatRow, Integer seatColumn, SeatReservationState state, FlightSeatLayout flightSeatLayout) {
+    public FlightSeatState(Integer seatRow, Integer seatColumn, SeatReservationState state, String lastUpdatedBy, FlightSeatLayout flightSeatLayout) {
         this.seatRow = seatRow;
         this.seatColumn = seatColumn;
         this.state = state;
+        this.lastUpdatedBy = lastUpdatedBy;
         this.flightSeatLayout = flightSeatLayout;
     }
 
@@ -52,11 +56,16 @@ public class FlightSeatState {
         return state;
     }
 
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
     public FlightSeatLayout getFlightSeatLayout() {
         return flightSeatLayout;
     }
 
-    public void updateSeatState(SeatReservationState seatReservationState) {
+    public void updateSeatState(SeatReservationState seatReservationState, String updatedByUsername) {
         this.state = seatReservationState;
+        this.lastUpdatedBy = updatedByUsername;
     }
 }

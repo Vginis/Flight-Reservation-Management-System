@@ -40,15 +40,11 @@ export class BookingComponent implements OnInit, OnDestroy {
     if(this.flightUUID!==null){
       this.fetchSeatLayoutMap();
       this.sub = this.flightSeatLayoutService.connect(this.flightUUID)
-        .subscribe(seat => {
-          console.log(seat);
-        });
+        .subscribe();
       
       this.flightSeatLayoutService
         .getConnectionStatus()
-        .subscribe(status => {
-          console.log('🔌 WebSocket status:', status);
-        });
+        .subscribe();
     }
     
   }
@@ -158,7 +154,6 @@ export class BookingComponent implements OnInit, OnDestroy {
   resolveNewSeatState(rowIndex: number, colIndex: number): SeatState {
     const seatId = this.getSeatId(rowIndex, colIndex);
     if(this.selectedSeats.has(seatId)) {
-      console.log("!!!");
       return 'AVAILABLE';
     }
 
