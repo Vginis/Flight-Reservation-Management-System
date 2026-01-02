@@ -3,6 +3,7 @@ package org.acme.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import org.acme.representation.reservation.TicketCreateRepresentation;
 
 @Embeddable
 public class PassengerInfo {
@@ -13,40 +14,27 @@ public class PassengerInfo {
     @Column(name = "lastName", nullable = false, length = 30)
     private String lastName;
 
-    @Column(name = "passportId", nullable = false, length = 10)
-    private  String passportId;
+    @Column(name = "passport", nullable = false, length = 10)
+    private  String passport;
 
     public PassengerInfo() {
     }
 
-    public PassengerInfo(String firstName, String lastName, String passportId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.passportId = passportId;
+    public PassengerInfo(TicketCreateRepresentation ticketCreateRepresentation) {
+        this.firstName = ticketCreateRepresentation.getFirstName();
+        this.lastName = ticketCreateRepresentation.getLastName();
+        this.passport = ticketCreateRepresentation.getPassport();
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getPassport() {
+        return passport;
     }
-
-    public String getPassportId() {
-        return passportId;
-    }
-
-    public void setPassportId(String passportId) {
-        this.passportId = passportId;
-    }
-
 }

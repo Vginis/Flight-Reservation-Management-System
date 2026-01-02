@@ -42,6 +42,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
+    @OneToMany(mappedBy ="user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Reservation> reservations = new ArrayList<>();
+
     public User() {
     }
 
@@ -53,6 +56,7 @@ public class User {
         this.phoneNumber = userCreateRepresentation.getPhoneNumber();
         this.role = role;
         this.addresses = new ArrayList<>();
+        this.reservations = new ArrayList<>();
     }
 
     public User(String username, String firstName, String lastName, String email){
@@ -63,6 +67,7 @@ public class User {
         this.phoneNumber = "";
         this.role = Role.SYSTEM_ADMIN;
         this.addresses = new ArrayList<>();
+        this.reservations = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -95,6 +100,10 @@ public class User {
 
     public List<Address> getAddresses() {
         return addresses;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
     public void updateDetails(UserUpdateRepresentation userUpdateRepresentation){

@@ -8,14 +8,11 @@ public class Luggage {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @Column(name = "weight", nullable = false, length = 2)
     private Integer weight = 0;
-
-    @Column(name = "pieces", nullable = false)
-    private Integer amount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", nullable = false)
@@ -24,9 +21,8 @@ public class Luggage {
     public Luggage() {
     }
 
-    public Luggage(Integer weight, Integer amount) {
+    public Luggage(Integer weight) {
         this.weight = weight;
-        this.amount = amount;
     }
 
     public Integer getWeight() {
@@ -37,11 +33,11 @@ public class Luggage {
         this.weight = weight;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 }

@@ -15,6 +15,7 @@ import org.acme.constant.SeatReservationState;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name = "flight_seat_layouts")
 public class FlightSeatLayout {
