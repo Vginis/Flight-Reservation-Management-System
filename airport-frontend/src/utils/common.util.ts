@@ -51,5 +51,5 @@ export class CommonUtils {
         return date >= today;
     };
 
-    public static readonly seatLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+    public static readonly seatLetters = ['A', 'B', 'C', 'D', 'E', 'F','H','I','J'];
 }

@@ -9,6 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { LuggagesModalComponent } from './luggages-modal/luggages-modal.component';
 import { FlightSeatLayoutService } from '../../../../services/backend/flightseatlayout.service';
 import { SeatState } from '../../../../models/flight.models';
+import { MatIconModule } from '@angular/material/icon';
+import { ReservationService } from '../../../../services/backend/reservation.service';
+import { SnackbarService } from '../../../../services/frontend/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-form',
@@ -17,7 +21,8 @@ import { SeatState } from '../../../../models/flight.models';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './ticket-form.component.html',
   styleUrl: './ticket-form.component.css'
@@ -31,7 +36,10 @@ export class TicketFormComponent implements OnInit, OnChanges {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly dialog: MatDialog,
-    private readonly flightSeatLayoutService: FlightSeatLayoutService
+    private readonly flightSeatLayoutService: FlightSeatLayoutService,
+    private readonly reservationService: ReservationService,
+    private readonly snackbar: SnackbarService,
+    private readonly router: Router
   ) {
     this.reservationForm = this.formBuilder.group({
       tickets: this.formBuilder.array([])
@@ -61,13 +69,47 @@ export class TicketFormComponent implements OnInit, OnChanges {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
         passport: ['', Validators.required],
-        luggages: this.formBuilder.array([])
+        luggageWeights: this.formBuilder.array([])
       }));
     });
   }
 
   completeReservation(): void {
+    if(this.reservationForm.invalid) return;
 
+    const payload = this.constructPayload();
+    this.reservationService.createReservation(payload).subscribe({
+      next: () => {
+        this.snackbar.success('Reservation was made successfully.');
+        this.navigateToHomePage();
+      },
+      error: (err: any) => {
+        this.snackbar.error(`Reservation was not made successfully! ${err?.error?.key}`);
+      }
+    });
+  }
+
+  constructPayload(): any {
+    const payload = {
+      flightUUID: this.flightUUID,
+      ticketCreateRepresentationList: this.reservationForm.value.tickets.map((ticket: any) => ({
+        ...ticket,
+        luggageWeights: ticket.luggageWeights?.map(
+          (lw: { weight: number }) => lw.weight
+        ) ?? []
+      }))
+    };
+
+    return payload;
+  }
+
+  getBagCount(ticket: any): number {
+    const luggages = ticket.get('luggageWeights')?.value;
+    return luggages.length;
+  }
+
+  navigateToHomePage() {
+    this.router.navigate(['/']);
   }
 
   removeTicket(index: number): void {
@@ -104,7 +146,7 @@ export class TicketFormComponent implements OnInit, OnChanges {
   }
 
   getLuggages(ticketIndex: number): FormArray {
-    return this.tickets.at(ticketIndex).get('luggages') as FormArray;
+    return this.tickets.at(ticketIndex).get('luggageWeights') as FormArray;
   }
 
   get tickets(): FormArray {

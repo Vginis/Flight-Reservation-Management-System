@@ -88,7 +88,7 @@ export class SeatSelectionComponent implements OnInit, OnDestroy{
       }
     }
     const newSet = new Set(this.selectedSeats);
-    this.selectedSeatsChange.emit(newSet);;
+    this.selectedSeatsChange.emit(newSet);
   } 
 
   displayBookingHeaderInformation(): string {
@@ -155,6 +155,9 @@ export class SeatSelectionComponent implements OnInit, OnDestroy{
         seatReservationState: 'LOCKED'
       });
     }
+
+    const newSet = new Set(this.selectedSeats);
+    this.selectedSeatsChange.emit(newSet);
   }
 
   constructSeatUpdatePayload(rowIndex: number, colIndex: number): FlightSeatUpdate {

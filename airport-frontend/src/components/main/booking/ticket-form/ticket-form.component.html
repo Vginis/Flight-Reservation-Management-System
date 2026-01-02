@@ -14,6 +14,14 @@
                             ticket.get('column')?.value
                             ) }})
                         </span>
+
+                        <ng-container *ngIf="getBagCount(ticket) > 0">
+                            <ng-container *ngFor="let _ of [].constructor(getBagCount(ticket))">
+                                <mat-icon class="luggage-icon" color="primary">
+                                luggage
+                                </mat-icon>
+                            </ng-container>
+                        </ng-container>
                     </p>
                     <mat-form-field appearance="outline" class="ticket-container-input-field">
                         <mat-label>First Name</mat-label>
@@ -48,5 +56,9 @@
                 </div>
             </div>
         </div>
+      
+        <button mat-flat-button type="submit" [disabled]="reservationForm.invalid || tickets.length === 0" color="primary" style="margin-top: 15px;">
+            Make Reservation
+        </button>
     </form>
 </div>
