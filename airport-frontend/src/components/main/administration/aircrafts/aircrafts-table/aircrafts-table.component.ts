@@ -15,7 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { AircraftRepresentation } from '../../../../../models/aircraft.model';
 import { AircraftService } from '../../../../../services/backend/aircraft.service';
 import { AircraftsCreateModalComponent } from '../aircrafts-create-modal/aircrafts-create-modal.component';
-import { AircraftsUpdateModalComponent } from '../aircrafts-update-modal/aircrafts-update-modal.component';
 import { AircraftsDeleteModalComponent } from '../aircrafts-delete-modal/aircrafts-delete-modal.component';
 
 @Component({
