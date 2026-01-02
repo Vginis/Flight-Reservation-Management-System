@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FlightSeatUpdate } from "../../models/flight.models";
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { map, Observable, Subject, switchMap } from "rxjs";
+import { BehaviorSubject, map, Observable, Subject, switchMap } from "rxjs";
 import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 
@@ -12,7 +12,10 @@ export class FlightSeatLayoutService {
 
     private socket?: WebSocketSubject<FlightSeatUpdate>;
     private readonly connection$ = new Subject<'OPEN' | 'CLOSED' | 'ERROR'>();
-    
+    private readonly selectedSeatsSubject = new BehaviorSubject<Set<string>>(new Set());
+
+    selectedSeats$ = this.selectedSeatsSubject.asObservable();
+
     constructor(
         private readonly httpClient: HttpClient
     ) {
@@ -48,4 +51,19 @@ export class FlightSeatLayoutService {
     disconnect(): void {
         this.socket?.complete();
     }
+
+    selectSeat(seatId: string, update: FlightSeatUpdate): void {
+        const next = new Set(this.selectedSeatsSubject.value);
+        next.add(seatId);
+        this.selectedSeatsSubject.next(next);
+        this.sendSeatUpdate(update);
+    }
+
+    deselectSeat(seatId: string, update: FlightSeatUpdate): void {
+        const next = new Set(this.selectedSeatsSubject.value);
+        next.delete(seatId);
+        this.selectedSeatsSubject.next(next);
+        this.sendSeatUpdate(update);
+    }
+
 }

@@ -50,4 +50,6 @@ export class CommonUtils {
         today.setHours(0,0,0,0);
         return date >= today;
     };
+
+    public static readonly seatLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 }

@@ -1,0 +1,53 @@
+<div class="luggages-modal-container">
+    <h2 mat-dialog-title>🧳 Add luggage for Seat 1A</h2>
+    <mat-divider></mat-divider>
+
+    <mat-dialog-content class="luggage-selection-container">
+        
+        <section class="checked-buggage-container">
+            <h3>Checked baggage</h3>
+
+            <mat-radio-group [(ngModel)]="bagCount" (ngModelChange)="onBagCountChange($event)">
+            <mat-radio-button [value]="0">No checked baggage</mat-radio-button>
+            <mat-radio-button [value]="1">1 bag</mat-radio-button>
+            <mat-radio-button [value]="2">2 bags</mat-radio-button>
+            </mat-radio-group>
+        </section>
+
+        <mat-divider *ngIf="bagCount > 0"></mat-divider>
+
+        <section *ngIf="bagCount > 0" class="buggage-weight-container">            
+            <h3>Weight per bag</h3>
+
+            <div class="bag-weight-row">
+                <mat-form-field
+                appearance="outline"
+                *ngFor="let bag of bagWeights; let i = index; trackBy: trackByIndex"
+                >
+                <mat-label>Bag {{ i + 1 }}</mat-label>
+                <mat-select [(ngModel)]="bag.value" (ngModelChange)="updateBagWeight(i, $event)">
+                    <mat-option [value]="20">20 kg</mat-option>
+                    <mat-option [value]="25">25 kg</mat-option>
+                    <mat-option [value]="30">30 kg</mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+
+            <p class="hint">
+                Max allowed: 30 kg per bag
+            </p>
+        </section>
+
+    </mat-dialog-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-dialog-actions class="luggages-modal-footer">
+        <button mat-button mat-dialog-close>
+            Cancel
+        </button>
+        <button mat-flat-button color="primary" (click)="save()">
+            Save
+        </button>
+    </mat-dialog-actions>
+</div>

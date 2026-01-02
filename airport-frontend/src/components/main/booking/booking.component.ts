@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FlightSeatLayoutService } from '../../../services/backend/flightseatlayout.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { FlightService } from '../../../services/backend/flight.service';
-import { IdentityService } from '../../../services/keycloak/identity.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatDividerModule } from "@angular/material/divider";
 import { MatButtonModule } from '@angular/material/button';
 import { SeatSelectionComponent } from './seat-selection/seat-selection.component';
+import { TicketFormComponent } from './ticket-form/ticket-form.component';
 
 @Component({
   selector: 'app-booking',
@@ -18,7 +16,8 @@ import { SeatSelectionComponent } from './seat-selection/seat-selection.componen
     MatStepperModule,
     MatDividerModule,
     MatButtonModule,
-    SeatSelectionComponent
+    SeatSelectionComponent,
+    TicketFormComponent
 ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
@@ -26,14 +25,12 @@ import { SeatSelectionComponent } from './seat-selection/seat-selection.componen
 export class BookingComponent implements OnInit{
 
   flightUUID!: string;
-
+  selectedSeats = new Set<string>();
+  
   @ViewChild('stepper') stepper!: MatStepper;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly flightSeatLayoutService: FlightSeatLayoutService,
-    private readonly flightService: FlightService,
-    private readonly identityService: IdentityService
   ) {}
 
   ngOnInit(): void {
@@ -48,4 +45,7 @@ export class BookingComponent implements OnInit{
     this.stepper.next();
   }
 
+  hasSelectedSeats(): boolean {
+    return this.selectedSeats.size > 0;
+  }
 }

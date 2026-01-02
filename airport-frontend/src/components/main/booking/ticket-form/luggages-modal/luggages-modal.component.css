@@ -1,0 +1,41 @@
+.luggages-modal-container {
+    height: 50%;
+    width: 600px;
+}
+
+.checked-buggage-container {
+    margin-left: 4%;
+    display: flex;
+    flex-direction: column;
+}
+
+.luggage-selection-container {
+    padding: 2%
+}
+
+mat-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.buggage-weight-container {
+    padding: 2%;
+    margin-left: 3%;
+}
+
+.luggages-modal-footer {
+    height: 100px;
+    justify-content: end;
+    padding: 4%;
+}
+
+.bag-weight-row {
+  display: flex;
+  gap: 12px;
+}
+
+.bag-weight-row mat-form-field {
+  flex: 1;
+  min-width: 120px;
+}

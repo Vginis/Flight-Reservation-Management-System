@@ -1,0 +1,32 @@
+.tickets-form-container {
+    padding: 2%;
+    margin-left: 4%;
+}
+
+.tickets-form-title {
+    margin-bottom: 3%;
+}
+
+.ticket-container {
+    width: 75%;
+    padding: 2%;
+    height: 25;
+    border-radius: 6px;
+    border: 1px solid lightgrey;
+}
+
+.ticket-label{
+    font-size: 15px;
+    margin-left: 2%;
+    font-weight: 500;
+}
+
+.seat-info {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+.ticket-container-input-field {
+    margin-right: 3%;
+}

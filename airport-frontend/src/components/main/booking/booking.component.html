@@ -4,7 +4,11 @@
         <ng-template matStepLabel>
             Seat Selection
         </ng-template>
-        <app-seat-selection [flightUUID]="flightUUID"></app-seat-selection>
+        <app-seat-selection 
+            [flightUUID]="flightUUID"
+            [selectedSeats]="selectedSeats"
+            (selectedSeatsChange)="selectedSeats = $event"
+        ></app-seat-selection>
     </mat-step>
 
     <mat-step>
@@ -12,7 +16,11 @@
             Complete Reservation
         </ng-template>
 
-        <div>Hello World</div>
+       <app-ticket-form
+           [selectedSeats]="selectedSeats"
+           [flightUUID]="flightUUID"
+        >
+        </app-ticket-form>
     </mat-step>
 </mat-horizontal-stepper>
 
@@ -28,7 +36,7 @@
     </div>
     <div class="footer-right">
         @if (stepper.selectedIndex === 0) {
-            <button mat-icon-button (click)="next()" class="clickable-no-background" id="next">
+            <button mat-icon-button (click)="next()" class="clickable-no-background" id="next" [disabled]="!hasSelectedSeats()">
                 <mat-icon>chevron_right</mat-icon>
             </button>
         } @else {

@@ -1,0 +1,52 @@
+<div class="tickets-form-container">
+    <h2 class="tickets-form-title">Complete your reservation by filling the ticket details</h2>
+
+    <form [formGroup]="reservationForm" (ngSubmit)="completeReservation()">
+        <div formArrayName="tickets">
+            
+            <div *ngFor="let ticket of tickets.controls; let i = index" [formGroupName]="i">
+                <div class="ticket-container">
+                    <p class="ticket-label">
+                        Ticket {{ i + 1 }}
+                        <span class="seat-info">
+                            (Seat {{ getSeatLabel(
+                            ticket.get('row')?.value,
+                            ticket.get('column')?.value
+                            ) }})
+                        </span>
+                    </p>
+                    <mat-form-field appearance="outline" class="ticket-container-input-field">
+                        <mat-label>First Name</mat-label>
+                        <input matInput formControlName="firstName" required/>
+                        <mat-error *ngIf="tickets.at(i).get('firstName')?.hasError('required')">
+                            First Name is mandatory.
+                        </mat-error>
+                    </mat-form-field>
+                    
+                    <mat-form-field appearance="outline" class="ticket-container-input-field">
+                        <mat-label>Last name</mat-label>
+                        <input matInput formControlName="lastName" required/>
+                        <mat-error *ngIf="tickets.at(i).get('lastName')?.hasError('required')">
+                            Last Name is mandatory.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="ticket-container-input-field">
+                        <mat-label>Passport</mat-label>
+                        <input matInput formControlName="passport" required/>
+                        <mat-error *ngIf="tickets.at(i).get('passport')?.hasError('required')">
+                            Passport is mandatory.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <button mat-raised-button color="primary" type="button" (click)="openLuggagesModal(i)" class="ticket-container-input-field">
+                        Add Luggage
+                    </button>
+                    <button mat-stroked-button color="warn" (click)="removeTicket(i)" type="button">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
