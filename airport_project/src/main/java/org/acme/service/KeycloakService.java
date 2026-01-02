@@ -138,7 +138,7 @@ public class KeycloakService {
                 .users().search(username);
 
         if(userRepresentations.isEmpty()){
-            throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
+            return;
         }
 
         try (Response response = keycloak.realm(keycloakConfiguration.getKeycloakAppRealm())
