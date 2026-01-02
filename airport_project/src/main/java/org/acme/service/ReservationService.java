@@ -7,7 +7,7 @@ import org.acme.constant.ErrorMessages;
 import org.acme.constant.SeatReservationState;
 import org.acme.domain.Flight;
 import org.acme.domain.FlightInformation;
-import org.acme.domain.FlightSeatState;
+import org.acme.domain.FlightSeat;
 import org.acme.domain.Luggage;
 import org.acme.domain.PassengerInfo;
 import org.acme.domain.Reservation;
@@ -85,7 +85,7 @@ public class ReservationService {
     }
 
     private void updateSeat(Flight flight, TicketCreateRepresentation ticketRepresentation) {
-        Optional<FlightSeatState> flightSeatStateOptional = flight.getFlightSeatLayout().getReservedSeats()
+        Optional<FlightSeat> flightSeatStateOptional = flight.getFlightSeatLayout().getReservedSeats()
             .stream().filter(seat -> Objects.equals(seat.getSeatRow(), ticketRepresentation.getRow())
                     && seat.getSeatColumn().equals(ticketRepresentation.getColumn())).findFirst();
 
@@ -93,7 +93,7 @@ public class ReservationService {
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
 
-        FlightSeatState flightSeatState = flightSeatStateOptional.get();
+        FlightSeat flightSeatState = flightSeatStateOptional.get();
         String username = userContext.extractUsername();
         if(!flightSeatState.getLastUpdatedBy().equals(username) || !flightSeatState.getState().equals(SeatReservationState.LOCKED)) {
             throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);

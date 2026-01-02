@@ -1,7 +1,7 @@
 package org.acme.representation.reservation;
 
 import org.acme.constant.SeatReservationState;
-import org.acme.domain.FlightSeatState;
+import org.acme.domain.FlightSeat;
 
 public class FlightSeatRepresentation {
     private Integer rowIndex;
@@ -12,11 +12,11 @@ public class FlightSeatRepresentation {
     public FlightSeatRepresentation() {
     }
 
-    public FlightSeatRepresentation(FlightSeatState flightSeatState) {
-        this.rowIndex = flightSeatState.getSeatRow();
-        this.columnIndex = flightSeatState.getSeatColumn();
-        this.seatReservationState = flightSeatState.getState();
-        this.lastUpdatedBy = flightSeatState.getLastUpdatedBy();
+    public FlightSeatRepresentation(FlightSeat flightSeat) {
+        this.rowIndex = flightSeat.getSeatRow();
+        this.columnIndex = flightSeat.getSeatColumn();
+        this.seatReservationState = flightSeat.getState();
+        this.lastUpdatedBy = flightSeat.getLastUpdatedBy();
     }
 
     public Integer getRowIndex() {

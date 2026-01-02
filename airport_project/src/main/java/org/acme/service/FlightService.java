@@ -11,8 +11,8 @@ import org.acme.domain.Airline;
 import org.acme.domain.AirlineAdministrator;
 import org.acme.domain.Airport;
 import org.acme.domain.Flight;
+import org.acme.domain.FlightSeat;
 import org.acme.domain.FlightSeatLayout;
-import org.acme.domain.FlightSeatState;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AircraftMapper;
@@ -103,18 +103,18 @@ public class FlightService {
         }
 
         FlightSeatLayout flightSeatLayout = flightOptional.get().getFlightSeatLayout();
-        Optional<FlightSeatState> flightSeatStateOptional = flightSeatLayout.getReservedSeats().stream()
+        Optional<FlightSeat> flightSeatStateOptional = flightSeatLayout.getReservedSeats().stream()
                 .filter(seat -> seat.getSeatColumn().equals(flightSeatLayoutUpdateRepresentation.getColumnIndex())
                         && seat.getSeatRow().equals(flightSeatLayoutUpdateRepresentation.getRowIndex())).findFirst();
         if(flightSeatStateOptional.isEmpty()) {
             throw new ResourceNotFoundException(ErrorMessages.ENTITY_NOT_FOUND);
         }
-        FlightSeatState flightSeatState = flightSeatStateOptional.get();
+        FlightSeat flightSeatState = flightSeatStateOptional.get();
         validateFlightSeatUpdate(flightSeatState, username, flightSeatLayoutUpdateRepresentation.getSeatReservationState());
         flightSeatState.updateSeatState(flightSeatLayoutUpdateRepresentation.getSeatReservationState(), username);
     }
 
-    private void validateFlightSeatUpdate(FlightSeatState flightSeatState, String username, SeatReservationState newState) {
+    private void validateFlightSeatUpdate(FlightSeat flightSeatState, String username, SeatReservationState newState) {
         SeatReservationState state = flightSeatState.getState();
         if(state.equals(SeatReservationState.BOOKED) ||
             (state.equals(SeatReservationState.LOCKED) && flightSeatState.getLastUpdatedBy()!=null &&!flightSeatState.getLastUpdatedBy().equals(username)) ||
