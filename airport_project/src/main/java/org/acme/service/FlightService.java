@@ -90,7 +90,7 @@ public class FlightService {
 
         return new FlightSeatLayoutRepresentation(
                 aircraft.getAircraftRows(), aircraft.getAircraftColumns(),
-                flightSeatLayout.getReservedSeats().stream().map(FlightSeatRepresentation::new).toList(),
+                flightSeatLayout.getFlightSeats().stream().map(FlightSeatRepresentation::new).toList(),
                 flightMapper.map(flight)
         );
     }
@@ -103,7 +103,7 @@ public class FlightService {
         }
 
         FlightSeatLayout flightSeatLayout = flightOptional.get().getFlightSeatLayout();
-        Optional<FlightSeat> flightSeatStateOptional = flightSeatLayout.getReservedSeats().stream()
+        Optional<FlightSeat> flightSeatStateOptional = flightSeatLayout.getFlightSeats().stream()
                 .filter(seat -> seat.getSeatColumn().equals(flightSeatLayoutUpdateRepresentation.getColumnIndex())
                         && seat.getSeatRow().equals(flightSeatLayoutUpdateRepresentation.getRowIndex())).findFirst();
         if(flightSeatStateOptional.isEmpty()) {

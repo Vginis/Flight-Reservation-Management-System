@@ -32,18 +32,18 @@ public class FlightSeatLayout {
     private Flight flight;
 
     @OneToMany(mappedBy = "flightSeatLayout", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    private List<FlightSeat> reservedSeats;//todo rename the reservedSeats field to "seats" or "flightSeats"
+    private List<FlightSeat> flightSeats;
 
     public FlightSeatLayout() {
     }
 
     public FlightSeatLayout(Aircraft aircraft) {
         this.aircraftId = aircraft.getId();
-        this.reservedSeats = new ArrayList<>();
+        this.flightSeats = new ArrayList<>();
         for(int row=1; row<aircraft.getAircraftRows()+1;row++){
             for(int column=1; column<aircraft.getAircraftColumns()+1; column++){
                 FlightSeat flightSeat = new FlightSeat(row, column, SeatReservationState.AVAILABLE, null, this);
-                reservedSeats.add(flightSeat);
+                flightSeats.add(flightSeat);
             }
         }
     }
@@ -64,7 +64,7 @@ public class FlightSeatLayout {
         this.flight = flight;
     }
 
-    public List<FlightSeat> getReservedSeats() {
-        return reservedSeats;
+    public List<FlightSeat> getFlightSeats() {
+        return flightSeats;
     }
 }

@@ -85,7 +85,7 @@ public class ReservationService {
     }
 
     private void updateSeat(Flight flight, TicketCreateRepresentation ticketRepresentation) {
-        Optional<FlightSeat> flightSeatStateOptional = flight.getFlightSeatLayout().getReservedSeats()
+        Optional<FlightSeat> flightSeatStateOptional = flight.getFlightSeatLayout().getFlightSeats()
             .stream().filter(seat -> Objects.equals(seat.getSeatRow(), ticketRepresentation.getRow())
                     && seat.getSeatColumn().equals(ticketRepresentation.getColumn())).findFirst();
 
