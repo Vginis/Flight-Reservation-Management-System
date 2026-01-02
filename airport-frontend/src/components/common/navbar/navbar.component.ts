@@ -45,7 +45,12 @@ export class NavbarComponent implements OnInit{
     this.checkLoginStatus();
     this.userService.getUserProfile().subscribe({
       next: profile => this.userProfile = profile,
-      error: () => this.navigateToCompleteRegistrationPage()
+      error: (err) => {
+        console.error(err);
+        if(err.status === 404) {
+          this.navigateToCompleteRegistrationPage();
+        }        
+      }
     });
   }
 
