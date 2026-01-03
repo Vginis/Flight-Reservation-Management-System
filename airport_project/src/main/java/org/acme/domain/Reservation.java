@@ -2,6 +2,7 @@ package org.acme.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,11 +13,14 @@ public class Reservation {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @Column(name = "reservation_uuid", nullable = false)
     private UUID reservationUUID;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -32,6 +36,7 @@ public class Reservation {
         this.reservationUUID = UUID.randomUUID();
         this.user = user;
         this.ticketsList = ticketsList;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -40,6 +45,10 @@ public class Reservation {
 
     public UUID getReservationUUID() {
         return reservationUUID;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public User getUser() {
