@@ -22,7 +22,7 @@ public class Ticket {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @Column(name = "ticket_uuid", nullable = false)
@@ -35,8 +35,9 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private List<Luggage> luggages;
 
-    @Embedded
-    private FlightInformation flightInformation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "flight_id", nullable = false)
+    private Flight flight;
 
     @Embedded
     private PassengerInfo passengerInfo;
@@ -44,10 +45,10 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(List<Luggage> luggages, FlightInformation flightInformation, PassengerInfo passengerInfo) {
+    public Ticket(List<Luggage> luggages, Flight flight, PassengerInfo passengerInfo) {
         this.ticketUUID = UUID.randomUUID().toString();
         this.luggages = luggages;
-        this.flightInformation = flightInformation;
+        this.flight = flight;
         this.passengerInfo = passengerInfo;
     }
 
@@ -67,8 +68,8 @@ public class Ticket {
         return luggages;
     }
 
-    public FlightInformation getFlightInformation() {
-        return flightInformation;
+    public Flight getFlight() {
+        return flight;
     }
 
     public PassengerInfo getPassengerInfo() {

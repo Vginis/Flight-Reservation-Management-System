@@ -1,18 +1,26 @@
 package org.acme.representation.reservation;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.acme.representation.TicketRepresentation;
 
 import java.util.List;
 
-@RegisterForReflection
 public class ReservationRepresentation {
+    private String reservationUUID;
+    private List<TicketRepresentation> ticketList;
 
-    public Integer reservationId;
-    public Integer passengerId;
-    public List<String> outgoingFlights;
-    public List<String> ingoingFlights;
-    public List<TicketRepresentation> ticketList;
-    public Long totalPrice;
+    public String getReservationUUID() {
+        return reservationUUID;
+    }
 
+    public void setReservationUUID(String reservationUUID) {
+        this.reservationUUID = reservationUUID;
+    }
+
+    public List<TicketRepresentation> getTicketList() {
+        return ticketList;
+    }
+
+    public void setTicketList(List<TicketRepresentation> ticketList) {
+        this.ticketList = ticketList;
+    }
 }

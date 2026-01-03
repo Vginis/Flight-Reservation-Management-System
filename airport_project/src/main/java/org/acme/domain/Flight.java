@@ -8,6 +8,8 @@ import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -47,6 +49,9 @@ public class Flight {
     @Column(name = "flight_status")
     private FlightStatus flightStatus;
 
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    private List<Ticket> tickets = new ArrayList<>();
+
     @Valid
     @NotNull
     @OneToOne(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,6 +70,7 @@ public class Flight {
         this.arrivalTime = flightCreateRepresentation.getArrivalTime();
         this.flightSeatLayout = flightSeatLayout;
         this.flightStatus = FlightStatus.SCHEDULED;
+        this.tickets = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -105,6 +111,10 @@ public class Flight {
 
     public FlightSeatLayout getFlightSeatLayout() {
         return flightSeatLayout;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 
     private void calculateAvailableSeats() {

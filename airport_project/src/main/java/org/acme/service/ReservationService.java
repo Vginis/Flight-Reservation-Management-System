@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import org.acme.constant.ErrorMessages;
 import org.acme.constant.SeatReservationState;
 import org.acme.domain.Flight;
-import org.acme.domain.FlightInformation;
 import org.acme.domain.FlightSeat;
 import org.acme.domain.Luggage;
 import org.acme.domain.PassengerInfo;
@@ -61,15 +60,15 @@ public class ReservationService {
         List<Ticket> tickets = new ArrayList<>();
         for(TicketCreateRepresentation ticketRepresentation: ticketCreateRepresentationList) {
             PassengerInfo passengerInfo = new PassengerInfo(ticketRepresentation);
-            FlightInformation flightInformation = new FlightInformation(flight.getFlightNumber(),flight.getFlightUUID());
 
             List<Luggage> luggages = loadLuggages(ticketRepresentation.getLuggageWeights());
-            Ticket ticket = new Ticket(luggages, flightInformation, passengerInfo);
+            Ticket ticket = new Ticket(luggages, flight, passengerInfo);
 
             ticket.getLuggages().forEach(luggage -> luggage.setTicket(ticket));
             tickets.add(ticket);
 
             this.updateSeat(flight, ticketRepresentation);
+            flight.getTickets().add(ticket);
         }
 
         return tickets;
