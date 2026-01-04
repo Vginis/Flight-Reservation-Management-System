@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.acme.constant.search.AirlineSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.domain.Airline;
+import org.acme.domain.AirlineLogo;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirlineMapper;
@@ -44,6 +45,9 @@ class AirlineServiceTest {
     @BeforeEach
     void setup(){
         airline = AirlineUtil.createAirline();
+        byte[] content = {11,12};
+        airline.setLogo(new AirlineLogo("fileName", "filePath", "pdf",
+                content, airline));
         airlineRepresentation = AirlineUtil.createAirlineRepresentation();
         airlineCreateRepresentation = AirlineUtil.createAirlineCreateRepresentation();
         airlineUpdateRepresentation = AirlineUtil.createAirlineUpdateRepresentation();
@@ -59,10 +63,25 @@ class AirlineServiceTest {
 
         Mockito.when(airlineRepository.searchAirlinesByParams(query))
                 .thenReturn(airlinePageResult);
-        Mockito.when(airlineMapper.map(airlinePageResult)).thenReturn(
-                new PageResult<>(1, List.of(airlineRepresentation)));
+        Mockito.when(airlineMapper.map(airline)).thenReturn(
+                airlineRepresentation);
         PageResult<AirlineRepresentation> pageResult = airlineService.searchAirlinesByParams(query);
         Assertions.assertEquals(1,  pageResult.getTotal());
+    }
+
+    @Test
+    void testGetAirlineLogos(){
+        Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
+                .thenReturn(Optional.of(airline));
+        Assertions.assertDoesNotThrow(() -> airlineService.getAirlineLogos(List.of("AA")));
+    }
+
+    @Test
+    void testGetAirlineLogosThrowsNotFoundException(){
+        Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
+                .thenReturn(Optional.empty());
+        Assertions.assertThrows(ResourceNotFoundException.class,()
+                -> airlineService.getAirlineLogos(List.of("AA")));
     }
 
     @Test

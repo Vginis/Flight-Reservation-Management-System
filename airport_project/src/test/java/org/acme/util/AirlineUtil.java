@@ -6,6 +6,7 @@ import org.acme.representation.airline.AirlineRepresentation;
 import org.acme.representation.airline.AirlineUpdateRepresentation;
 
 public class AirlineUtil {
+
     public static AirlineCreateRepresentation createAirlineCreateRepresentation(){
         return new AirlineCreateRepresentation("airline 1", "AA");
     }

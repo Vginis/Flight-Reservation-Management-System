@@ -6,7 +6,6 @@ import org.acme.domain.Airline;
 import org.acme.domain.AirlineAdministrator;
 import org.acme.domain.User;
 import org.acme.exception.InvalidRequestException;
-import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AddressMapper;
 import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirlineRepository;
@@ -23,9 +22,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Files;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +45,8 @@ class AirlineAdministratorServiceTest {
     KeycloakService keycloakService;
     @Mock
     FileUpload fileUpload;
+    @Mock
+    java.nio.file.Path mockPath;
 
     User user;
     Airline airline;
@@ -63,15 +66,23 @@ class AirlineAdministratorServiceTest {
         Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
                 .thenReturn(Optional.of(airline));
 
-//        Mockito.when(addressMapper.ma(Mockito.any(AddressCreateRepresentation.class)))
-//                .thenReturn(address);
-        Mockito.doNothing().when(airlineAdministratorRepository)
-                .persist(Mockito.any(AirlineAdministrator.class));
-        Mockito.doNothing().when(keycloakService)
-                .createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
+        Mockito.when(addressMapper.mapRepresentationToEntity(Mockito.any(AddressCreateRepresentation.class)))
+                .thenReturn(address);
 
-        Assertions.assertDoesNotThrow(() -> airlineAdministratorService
-                .createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
+        try (MockedStatic<Files> mockedStatic = Mockito.mockStatic(Files.class)) {
+            byte[] fileContent = {11,12,13,14};
+            mockedStatic.when(() -> Files.readAllBytes(Mockito.any(java.nio.file.Path.class)))
+                    .thenReturn(fileContent);
+            Mockito.when(fileUpload.filePath()).thenReturn(mockPath);
+            Mockito.when(mockPath.toString()).thenReturn("mockPath");
+            Mockito.doNothing().when(keycloakService)
+                    .createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
+            Mockito.doNothing().when(airlineAdministratorRepository)
+                    .persist(Mockito.any(AirlineAdministrator.class));
+            Assertions.assertDoesNotThrow(() -> airlineAdministratorService
+                    .createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
+        }
+
     }
 
     @Test
@@ -84,13 +95,43 @@ class AirlineAdministratorServiceTest {
     }
 
     @Test
-    void testCreateAirlineAdministratorThrowsResourceNotFoundException(){
+    void testCreateAirlineAdministratorThrowsInvalidRequestExceptionAirlineExists(){
         Mockito.when(userRepository.findUserByUsername("user-1"))
                 .thenReturn(Optional.empty());
         Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
                 .thenReturn(Optional.empty());
-        Assertions.assertThrows(ResourceNotFoundException.class,
+        Mockito.when(airlineRepository.findOptionalAirlineByName("airline 1"))
+                .thenReturn(Optional.of(airline));
+        Assertions.assertThrows(InvalidRequestException.class,
                 () -> airlineAdministratorService.
                         createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
+    }
+
+    @Test
+    void testCreateAirlineAdministratorFindAirlineByName(){
+        Mockito.when(userRepository.findUserByUsername("user-1"))
+                .thenReturn(Optional.empty());
+        Mockito.when(airlineRepository.findOptionalAirlineByU2DigitCode("AA"))
+                .thenReturn(Optional.empty());
+        Mockito.when(airlineRepository.findOptionalAirlineByName("airline 1"))
+                .thenReturn(Optional.empty());
+        Mockito.doNothing().when(airlineRepository)
+                .persist(Mockito.any(Airline.class));
+        Mockito.when(addressMapper.mapRepresentationToEntity(Mockito.any(AddressCreateRepresentation.class)))
+                .thenReturn(address);
+
+        try (MockedStatic<Files> mockedStatic = Mockito.mockStatic(Files.class)) {
+            byte[] fileContent = {11,12,13,14};
+            mockedStatic.when(() -> Files.readAllBytes(Mockito.any(java.nio.file.Path.class)))
+                    .thenReturn(fileContent);
+            Mockito.when(fileUpload.filePath()).thenReturn(mockPath);
+            Mockito.when(mockPath.toString()).thenReturn("mockPath");
+            Mockito.doNothing().when(keycloakService)
+                    .createKeycloakUser(airlineAdministratorCreateRepresentation, Role.AIRLINE_ADMINISTRATOR);
+            Mockito.doNothing().when(airlineAdministratorRepository)
+                    .persist(Mockito.any(AirlineAdministrator.class));
+            Assertions.assertDoesNotThrow(() -> airlineAdministratorService
+                    .createAirlineAdministrator(airlineAdministratorCreateRepresentation, fileUpload));
+        }
     }
 }

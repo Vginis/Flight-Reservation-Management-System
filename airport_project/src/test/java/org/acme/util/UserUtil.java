@@ -1,6 +1,8 @@
 package org.acme.util;
 
 import org.acme.constant.Role;
+import org.acme.domain.Airline;
+import org.acme.domain.AirlineAdministrator;
 import org.acme.domain.User;
 import org.acme.representation.airline.AirlineCreateRepresentation;
 import org.acme.representation.passenger.PassengerUpdateRepresentation;
@@ -10,9 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserUtil {
+
     public static AirlineAdministratorCreateRepresentation createAirlineAdministratorCreateRepresentation(){
         return new AirlineAdministratorCreateRepresentation("user-1","Kendrick", "Nunn","email@email.com","1234557890",
-                new ArrayList<>(List.of(AddressUtil.createAddressCreateRepresentation())),new AirlineCreateRepresentation());
+                new ArrayList<>(List.of(AddressUtil.createAddressCreateRepresentation())),AirlineUtil.createAirlineCreateRepresentation());
+    }
+
+    public static AirlineAdministrator createAirlineAdministrator(Airline airline) {
+        return new AirlineAdministrator(createUserCreateRepresentation(), airline);
     }
 
     public static UserRepresentation createUserRepresentation(){

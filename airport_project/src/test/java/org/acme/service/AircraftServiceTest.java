@@ -5,9 +5,11 @@ import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.domain.Aircraft;
 import org.acme.domain.Airline;
+import org.acme.domain.AirlineAdministrator;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AircraftMapper;
 import org.acme.persistence.AircraftRepository;
+import org.acme.persistence.AirlineAdministratorRepository;
 import org.acme.persistence.AirlineRepository;
 import org.acme.representation.aircraft.AircraftCreateUpdateRepresentation;
 import org.acme.representation.aircraft.AircraftRepresentation;
@@ -15,6 +17,8 @@ import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 import org.acme.util.AircraftUtil;
 import org.acme.util.AirlineUtil;
+import org.acme.util.UserContext;
+import org.acme.util.UserUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,17 +44,23 @@ class AircraftServiceTest {
     AirlineRepository airlineRepository;
     @Mock
     EntityManager entityManager;
+    @Mock
+    UserContext userContext;
+    @Mock
+    AirlineAdministratorRepository airlineAdministratorRepository;
 
     Aircraft aircraft;
     AircraftRepresentation aircraftRepresentation;
     AircraftCreateUpdateRepresentation aircraftCreateUpdateRepresentation;
     Airline airline;
+    AirlineAdministrator airlineAdministrator;
     @BeforeEach
     void setup(){
        aircraft = AircraftUtil.createAircraft();
        aircraftRepresentation = AircraftUtil.createAircraftRepresentation();
        aircraftCreateUpdateRepresentation = AircraftUtil.createAircraftCreateRepresentation();
        airline = AirlineUtil.createAirline();
+       airlineAdministrator = UserUtil.createAirlineAdministrator(airline);
     }
 
     @Test
@@ -68,16 +79,38 @@ class AircraftServiceTest {
     }
 
     @Test
+    void testSmartSearchAircraft() {
+        Mockito.when(userContext.extractUsername()).thenReturn("user-1");
+        Mockito.when(airlineAdministratorRepository.findByUsername("user-1"))
+            .thenReturn(Optional.ofNullable(airlineAdministrator));
+        Mockito.when(aircraftRepository.smartSearchAircraft("aircraft-1", airline))
+            .thenReturn(List.of(aircraft));
+        Mockito.when(aircraftMapper.map(Mockito.anyList())).thenReturn(new ArrayList<>());
+        Assertions.assertDoesNotThrow(() -> aircraftService.smartSearchAircraft("aircraft-1"));
+    }
+
+    @Test
+    void testSmartSearchAircraftThrowsNotFoundException() {
+        Mockito.when(userContext.extractUsername()).thenReturn("user-1");
+        Mockito.when(airlineAdministratorRepository.findByUsername("user-1"))
+                .thenReturn(Optional.empty());
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> aircraftService.smartSearchAircraft("aircraft-1"));
+    }
+
+    @Test
     void testCreateAircraft(){
-        Mockito.when(airlineRepository.findByIdOptional(Mockito.any()))
-                .thenReturn(Optional.of(airline));
+        Mockito.when(userContext.extractUsername()).thenReturn("user-1");
+        Mockito.when(airlineAdministratorRepository.findByUsername("user-1"))
+                .thenReturn(Optional.of(airlineAdministrator));
         Mockito.doNothing().when(aircraftRepository).persist(Mockito.any(Aircraft.class));
         Assertions.assertDoesNotThrow(() -> aircraftService.createAircraft(aircraftCreateUpdateRepresentation));
     }
 
     @Test
     void testCreateAircraftThrowsNotFoundException(){
-        Mockito.when(airlineRepository.findByIdOptional(Mockito.any()))
+        Mockito.when(userContext.extractUsername()).thenReturn("user-1");
+        Mockito.when(airlineAdministratorRepository.findByUsername("user-1"))
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () ->
