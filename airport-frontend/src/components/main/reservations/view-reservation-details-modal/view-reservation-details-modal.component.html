@@ -1,0 +1,95 @@
+<h2 mat-dialog-title> Reservation Details</h2>
+<mat-dialog-content class="dialog-content">
+
+    <section class="reservation-meta">
+    <p><strong>Reservation ID:</strong> {{ reservation.reservationUUID }}</p>
+    <p><strong>Created:</strong> {{ formatDateTime(reservation.createdAt) }}</p>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="flight-info" *ngIf="reservation.ticketList?.length">
+    <h3>Flight</h3>
+
+    <div class="flight-row">
+      <span class="flight-number">
+        {{ reservation.ticketList[0].flightRepresentation.flightNumber }}
+      </span>
+      <span class="airline">
+        {{ reservation.ticketList[0].flightRepresentation.airlineU2DigitCode }}
+      </span>
+    </div>
+
+    <div class="route">
+      <strong>
+        {{ reservation.ticketList[0].flightRepresentation.departureAirport.code }}
+      </strong>
+      →
+      <strong>
+        {{ reservation.ticketList[0].flightRepresentation.arrivalAirport.code }}
+      </strong>
+    </div>
+
+    <div class="times">
+      <div>
+        <small>Departure</small>
+        <p>{{ formatDateTime(reservation.ticketList[0].flightRepresentation.departureTime) }}</p>
+      </div>
+      <div>
+        <small>Arrival</small>
+        <p>{{ formatDateTime(reservation.ticketList[0].flightRepresentation.arrivalTime) }}</p>
+      </div>
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="tickets">
+    <h3>Passengers</h3>
+
+    <mat-card *ngFor="let ticket of reservation.ticketList; let i = index" class="ticket-card">
+
+      <mat-card-title>
+        Ticket {{ i + 1 }}
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <p>
+          <strong>Name:</strong>
+          {{ ticket.firstName }} {{ ticket.lastName }}
+        </p>
+
+        <p>
+          <strong>Passport:</strong>
+          {{ ticket.passportId }}
+        </p>
+
+        <div class="luggage" *ngIf="ticket.luggageWeights?.length">
+          <strong>Luggage:</strong>
+
+          <span class="luggage-icons">
+            <mat-icon
+              *ngFor="let _ of ticket.luggageWeights"
+              color="primary">
+              work
+            </mat-icon>
+          </span>
+
+          <span class="luggage-weights">
+            ({{ ticket.luggageWeights.join(' kg, ') }} kg)
+          </span>
+        </div>
+
+        <div *ngIf="!ticket.luggageWeights?.length" class="no-luggage">
+          No luggage added
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

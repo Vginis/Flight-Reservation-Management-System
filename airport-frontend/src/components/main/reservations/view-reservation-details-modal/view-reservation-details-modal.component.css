@@ -1,0 +1,44 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reservation-meta p {
+  margin: 0;
+}
+
+.flight-info .flight-row {
+  display: flex;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.route {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.times {
+  display: flex;
+  gap: 32px;
+}
+
+.ticket-card {
+  margin-top: 12px;
+}
+
+.luggage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.luggage-icons mat-icon {
+  font-size: 18px;
+}
+
+.no-luggage {
+  color: #777;
+  font-style: italic;
+}
