@@ -13,7 +13,7 @@ public class Reservation {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
     @Column(name = "reservation_uuid", nullable = false)

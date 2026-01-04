@@ -19,6 +19,12 @@ public class PageQuery<T extends SortBy> {
         this.sortDirection = sortDirection;
     }
 
+    public PageQuery(Integer size, Integer index, SortDirection sortDirection) {
+        this.size = size;
+        this.index = index;
+        this.sortDirection = sortDirection;
+    }
+
     public T getSearchField() {
         return searchField;
     }

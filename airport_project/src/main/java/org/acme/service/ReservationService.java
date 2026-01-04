@@ -14,11 +14,18 @@ import org.acme.domain.Ticket;
 import org.acme.domain.User;
 import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
+import org.acme.mapper.FlightMapper;
+import org.acme.mapper.TicketMapper;
 import org.acme.persistence.FlightRepository;
 import org.acme.persistence.ReservationRepository;
 import org.acme.persistence.UserRepository;
+import org.acme.representation.TicketRepresentation;
 import org.acme.representation.reservation.ReservationCreateRepresentation;
+import org.acme.representation.reservation.ReservationRepresentation;
 import org.acme.representation.reservation.TicketCreateRepresentation;
+import org.acme.search.PageQuery;
+import org.acme.search.PageResult;
+import org.acme.search.SortBy;
 import org.acme.util.UserContext;
 
 import java.util.ArrayList;
@@ -37,6 +44,8 @@ public class ReservationService {
     UserRepository userRepository;
     @Inject
     UserContext userContext;
+    @Inject
+    FlightMapper flightMapper;
 
     @Transactional
     public void createReservation(ReservationCreateRepresentation reservationCreateRepresentation){
@@ -100,4 +109,30 @@ public class ReservationService {
         flightSeatState.updateSeatState(SeatReservationState.BOOKED, username);
     }
 
+    public PageResult<ReservationRepresentation> searchUsersReservations(PageQuery<SortBy> query) {
+        PageResult<Reservation> reservationPageResult = reservationRepository.searchReservationByParams(userContext.extractUsername(),
+                query);
+        List<ReservationRepresentation> reservationRepresentations = new ArrayList<>();
+
+        reservationPageResult.getResults().forEach(reservation -> {
+            ReservationRepresentation reservationRepresentation = new ReservationRepresentation();
+            reservationRepresentation.setReservationUUID(reservation.getReservationUUID().toString());
+            reservationRepresentation.setTicketList(this.mapTickets(reservation));
+            reservationRepresentation.setCreatedAt(reservation.getCreatedAt());
+            reservationRepresentations.add(reservationRepresentation);
+        });
+
+        return new PageResult<>(reservationRepresentations.size(), reservationRepresentations);
+    }
+
+    private List<TicketRepresentation> mapTickets(Reservation reservation) {
+        List<TicketRepresentation> ticketRepresentations = new ArrayList<>();
+        for(Ticket ticket: reservation.getTicketsList()) {
+            TicketRepresentation ticketRepresentation = TicketMapper.mapEntityToRepresentation(ticket);
+            ticketRepresentation.setFlightRepresentation(flightMapper.map(ticket.getFlight()));
+            ticketRepresentations.add(ticketRepresentation);
+        }
+
+        return ticketRepresentations;
+    }
 }

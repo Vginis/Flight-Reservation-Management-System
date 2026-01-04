@@ -19,6 +19,7 @@ import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.representation.reservation.ReservationCreateRepresentation;
 import org.acme.search.PageQuery;
+import org.acme.search.SortBy;
 import org.acme.service.ReservationService;
 import org.acme.validation.EnumerationValue;
 
@@ -39,17 +40,13 @@ public class ReservationResource {
         return Response.ok().build();
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response searchByParams(@QueryParam("searchField") @EnumerationValue(acceptedEnum = AircraftSortAndFilterBy.class) String searchField,
-//                                   @QueryParam("searchValue") String searchValue,
-//                                   @QueryParam("size") @DefaultValue("10") Integer size,
-//                                   @QueryParam("index") @DefaultValue("0") Integer index,
-//                                   @QueryParam("sortBy") @EnumerationValue(acceptedEnum = AircraftSortAndFilterBy.class) String sortBy,
-//                                   @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
-//        PageQuery<AircraftSortAndFilterBy> query = new PageQuery<>(ValueEnum.fromValue(searchField, AircraftSortAndFilterBy.class), searchValue, size, index
-//                , ValueEnum.fromValue(sortBy, AircraftSortAndFilterBy.class), ValueEnum.fromValue(sortDirection, SortDirection.class));
-//        return Response.ok(reservationService.searchUsersReservations(query)).build();
-//    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchByParams(@QueryParam("size") @DefaultValue("10") Integer size,
+                                   @QueryParam("index") @DefaultValue("0") Integer index,
+                                   @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
+        PageQuery<SortBy> query = new PageQuery<>(size, index, ValueEnum.fromValue(sortDirection, SortDirection.class));
+        return Response.ok(reservationService.searchUsersReservations(query)).build();
+    }
 
 }
