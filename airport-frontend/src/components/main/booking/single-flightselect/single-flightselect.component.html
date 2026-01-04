@@ -5,7 +5,7 @@
             <p class="city">{{ flight.departureAirport.city }}</p>
 
             <p class="date">Date</p>
-            <p>{{ formatFlightTime(flight.departureTime) }}</p>
+            <p>{{ commonUtils.formatFlightTime(flight.departureTime) }}</p>
         </div>
 
         <div class="flight-icon">
@@ -15,7 +15,7 @@
                 alt="Airline Logo"
             />
             <mat-icon style="margin-left: 25px">flight_takeoff</mat-icon>
-            <div class="arrival-time">{{ displayTravelDuration() }}</div>
+            <div class="arrival-time">{{ commonUtils.displayTravelDuration(flight) }}</div>
         </div>
         
         <div class="arrival">

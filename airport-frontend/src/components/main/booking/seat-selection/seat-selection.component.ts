@@ -6,6 +6,7 @@ import { FlightService } from '../../../../services/backend/flight.service';
 import { IdentityService } from '../../../../services/keycloak/identity.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { CommonUtils } from '../../../../utils/common.util';
 
 @Component({
   selector: 'app-seat-selection',
@@ -28,7 +29,9 @@ export class SeatSelectionComponent implements OnInit, OnDestroy{
   leftSeatColumns = Array.from({ length: 3 });
   rightSeatColumns = Array.from({ length: 3 });
   bookedSeats = new Set<string>();
-
+  
+  commonUtils = CommonUtils;  
+  
   constructor(
     private readonly flightSeatLayoutService: FlightSeatLayoutService,
     private readonly flightService: FlightService,
@@ -101,43 +104,9 @@ export class SeatSelectionComponent implements OnInit, OnDestroy{
   displayAdditionalFlightInfo(): string {
     if(!this.flightInformation) return '';
 
-    return `Departure: ${this.formatFlightTime(this.flightInformation.departureTime)} • 
-            Arrival: ${this.formatFlightTime(this.flightInformation.arrivalTime)} • 
-            Duration: ${this.displayTravelDuration()}`;
-  }
-
-  formatFlightTime(timeString: string): string {
-    const date = new Date(timeString);
-
-    const day = date.getDate();
-    const month = date.toLocaleString('en-US', { month: 'short' });
-
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    const hour12 = hours % 12 || 12;
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    return `${day} ${month}, ${hour12}:${minutes} ${ampm}`;
-  }
-
-  displayTravelDuration() : string {
-    if(!this.flightInformation) return '';
-
-    const departure = new Date(this.flightInformation.departureTime);
-    const arrival = new Date(this.flightInformation.arrivalTime);
-    const diffMs = arrival.getTime() - departure.getTime();
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const hours = Math.floor(diffMinutes / 60);
-    const minutes = diffMinutes % 60;
-
-    const formattedEndTime = arrival.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true
-    });
-
-    return (minutes === 0) ? `${hours}h: ${formattedEndTime}` : `${hours}h ${minutes}m: ${formattedEndTime}` 
+    return `Departure: ${this.commonUtils.formatFlightTime(this.flightInformation.departureTime)} • 
+            Arrival: ${this.commonUtils.formatFlightTime(this.flightInformation.arrivalTime)} • 
+            Duration: ${this.commonUtils.displayTravelDuration(this.flightInformation)}`;
   }
 
   onSeatClick(rowIndex: number, colIndex: number): void {
