@@ -9,6 +9,12 @@ export interface SearchParams {
     sortDirection: string;
 }
 
+export interface ReservationsSearchParams {
+    size: number,
+    index: number,
+    sortDirection: string;
+}
+
 export interface FlightSearchParams extends SearchParams {
     departureDate: string;
     arrivalDate: string;

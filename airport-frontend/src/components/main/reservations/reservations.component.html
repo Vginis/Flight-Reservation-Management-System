@@ -1,0 +1,39 @@
+<div class="reservations-container">
+    <div>
+        <h2>View Previous Reservations</h2>    
+    </div>
+
+    <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" matSort [matSortDisableClear]="true" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="reservationUUID">
+        <th mat-header-cell *matHeaderCellDef> Reservation Identifier </th>
+        <td mat-cell *matCellDef="let reservation"> {{ reservation.reservationUUID }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="travelFrom">
+        <th mat-header-cell *matHeaderCellDef> Travel From </th>
+        <td mat-cell *matCellDef="let reservation"> From {{ displayDepartureAirport(reservation )}} to {{ displayArrivalAirport(reservation )}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+        <td mat-cell *matCellDef="let reservation"> {{ displayDate(reservation.createdAt) }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="viewDetails">
+        <th mat-header-cell *matHeaderCellDef> View Details </th>
+        <td mat-cell *matCellDef="let reservation">
+          <button mat-icon-button color="primary" (click)="openViewDetailsModal(reservation)" style="justify-content: center;">
+            <mat-icon>crop_16_9</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="pagingOptions" showFirstLastButtons></mat-paginator>
+</div>

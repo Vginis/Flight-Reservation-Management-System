@@ -98,6 +98,10 @@ export class NavbarComponent implements OnInit{
     this.router.navigate(['/complete-registration']);
   }
 
+  navigateToReservationsPage() {
+    this.router.navigate(['/reservations'])
+  }
+
   isAdmin(): boolean{
     if(this.loggedIn){
       return this.identityService.hasRole(CommonUtils.SYSTEM_ADMIN) ||

@@ -1,0 +1,12 @@
+.reservations-container {
+  padding: 2rem;
+  padding-left: 5%;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
