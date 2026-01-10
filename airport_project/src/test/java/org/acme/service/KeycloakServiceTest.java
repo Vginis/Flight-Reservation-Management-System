@@ -194,4 +194,88 @@ class KeycloakServiceTest {
         Assertions.assertThrows(ResourceNotFoundException.class,
                 () -> keycloakService.updateUserPassword("user-1","new Password"));
     }
+
+    @Test
+    void test_delete_user_user_not_found() {
+        Mockito.when(keycloakConfiguration.getKeycloakAppRealm())
+                .thenReturn("airport");
+        Mockito.when(keycloak.realm("airport")).thenReturn(realmResource);
+        Mockito.when(realmResource.users()).thenReturn(usersResource);
+        Mockito.when(usersResource.search("user-1")).thenReturn(List.of());
+
+        Assertions.assertDoesNotThrow(() ->
+                keycloakService.deleteUser("user-1"));
+
+        Mockito.verify(usersResource, Mockito.never()).delete(Mockito.anyString());
+    }
+
+    @Test
+    void test_delete_user_success_204() {
+        prepareUserDeletionTest();
+        Mockito.when(response.getStatus()).thenReturn(204);
+
+        Assertions.assertDoesNotThrow(() ->
+                keycloakService.deleteUser("user-1"));
+
+        Mockito.verify(usersResource).delete("user-id");
+        Mockito.verify(response).close();
+    }
+
+    @Test
+    void test_delete_user_success_200() {
+        prepareUserDeletionTest();
+        Mockito.when(response.getStatus()).thenReturn(200);
+
+        Assertions.assertDoesNotThrow(() ->
+                keycloakService.deleteUser("user-1"));
+
+        Mockito.verify(usersResource).delete("user-id");
+        Mockito.verify(response).close();
+    }
+
+    @Test
+    void test_delete_user_failure_status_logged() {
+        prepareUserDeletionTest();
+        Mockito.when(response.getStatus()).thenReturn(500);
+
+        Assertions.assertDoesNotThrow(() ->
+                keycloakService.deleteUser("user-1"));
+
+        Mockito.verify(usersResource).delete("user-id");
+        Mockito.verify(response).close();
+    }
+
+    private void prepareUserDeletionTest() {
+        UserRepresentation user = new UserRepresentation();
+        user.setId("user-id");
+        user.setUsername("user-1");
+
+        Mockito.when(keycloakConfiguration.getKeycloakAppRealm())
+                .thenReturn("airport");
+        Mockito.when(keycloak.realm("airport")).thenReturn(realmResource);
+        Mockito.when(realmResource.users()).thenReturn(usersResource);
+        Mockito.when(usersResource.search("user-1")).thenReturn(List.of(user));
+        Mockito.when(usersResource.delete("user-id")).thenReturn(response);
+    }
+
+    @Test
+    void test_delete_user_exception_caught() {
+        UserRepresentation user = new UserRepresentation();
+        user.setId("user-id");
+        user.setUsername("user-1");
+
+        Mockito.when(keycloakConfiguration.getKeycloakAppRealm())
+                .thenReturn("airport");
+        Mockito.when(keycloak.realm("airport")).thenReturn(realmResource);
+        Mockito.when(realmResource.users()).thenReturn(usersResource);
+        Mockito.when(usersResource.search("user-1")).thenReturn(List.of(user));
+        Mockito.when(usersResource.delete("user-id"))
+                .thenThrow(new RuntimeException("Keycloak error"));
+
+        Assertions.assertDoesNotThrow(() ->
+                keycloakService.deleteUser("user-1"));
+
+        Mockito.verify(usersResource).delete("user-id");
+    }
+
 }

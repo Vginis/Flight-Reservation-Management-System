@@ -10,12 +10,15 @@ import org.acme.exception.InvalidRequestException;
 import org.acme.exception.ResourceNotFoundException;
 import org.acme.mapper.AirportMapper;
 import org.acme.persistence.AirportRepository;
+import org.acme.persistence.CityRepository;
+import org.acme.persistence.CountryRepository;
 import org.acme.representation.airport.AirportCreateRepresentation;
 import org.acme.representation.airport.AirportRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
 import org.acme.search.PageQuery;
 import org.acme.search.PageResult;
 import org.acme.util.AirportUtil;
+import org.acme.util.CountryCityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,17 +41,26 @@ class AirportServiceTest {
     AirportMapper airportMapper;
     @Mock
     EntityManager entityManager;
+    @Mock
+    CountryRepository countryRepository;
+    @Mock
+    CityRepository cityRepository;
 
     Airport airport;
     AirportRepresentation airportRepresentation;
     AirportCreateRepresentation airportCreateRepresentation;
     AirportUpdateRepresentation airportUpdateRepresentation;
+    Country country;
+    City city;
     @BeforeEach
     void setup(){
         airport = AirportUtil.createAirport();
-        airportRepresentation = AirportUtil.createAirportRepresentation();
+        airportRepresentation = AirportUtil.createAirportRepresentation("ATH");
         airportCreateRepresentation = AirportUtil.createAirportCreateRepresentation();
         airportUpdateRepresentation = AirportUtil.createAirportUpdateRepresentation();
+        country = CountryCityUtil.createCountry();
+        city = CountryCityUtil.createCity();
+        country.getCities().add(city);
     }
 
     @Test
@@ -73,6 +85,11 @@ class AirportServiceTest {
                 .thenReturn(Optional.empty());
         Mockito.when(airportRepository.findAirportBy3DCode("ATH"))
                 .thenReturn(Optional.empty());
+        Mockito.when(countryRepository.findByName("Greece"))
+                .thenReturn(Optional.ofNullable(country));
+        Mockito.when(cityRepository.findByName("Athens"))
+                .thenReturn(Optional.ofNullable(city));
+
         Mockito.doNothing().when(airportRepository).persist(Mockito.any(Airport.class));
         Assertions.assertDoesNotThrow(() ->
                 airportService.createAirport(airportCreateRepresentation));
@@ -100,6 +117,10 @@ class AirportServiceTest {
                 .thenReturn(entityManager);
         Mockito.when(entityManager.merge(Mockito.any(Airport.class)))
                 .thenReturn(airport);
+        Mockito.when(countryRepository.findByName("Greece"))
+                .thenReturn(Optional.ofNullable(country));
+        Mockito.when(cityRepository.findByName("Athens"))
+                .thenReturn(Optional.ofNullable(city));
         Assertions.assertDoesNotThrow(() ->
                 airportService.updateAirport(airportUpdateRepresentation));
     }
@@ -115,13 +136,14 @@ class AirportServiceTest {
     @Test
     void testUpdateAirportDetailsThrowsInvalidRequestException(){
         Airport otherAirport = new Airport("airport 2", new City(),new Country(),"BTH");
+        airport.setId(1);
+        otherAirport.setId(2);
         Mockito.when(airportRepository.findByIdOptional(1))
                 .thenReturn(Optional.of(airport));
         Mockito.when(airportRepository.findAirportByName("airport 1"))
                 .thenReturn(Optional.of(otherAirport));
         Mockito.when(airportRepository.findAirportBy3DCode("ATH"))
-                .thenReturn(Optional.empty());
-
+                .thenReturn(Optional.of(airport));
         Assertions.assertThrows(InvalidRequestException.class,() ->
                 airportService.updateAirport(airportUpdateRepresentation));
     }

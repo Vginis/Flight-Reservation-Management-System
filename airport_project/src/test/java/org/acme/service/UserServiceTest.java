@@ -15,6 +15,7 @@ import org.acme.mapper.UserMapper;
 import org.acme.persistence.AirlineRepository;
 import org.acme.persistence.UserRepository;
 import org.acme.representation.user.PasswordResetRepresentation;
+import org.acme.representation.user.UserCreateRepresentation;
 import org.acme.representation.user.UserRepresentation;
 import org.acme.representation.user.UserUpdateRepresentation;
 import org.acme.search.PageQuery;
@@ -62,6 +63,7 @@ class UserServiceTest {
     UserUpdateRepresentation userUpdateRepresentation;
     Airline airline;
     AirlineAdministrator airlineAdministrator;
+    UserCreateRepresentation userCreateRepresentation;
     @BeforeEach
     void setup(){
         userRepresentation = UserUtil.createUserRepresentation();
@@ -72,18 +74,35 @@ class UserServiceTest {
         airline = AirlineUtil.createAirline();
         airlineAdministrator = new AirlineAdministrator(UserUtil.createAirlineAdministratorCreateRepresentation(),
                 airline);
+        userCreateRepresentation = UserUtil.createUserCreateRepresentation();
     }
 
     @Test
     void test_search_by_params(){
-        PageResult<User> pageResult = new PageResult<>(1, new ArrayList<>());
-        PageResult<UserRepresentation> pageResultRepresentation = new PageResult<>(1, new ArrayList<>());
+        PageResult<User> pageResult = new PageResult<>(1, List.of(user));
         Mockito.when(userRepository.searchUsersByParams(Mockito.any(PageQuery.class)))
                 .thenReturn(pageResult);
-        Mockito.when(userMapper.map(pageResult)).thenReturn(pageResultRepresentation);
+        Mockito.when(userMapper.map(user)).thenReturn(userRepresentation);
 
         Assertions.assertDoesNotThrow(() -> userService.searchUsersByParams(
                 new PageQuery<>(UserSortAndFilterBy.EMAIL, "value", 5, 0, UserSortAndFilterBy.EMAIL, SortDirection.ASCENDING)));
+    }
+
+    @Test
+    void test_create_system_admin() {
+        Mockito.when(userRepository.findUserByUsername("user-1"))
+                .thenReturn(Optional.empty());
+        Mockito.doNothing().when(keycloakService).createKeycloakUser(userCreateRepresentation, Role.SYSTEM_ADMIN);
+        Mockito.doNothing().when(userRepository).persist(Mockito.any(User.class));
+        Assertions.assertDoesNotThrow(() -> userService.createSystemAdministrator(userCreateRepresentation));
+    }
+
+    @Test
+    void test_create_system_admin_throws_user_exists_exception() {
+        Mockito.when(userRepository.findUserByUsername("user-1"))
+                .thenReturn(Optional.of(user));
+        Assertions.assertThrows(InvalidRequestException.class,
+                () -> userService.createSystemAdministrator(userCreateRepresentation));
     }
 
     @Test
@@ -142,7 +161,7 @@ class UserServiceTest {
     void test_update_user(){
         Mockito.when(userContext.extractUsername()).thenReturn("user-1");
         Mockito.when(userRepository.findUserByUsername("user-1")).thenReturn(Optional.of(user));
-        //Mockito.when(addressMapper.mapToEntity(Mockito.any())).thenReturn(new Address());
+        Mockito.when(addressMapper.mapRepresentationToEntity(Mockito.any())).thenReturn(new Address());
         Mockito.when(userRepository.getEntityManager()).thenReturn(entityManager);
         Mockito.when(entityManager.merge(Mockito.any(User.class))).thenReturn(user);
 

@@ -8,18 +8,22 @@ import org.acme.representation.airport.AirportRepresentation;
 import org.acme.representation.airport.AirportUpdateRepresentation;
 
 public class AirportUtil {
-    public static AirportRepresentation createAirportRepresentation(){
+    public static AirportRepresentation createAirportRepresentation(String code){
         AirportRepresentation airportRepresentation = new AirportRepresentation();
         airportRepresentation.setAirportName("airportName");
         airportRepresentation.setAirportId(1);
         airportRepresentation.setCity("Athens");
         airportRepresentation.setCountry("Greece");
-        airportRepresentation.setU3digitCode("ATH");
+        airportRepresentation.setU3digitCode(code);
         return airportRepresentation;
     }
 
     public static Airport createAirport(){
         return new Airport("airportName", new City(),new Country(), "ATH");
+    }
+
+    public static Airport createAirport(String u3digitCode){
+        return new Airport("airportName", new City(),new Country(), u3digitCode);
     }
 
     public static AirportCreateRepresentation createAirportCreateRepresentation(){

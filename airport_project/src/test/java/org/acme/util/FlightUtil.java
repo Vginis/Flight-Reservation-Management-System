@@ -1,6 +1,7 @@
 package org.acme.util;
 
 import org.acme.domain.Flight;
+import org.acme.domain.FlightSeatLayout;
 import org.acme.representation.flight.FlightCreateRepresentation;
 import org.acme.representation.flight.FlightDateUpdateRepresentation;
 import org.acme.representation.flight.FlightRepresentation;
@@ -13,16 +14,17 @@ public class FlightUtil {
         flightRepresentation.setId(1);
         flightRepresentation.setFlightNumber("AA-121");
         flightRepresentation.setFlightUUID("uuid");
-//        flightRepresentation.setAircraftId(1);
-//        flightRepresentation.setArrivalAirport("ATH");
-//        flightRepresentation.setDepartureAirport("SKG");
+        flightRepresentation.setArrivalAirport(AirportUtil.createAirportRepresentation("ATH"));
+        flightRepresentation.setDepartureAirport(AirportUtil.createAirportRepresentation("SKG"));
         flightRepresentation.setArrivalTime(LocalDateTime.now());
         flightRepresentation.setDepartureTime(LocalDateTime.now());
         return flightRepresentation;
     }
 
     public static Flight createFlight(){
-        return new Flight();
+        return new Flight(createFlightCreateRepresentation(), AirlineUtil.createAirline(),
+                AirportUtil.createAirport("ATH"), AirportUtil.createAirport("SKG"),
+                new FlightSeatLayout(AircraftUtil.createAircraft()));
     }
 
     public static FlightCreateRepresentation createFlightCreateRepresentation(){

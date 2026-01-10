@@ -60,7 +60,13 @@ public class UserUtil {
     }
 
     public static PassengerUpdateRepresentation createPassengerUpdateRepresentation(){
-        PassengerUpdateRepresentation passengerUpdateRepresentation = (PassengerUpdateRepresentation) createUserUpdateRepresentation();
+        PassengerUpdateRepresentation passengerUpdateRepresentation = new PassengerUpdateRepresentation();
+        passengerUpdateRepresentation.setFirstName("firstName");
+        passengerUpdateRepresentation.setLastName("lastName");
+        passengerUpdateRepresentation.setEmail("email@email.com");
+        passengerUpdateRepresentation.setPhoneNumber("1234567899");
+        passengerUpdateRepresentation.setAddresses(new ArrayList<>());
+        passengerUpdateRepresentation.getAddresses().add(AddressUtil.createAddressCreateRepresentation());
         passengerUpdateRepresentation.setPassport("123");
         return passengerUpdateRepresentation;
     }
