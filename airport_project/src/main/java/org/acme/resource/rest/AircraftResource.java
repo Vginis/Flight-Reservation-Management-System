@@ -5,7 +5,16 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
@@ -66,7 +75,7 @@ public class AircraftResource {
     public Response updateAircraft(@Valid AircraftCreateUpdateRepresentation aircraftUpdateRepresentation,
                                    @NotNull @PathParam("id") Integer id){
         aircraftService.updateAircraft(aircraftUpdateRepresentation, id);
-        return Response.ok(new MessageRepresentation(SuccessMessages.AIRPORT_UPDATE_SUCCESS)).build();
+        return Response.ok(new MessageRepresentation(SuccessMessages.AIRCRAFT_UPDATE_SUCCESS)).build();
     }
 
     @DELETE

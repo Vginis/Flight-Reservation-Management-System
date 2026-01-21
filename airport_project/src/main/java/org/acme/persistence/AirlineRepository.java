@@ -33,8 +33,8 @@ public class AirlineRepository extends AbstractSearchRepository<Airline> {
 
             @Override
             public void search(PageQuery<?> query, StringBuilder queryBuilder, Parameters parameters) {
-                appendQueryBuildAndParamsForField("airlineName"," and airlineName like '%'||:airlineName||'%'", query, queryBuilder, parameters);
-                appendQueryBuildAndParamsForField("u2digitCode"," and u2digitCode like '%'||:u2digitCode||'%'", query, queryBuilder, parameters);
+                appendQueryBuildAndParamsForField("airlineName"," and LOWER(airlineName) like LOWER(CONCAT('%', :airlineName, '%'))", query, queryBuilder, parameters);
+                appendQueryBuildAndParamsForField("u2digitCode"," and LOWER(u2digitCode) like LOWER(CONCAT('%', :u2digitCode, '%'))", query, queryBuilder, parameters);
             }
         });
     }
