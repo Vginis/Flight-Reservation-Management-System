@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class UserContext {
+
     @Inject
     JsonWebToken jsonWebToken;
 
