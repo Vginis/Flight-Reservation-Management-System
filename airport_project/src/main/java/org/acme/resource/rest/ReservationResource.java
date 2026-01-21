@@ -1,7 +1,6 @@
 package org.acme.resource.rest;
 
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -13,9 +12,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.constant.Role;
 import org.acme.constant.ValueEnum;
-import org.acme.constant.search.AircraftSortAndFilterBy;
 import org.acme.constant.search.SortDirection;
 import org.acme.representation.reservation.ReservationCreateRepresentation;
 import org.acme.search.PageQuery;

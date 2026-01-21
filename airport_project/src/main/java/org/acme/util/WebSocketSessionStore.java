@@ -40,4 +40,8 @@ public class WebSocketSessionStore {
     public void remove(String sessionId) {
         sessionsMap.remove(sessionId);
     }
+
+    public Map<String, WsSession> getSessionsMap() {
+        return sessionsMap;
+    }
 }
