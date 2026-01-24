@@ -103,7 +103,8 @@ public class ReservationService {
 
         FlightSeat flightSeatState = flightSeatStateOptional.get();
         String username = userContext.extractUsername();
-        if(!flightSeatState.getLastUpdatedBy().equals(username) || !flightSeatState.getState().equals(SeatReservationState.LOCKED)) {
+        if((flightSeatState.getLastUpdatedBy()!=null && !flightSeatState.getLastUpdatedBy().equals(username))
+                || !flightSeatState.getState().equals(SeatReservationState.LOCKED)) {
             throw new InvalidRequestException(ErrorMessages.INVALID_VALUE);
         }
         flightSeatState.updateSeatState(SeatReservationState.BOOKED, username);

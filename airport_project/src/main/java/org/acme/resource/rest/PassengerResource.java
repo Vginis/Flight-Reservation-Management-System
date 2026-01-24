@@ -32,6 +32,7 @@ public class PassengerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(Role.SYSTEM_ADMIN)
     public Response createPassenger(@Valid PassengerCreateRepresentation passengerCreateRepresentation) {
         passengerService.createPassengerAsAdmin(passengerCreateRepresentation);
         return Response.ok(new MessageRepresentation(SuccessMessages.PASSENGER_CREATE_SUCCESS)).build();

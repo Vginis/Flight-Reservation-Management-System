@@ -86,6 +86,7 @@ class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    @TestTransaction
     @TestSecurity(user = "sys_admin", roles = {Role.SYSTEM_ADMIN})
     void createAirline() {
         given()
@@ -98,6 +99,7 @@ class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    @TestTransaction
     void createAirline_returns_401() {
         given()
             .contentType(ContentType.JSON)
@@ -109,6 +111,7 @@ class AirlineResourceTest extends JPATest {
     }
 
     @Test
+    @TestTransaction
     @TestSecurity(user = "passenger", roles = {Role.PASSENGER})
     void createAirline_returns_403() {
         given()

@@ -1,184 +1,159 @@
 package org.acme.resource;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.common.mapper.TypeRef;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
-import jakarta.ws.rs.core.Response;
 import org.acme.constant.AirportProjectURIs;
-import org.acme.persistence.JPATest;
-import org.acme.representation.flight.FlightRepresentation;
-import org.acme.representation.user.UserRepresentation;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
+import org.acme.constant.Role;
+import org.acme.constant.SuccessMessages;
+import org.acme.representation.passenger.PassengerUpdateRepresentation;
+import org.acme.representation.user.PassengerCreateRepresentation;
+import org.acme.service.PassengerService;
+import org.acme.util.UserUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
-@Disabled
-class PassengerResourceTest extends JPATest {
+class PassengerResourceTest {
 
-    static final String API_ROOT  = "http://localhost:8081";
+    @InjectMock
+    PassengerService passengerService;
 
-    @Test
-    void findAllPassengers() {
-        List<UserRepresentation> passengers = when().get(API_ROOT+ AirportProjectURIs.PASSENGERS)
-                .then()
-                .statusCode(200)
-                .extract().as(new TypeRef<List<UserRepresentation>>() {});
-        assertEquals(2, passengers.size());
-    }
-
-    @Test
-    void findPassengerByEmail() {
-        List<UserRepresentation> passengers = given().queryParam("email", "passenger@gmail.com").when().get(API_ROOT + AirportProjectURIs.PASSENGERS)
-                .then()
-                .statusCode(200)
-                .extract().as(new TypeRef<List<UserRepresentation>>() {}) ;
-
-        assertEquals(1, passengers.size());
-    }
-
-    @Test
-    void findExistingPassenger() {
-        UserRepresentation p = when().get(API_ROOT+ AirportProjectURIs.PASSENGERS+"/"+ 6)
-                .then()
-                .statusCode(200)
-                .extract().as(UserRepresentation.class);
-
-        assertEquals("passenger", p.getUsername());
-    }
-
-    @Test
-    void findNoExistingPassenger() {
-        when().get(API_ROOT +AirportProjectURIs.PASSENGERS + "/" + 666)
-                .then()
-                .statusCode(404);
-    }
-
-    @Test
-    void findFlights(){
-
-        List<FlightRepresentation> fr = when().get(API_ROOT+ AirportProjectURIs.PASSENGERS+"/searchForFlights/4/Venezuelo")
-                .then()
-                .statusCode(200)
-                .extract().as(new TypeRef<List<FlightRepresentation>>() {});
-        assertEquals(1,fr.size());
-        assertEquals("Venezuelo",fr.getFirst().getArrivalAirport());
-        assertEquals("Fiumicino",fr.getFirst().getDepartureAirport());
-    }
-
-    @Test
-    void findNoExistingFlight() {
-        when().get(API_ROOT+ AirportProjectURIs.PASSENGERS+"/searchForFlights/5/Venezuelo")
-                .then()
-                .statusCode(404);
+    PassengerCreateRepresentation passengerCreateRepresentation;
+    PassengerUpdateRepresentation passengerUpdateRepresentation;
+    @BeforeEach
+    void setup() {
+        passengerCreateRepresentation = UserUtil.createPassengerCreateRepresentation();
+        passengerUpdateRepresentation = UserUtil.createPassengerUpdateRepresentation();
     }
 
     @Test
     @TestTransaction
-    void createPassenger(){
-        UserRepresentation userRepresentation = new UserRepresentation();
-        UserRepresentation savedPassenger = given().contentType(ContentType.JSON).body(userRepresentation).when()
-                .post(API_ROOT + AirportProjectURIs.PASSENGERS).then().statusCode(201).extract().as(UserRepresentation.class);
-
-        assertNotNull(savedPassenger);
-        assertEquals("passenger123",savedPassenger.getUsername());
-        assertEquals("8388383838",savedPassenger.getPhoneNumber());
-        assertEquals("email@gmail.com", savedPassenger.getEmail());
-    }
-
-    @Test
-    void updatePassenger() {
-        UserRepresentation passenger = when().get(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
-                .then()
-                .statusCode(200)
-                .extract().as(UserRepresentation.class);
-
-        passenger.setUsername("passenger123");
-        passenger.setEmail("sjdfs@gmail.com");
-        passenger.setPhoneNumber("999999999");
-
+    @TestSecurity(user = "sys_admin", roles = {Role.SYSTEM_ADMIN})
+    void testCreatePassenger_success() {
+        Mockito.doNothing().when(passengerService).createPassengerAsAdmin(passengerCreateRepresentation);
         given()
-                .contentType(ContentType.JSON)
-                .body(passenger)
-                .when().put(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
-                .then().statusCode(204);
-
-        UserRepresentation updated = when().get(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
-                .then()
-                .statusCode(200)
-                .extract().as(UserRepresentation.class);
-
-        assertEquals("passenger123", updated.getUsername());
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .post(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(200)
+            .body("key", equalTo(SuccessMessages.PASSENGER_CREATE_SUCCESS));
     }
 
     @Test
-    void updatePassengerWithNotTheSameId() {
-        UserRepresentation passenger = when().get(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
-                .then()
-                .statusCode(200)
-                .extract().as(UserRepresentation.class);
-
-        passenger.setId(10);
-
-        given().contentType(ContentType.JSON).body(passenger)
-                .when().put(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 6)
-                .then().statusCode(400);
+    @TestSecurity(user = "passenger", roles = {Role.PASSENGER})
+    void testCreatePassenger_returns_403() {
+        given()
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .post(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(403);
     }
 
     @Test
-    @TestTransaction
-    void removeExistingPassenger(){
-        when()
-                .delete(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 12)
-                .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    void testCreatePassenger_returns_401() {
+        given()
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .post(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(401);
     }
 
     @Test
     @TestTransaction
-    void removeNoExistingPassenger(){
-        when()
-                .delete(API_ROOT + AirportProjectURIs.PASSENGERS + "/" + 4)
-                .then()
-                .statusCode(404);
+    @TestSecurity(user = "sys_admin", roles = {Role.SYSTEM_ADMIN})
+    void testCompletePassengerRegistration_success() {
+        Mockito.doNothing().when(passengerService).completePassengerRegistration(passengerCreateRepresentation);
+        given()
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .post(AirportProjectURIs.PASSENGERS+"/complete-registration")
+            .then()
+            .statusCode(200)
+            .body("key", equalTo(SuccessMessages.PASSENGER_CREATE_SUCCESS));
     }
 
     @Test
-    void makeNewReservation(){
-        when().post(API_ROOT + AirportProjectURIs.PASSENGERS + "/12/makeReservation/Gkinis/Evangelos/AA4839/FR8438/23/1/F4")
-                .then().statusCode(201)
-                .header("Location", Matchers.matchesPattern(".*/Reservations/[0-9]+"));
+    @TestSecurity(user = "passenger", roles = {Role.PASSENGER})
+    void testCompletePassengerRegistration_returns_401() {
+        given()
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .post(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(403);
     }
 
     @Test
-    void denyAddingExistingReservations(){
-        when()
-                .post(API_ROOT + "/6/makeReservation/Wonder/Bob/CP152D45/FR8438/0/0/1A")
-                .then()
-                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    @TestSecurity(user = "sys_admin", roles = {Role.SYSTEM_ADMIN})
+    void testGetPassengerPassport_success() {
+        given()
+            .queryParam("username", "passenger1")
+            .when()
+            .get(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(200);
     }
 
     @Test
-    void deleteAReservation(){
-        when()
-                .delete(API_ROOT + AirportProjectURIs.PASSENGERS + "/6/deleteReservation/11")
-                .then()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    @TestSecurity(user = "passenger", roles = {Role.PASSENGER})
+    void testGetPassengerPassport_returns_403() {
+        given()
+            .queryParam("username", "passenger1")
+            .when()
+            .get(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(403);
     }
 
     @Test
-    void denyDeletingNonExistingReservation(){
-        when()
-                .delete(API_ROOT + AirportProjectURIs.PASSENGERS + "/12/deleteReservation/20")
-                .then()
-                .statusCode(404);
+    void testGetPassengerPassport_returns_401() {
+        given()
+            .queryParam("username", "passenger1")
+            .when()
+            .get(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(401);
+    }
+
+    @Test
+    @TestTransaction
+    @TestSecurity(user = "sys_admin", roles = {Role.SYSTEM_ADMIN})
+    void testUpdatePassenger_success() {
+        given()
+            .queryParam("username", "passenger1")
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .put(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(200);
+    }
+
+    @Test
+    @TestTransaction
+    void testUpdatePassenger_returns_401() {
+        given()
+            .queryParam("username", "passenger1")
+            .contentType(ContentType.JSON)
+            .body(passengerCreateRepresentation)
+            .when()
+            .put(AirportProjectURIs.PASSENGERS)
+            .then()
+            .statusCode(401);
     }
 }

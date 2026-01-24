@@ -86,6 +86,7 @@ public class UserResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(Role.SYSTEM_ADMIN)
     public Response updateUserDetails(@Valid UserUpdateRepresentation userUpdateRepresentation,
                                       @QueryParam("username") String username){
         userService.updateUserDetails(userUpdateRepresentation, username);

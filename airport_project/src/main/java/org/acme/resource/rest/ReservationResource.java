@@ -29,14 +29,6 @@ public class ReservationResource {
     @Inject
     ReservationService reservationService;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createReservation(@Valid ReservationCreateRepresentation reservationCreateRepresentation) {
-        reservationService.createReservation(reservationCreateRepresentation);
-        return Response.ok().build();
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByParams(@QueryParam("size") @DefaultValue("10") Integer size,
@@ -44,6 +36,14 @@ public class ReservationResource {
                                    @QueryParam("sortDirection") @EnumerationValue(acceptedEnum = SortDirection.class) String sortDirection){
         PageQuery<SortBy> query = new PageQuery<>(size, index, ValueEnum.fromValue(sortDirection, SortDirection.class));
         return Response.ok(reservationService.searchUsersReservations(query)).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createReservation(@Valid ReservationCreateRepresentation reservationCreateRepresentation) {
+        reservationService.createReservation(reservationCreateRepresentation);
+        return Response.ok().build();
     }
 
 }
