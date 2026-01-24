@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 public class TicketMapper {
 
+    private TicketMapper() {
+
+    }
+
     public static TicketRepresentation mapEntityToRepresentation(Ticket ticket) {
         TicketRepresentation ticketRepresentation = new TicketRepresentation();
         ticketRepresentation.setTicketUUID(ticket.getTicketUUID());
