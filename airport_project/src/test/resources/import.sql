@@ -25,19 +25,19 @@ ALTER TABLE airline ALTER COLUMN id RESTART WITH 3;
 INSERT INTO users (
     id, username, first_name, last_name, email, phoneNumber, role, type
 ) VALUES (
-    10, 'admin1', 'Alice', 'Admin', 'admin@aegean.com', '123456789', 'airline_admin', 'AirlineAdministrator'
+    10, 'admin1', 'Alice', 'Admin', 'admin@aegean.com', '123456789', 'airline_admin', 'not_null'
 );
 
 INSERT INTO users (
     id, username, first_name, last_name, email, phoneNumber, role, type
 ) VALUES (
-    20, 'passenger1', 'Bob', 'Passenger', 'bob@mail.com', '987654321', 'passenger', 'Passenger'
+    20, 'passenger1', 'Bob', 'Passenger', 'bob@mail.com', '987654321', 'passenger', 'not_null'
 );
 
 INSERT INTO users (
     id, username, first_name, last_name, email, phoneNumber, role, type
 ) VALUES (
-    30, 'sysAdmin1', 'Michael', 'Jordan', 'sys@admin.com', '987654321', 'system_admin', 'SystemAdministrator'
+    30, 'sysAdmin1', 'Michael', 'Jordan', 'sys@admin.com', '987654321', 'system_admin', 'not_null'
 );
 
 -- Airline Administrators
@@ -81,6 +81,8 @@ VALUES (
       'SCHEDULED'
   );
 
+ALTER TABLE flights ALTER COLUMN id RESTART WITH 3;
+
 -- Reservations
 INSERT INTO reservations (
     id, reservation_uuid, created_at, user_id
@@ -91,6 +93,8 @@ VALUES (
     '2026-01-20 10:00:00',
     20
 );
+
+ALTER TABLE reservations ALTER COLUMN id RESTART WITH 2;
 
 -- Tickets
 INSERT INTO tickets (
@@ -105,13 +109,8 @@ VALUES (
     'Bob',
     'Passenger',
     'P12345678'
-);
-
-INSERT INTO tickets (
-    id, ticket_uuid, reservation_id, flight_id,
-    firstName, lastName, passport
-)
-VALUES (
+),
+(
     2,
     'a1b2c3d4-e5f6-7890-abcd-000000000002',
     1,
@@ -120,6 +119,8 @@ VALUES (
     'Passenger',
     'P12345678'
 );
+
+ALTER TABLE tickets ALTER COLUMN id RESTART WITH 3;
 
 -- Aircraft
 INSERT INTO aircrafts (id, aircraft_name, aircraft_capacity, aircraft_rows, aircraft_columns, airline_id)
@@ -137,10 +138,15 @@ INSERT INTO flight_seat_layouts (id, aircraft_id, flight_id)
 VALUES
   (2, 1, 2);
 
+ALTER TABLE flight_seat_layouts ALTER COLUMN id RESTART WITH 3;
+
 -- Flight seat states
 INSERT INTO flight_seat (id, seat_row, seat_column, state, flight_seat_layout_id)
 VALUES
-  (1, 1, 1, 'AVAILABLE', 1);
+  (1, 1, 1, 'AVAILABLE', 1),
+  (2, 1, 1, 'LOCKED', 2);
+
+ALTER TABLE flight_seat ALTER COLUMN id RESTART WITH 3;
 
 -- Airline Logos
 INSERT INTO airline_logo (id, file_name, file_path, content, content_type)
