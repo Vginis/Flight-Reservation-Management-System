@@ -130,19 +130,20 @@ export class FlightsCreateModalComponent implements OnInit {
   }
 
   differentAirportsValidator(control: AbstractControl): ValidationErrors | null { 
-    const departureAirport = control.get('departureAirport');
-    const arrivalAirport = control.get('arrivalAirport');
+    const departureAirportControl = control.get('departureAirport');
+    const arrivalAirportControl = control.get('arrivalAirport');
+
+    const departureAirport = departureAirportControl?.value;
+    const arrivalAirport = arrivalAirportControl?.value
     
     if(departureAirport && arrivalAirport){
-      const depCode = departureAirport?.value.u3digitCode;
-      const arrCode = arrivalAirport?.value.u3digitCode;
+      const depCode = departureAirport?.u3digitCode;
+      const arrCode = arrivalAirport?.u3digitCode;
       if (depCode && arrCode && depCode === arrCode) {
-        arrivalAirport.setErrors({ ...arrivalAirport.errors, sameAirport: true });
-      } else {
-        if (arrivalAirport.hasError('sameAirport')) {
-          const { sameAirport, ...otherErrors } = arrivalAirport.errors || {};
-          arrivalAirport.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-        }
+        arrivalAirportControl.setErrors({ ...arrivalAirport.errors, sameAirport: true });
+      } else if (arrivalAirportControl.hasError('sameAirport')) {
+          const { sameAirport, ...otherErrors } = arrivalAirportControl.errors || {};
+          arrivalAirportControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
       }
     }
 

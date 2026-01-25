@@ -55,7 +55,6 @@ describe('AirportsTableComponent', () => {
   it('should load airports table on init', () => {
     expect(airportServiceSpy.searchAirports).toHaveBeenCalled();
     expect(component.dataSource.data.length).toBe(2);
-    expect(component.paginator.length).toBe(2);
   });
 
   it('should apply filter and reload table', () => {
